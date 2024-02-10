@@ -1,6 +1,6 @@
 import 'package:chitchat/helpers/helpers.dart';
-import 'package:chitchat/mainwidgets/authbuttons.dart';
 import 'package:chitchat/mainwidgets/bacground_ellipse.dart';
+import 'package:chitchat/mainwidgets/main_auth_button.dart';
 import 'package:chitchat/views/otpscreen.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
@@ -16,8 +16,8 @@ class _PhoneRequestPageState extends State<PhoneRequestPage> {
   TextEditingController phoneController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     phoneController.selection = TextSelection.fromPosition(
         TextPosition(offset: phoneController.text.length));
     Country selectedCountry = Country(
@@ -38,28 +38,22 @@ class _PhoneRequestPageState extends State<PhoneRequestPage> {
         width: double.infinity,
         decoration: BoxDecoration(gradient: backroundGradient()),
         child: Stack(children: [
-          Eclipses(),
+          Ellipses(),
           Padding(
             padding: EdgeInsets.only(
-              top: screenHeight * 0.06,
-              left: screenWidth * 0.05,
-              right: screenWidth * 0.05,
+              top: height * 0.06,
+              left: width * 0.05,
+              right: width * 0.05,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                InkWell(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: Icon(
-                      Icons.arrow_back,
-                      color: Colors.white,
-                    )),
+                goBackArrow(context),
+                spacingHeight(height * 0.01),
                 titlesofAuth(
-                    screenHeight: screenHeight,
+                    screenHeight: height,
                     title: 'Hello\nPlease Enter\nyour\nPhonenumber '),
-                spacingHeight(10),
+                spacingHeight(height *0.02),
                 TextFormField(
                   controller: phoneController,
                   onChanged: (value) {
@@ -104,7 +98,7 @@ class _PhoneRequestPageState extends State<PhoneRequestPage> {
                           );
                         },
                         child: Container(
-                          padding: EdgeInsets.only(
+                          padding: const EdgeInsets.only(
                               top: 16, bottom: 15, left: 15, right: 5),
                           child: Text(
                             "${selectedCountry.flagEmoji}"
@@ -115,19 +109,22 @@ class _PhoneRequestPageState extends State<PhoneRequestPage> {
                         ),
                       )),
                 ),
-                spacingHeight(20),
+                spacingHeight(height*0.02),
                 textFields(text: 'Name', fontSize: 13),
-                spacingHeight(20),
+                spacingHeight(height*0.02),
                 textFields(text: 'E-mail', fontSize: 13),
-                spacingHeight(30),
+                spacingHeight(height*0.04),
                 InkWell(
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => OtpScreen(),
-                    ));
-                  },
-                  child: MainButtons(screenHeight: screenHeight, text: 'Send request')
-                ),
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => OtpScreen(),
+                      ));
+                    },
+                    child: MainButtons(
+                      screenHeight: height,
+                      text: 'Send request',
+                      onPressed: () =>Navigator.of(context).push(MaterialPageRoute(builder: (context) => OtpScreen(),)),
+                    )),
               ],
             ),
           )

@@ -1,5 +1,4 @@
 import 'package:chitchat/mainwidgets/toggle_auth.dart';
-import 'package:chitchat/views/loginpage.dart';
 import 'package:flutter/material.dart';
 
 void main(){

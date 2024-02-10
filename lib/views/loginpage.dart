@@ -1,8 +1,10 @@
 import 'dart:ui';
 
 import 'package:chitchat/helpers/helpers.dart';
-import 'package:chitchat/mainwidgets/authbuttons.dart';
+import 'package:chitchat/mainwidgets/main_auth_button.dart';
+import 'package:chitchat/mainwidgets/media_auth_button.dart';
 import 'package:chitchat/mainwidgets/bacground_ellipse.dart';
+import 'package:chitchat/mainwidgets/toggle_signup_login.dart';
 import 'package:chitchat/views/chat_screen.dart';
 import 'package:chitchat/views/phone_request.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
         decoration: BoxDecoration(gradient: backroundGradient()),
         child: Stack(
           children: [
-            Eclipses(),
+            Ellipses(),
             Padding(
               padding: EdgeInsets.only(
                 top: screenHeight * 0.06,
@@ -54,20 +56,21 @@ class _LoginPageState extends State<LoginPage> {
                     style: TextStyle(color: Color(0xff02B4BF), fontSize: 11),
                   ),
                   spacingHeight(screenHeight * 0.010),
-                  InkWell(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
+                  MainButtons(
+                    screenHeight: screenHeight,
+                    text: 'Login',
+                    onPressed: () => Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => ChatScreen(),
-                        ));
-                      },
-                      child: MainButtons(
-                        screenHeight: screenHeight,
-                        text: 'Login',
-                      )),
+                        )),
+                  ),
                   spacingHeight(screenHeight * 0.01),
-                  ToggleScreen(screenHeight: screenHeight, screenWidth: screenWidth,toggleScreen: () {
-                    widget.showSignUp();
-                  },),
+                  ToggleScreen(
+                    screenHeight: screenHeight,
+                    screenWidth: screenWidth,
+                    text1: 'Create New Account',
+                    text2: 'Sign up',
+                    toggleScreen: ()=>widget.showSignUp(),
+                  ),
                   spacingHeight(screenHeight * 0.010),
                   Center(
                     child: Text(
@@ -116,45 +119,3 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
-
-class ToggleScreen extends StatelessWidget {
-  const ToggleScreen({
-    Key? key,
-    required this.screenHeight,
-    required this.screenWidth,
-    required this.toggleScreen,
-  }) : super(key: key);
-
-  final double screenHeight;
-  final double screenWidth;
-  final VoidCallback toggleScreen;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          'Create New Account',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: screenHeight * 0.015,
-          ),
-        ),
-        spacingWidth(screenWidth * 0.01),
-        InkWell(
-          onTap: toggleScreen,
-          child: Text(
-            'Sign up',
-            style: TextStyle(
-              color: Color(0xff02B4BF),
-              fontSize: screenHeight * 0.015,
-            ),
-          ),
-        ),
-        spacingWidth(screenWidth * 0.01),
-      ],
-    );
-  }
-}
-

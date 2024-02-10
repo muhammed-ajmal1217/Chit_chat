@@ -1,9 +1,12 @@
 import 'package:chitchat/helpers/helpers.dart';
-import 'package:chitchat/mainwidgets/authbuttons.dart';
+import 'package:chitchat/mainwidgets/main_auth_button.dart';
 import 'package:chitchat/mainwidgets/bacground_ellipse.dart';
+import 'package:chitchat/mainwidgets/toggle_signup_login.dart';
+import 'package:chitchat/views/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+// ignore: must_be_immutable
 class SignUpPage extends StatefulWidget {
   VoidCallback showLogin;
   SignUpPage({super.key, required this.showLogin});
@@ -15,8 +18,8 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
         backgroundColor: Color(0xff3A487A),
         body: Container(
@@ -25,62 +28,52 @@ class _SignUpPageState extends State<SignUpPage> {
           decoration: BoxDecoration(gradient: backroundGradient()),
           child: Stack(
             children: [
-              Eclipses(),
+              Ellipses(),
               Padding(
                 padding: EdgeInsets.only(
-                  top: screenHeight * 0.06,
-                  left: screenWidth * 0.05,
-                  right: screenWidth * 0.05,
+                  top: height * 0.06,
+                  left: width * 0.05,
+                  right: width * 0.05,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    spacingHeight(screenHeight * 0.01),
-                    titlesofAuth(screenHeight: screenHeight,title: "Create new\nAccount\nSign-up with\nEmail"),
+                    spacingHeight(height * 0.01),
+                    titlesofAuth(
+                        screenHeight: height,
+                        title: "Create new\nAccount\nSign-up with\nEmail"),
+                      spacingHeight(height*0.02),
                     textFields(text: 'Name', fontSize: 13),
-                    spacingHeight(20),
+                    spacingHeight(height*0.02),
                     textFields(text: 'E-mail', fontSize: 13),
-                    spacingHeight(20),
+                    spacingHeight(height*0.01),
                     Text(
                       "Password must be include 8 charecters",
                       style: GoogleFonts.aBeeZee(
                         color: Colors.white,
-                        fontSize: screenHeight * 0.013,
+                        fontSize: height * 0.013,
                       ),
                     ),
-                    spacingHeight(20),
+                    spacingHeight(height*0.01),
                     textFields(text: 'Create password', fontSize: 13),
-                    spacingHeight(20),
+                    spacingHeight(height*0.02),
                     textFields(text: 'Confirm password', fontSize: 13),
-                    spacingHeight(10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Log in with Existing Account',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: screenHeight * 0.015,
-                          ),
-                        ),
-                        spacingWidth(screenWidth * 0.01),
-                        InkWell(
-                          onTap: () {
-                            widget.showLogin();
-                          },
-                          child: Text(
-                            'Log in',
-                            style: TextStyle(
-                              color: Color(0xff02B4BF),
-                              fontSize: screenHeight * 0.015,
-                            ),
-                          ),
-                        ),
-                        spacingWidth(screenWidth * 0.01),
-                      ],
+                    spacingHeight(height*0.01),
+                    ToggleScreen(
+                        screenHeight: height,
+                        screenWidth: height,
+                        toggleScreen: () => widget.showLogin(),
+                        text1: 'login with an existing sccount',
+                        text2: 'Login'),
+                    spacingHeight(height*0.02),
+                    MainButtons(
+                      screenHeight: height,
+                      text: 'Sign up',
+                      onPressed: () =>
+                          Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ChatScreen(),
+                      )),
                     ),
-                    spacingHeight(20),
-                    MainButtons(screenHeight: screenHeight, text: 'Sign up'),
                   ],
                 ),
               )
@@ -88,6 +81,4 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
         ));
   }
-
-
 }

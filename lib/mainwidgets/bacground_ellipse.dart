@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class Eclipses extends StatelessWidget {
-  const Eclipses({super.key});
+class Ellipses extends StatelessWidget {
+  const Ellipses({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +51,39 @@ class Eclipses extends StatelessWidget {
                 'assets/Ellipse 1.png',
                 height:
                     screenHeight * 0.85, 
+              ),
+            ),
+        ],
+      );
+  }
+}
+class Ellipses2 extends StatelessWidget {
+  const Ellipses2({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    return  Stack(
+        children: [
+          Positioned(
+              left: screenWidth *
+                  0.04, 
+              bottom: screenHeight *
+                  0.40, 
+              child: Image.asset(
+                'assets/Ellipse 1.png',
+                height:
+                    screenHeight * 0.85, 
+              ),
+            ),
+            Positioned(
+              right: screenWidth *
+                  0.38, 
+              child: Image.asset(
+                'assets/Ellipse 1 (1).png',
+                height:
+                    screenHeight * 0.60, 
               ),
             ),
         ],
