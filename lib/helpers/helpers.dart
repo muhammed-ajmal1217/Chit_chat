@@ -25,36 +25,16 @@ TextFormField textFields({required String text, required double fontSize}) {
   );
 }
 
-LinearGradient backroundGradient() {
-  return LinearGradient(
-      begin: Alignment.topCenter,
-      end: Alignment.bottomCenter,
-      colors: [
-        Color(0xff040921),
-        Color.fromARGB(255, 15, 18, 43).withOpacity(0.8),
-        Color.fromARGB(255, 5, 13, 15).withOpacity(0),
-      ]);
-}
-LinearGradient appBarGradient() {
-  return LinearGradient(
-      begin: Alignment.topLeft,
-      end: Alignment.bottomRight,
-      colors: [
-        Color.fromARGB(255, 3, 9, 38),
-        Color.fromARGB(255, 3, 9, 38),
-        Color.fromARGB(255, 4, 38, 75),
-        Color.fromARGB(255, 7, 57, 82),
-      ]);
-}
 LinearGradient circleAvatarGradient() {
   return LinearGradient(
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
       colors: [
-        Color.fromARGB(255, 2, 226, 255),
-        Color.fromARGB(255, 3, 26, 46),
-        Color.fromARGB(255, 5, 83, 105),
-        Color.fromARGB(255, 17, 211, 255),
+        Color.fromARGB(255, 163, 239, 249),
+        Color.fromARGB(255, 9, 247, 255),
+        Color.fromARGB(255, 6, 123, 121),
+        Color.fromARGB(255, 57, 2, 255),
+        Color.fromARGB(255, 13, 96, 100),
       ]);
 }
 
@@ -78,3 +58,15 @@ InkWell goBackArrow(BuildContext context) {
         color: Colors.white,
       ));
 }
+  LinearGradient mainGradient() {
+    return LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                      Color.fromARGB(255, 0, 17, 22),
+                      Color.fromARGB(230, 8, 33, 56),
+                      Color.fromARGB(255, 0, 17, 22),
+                      Color.fromARGB(230, 8, 33, 56),
+                    ]);
+  }
+

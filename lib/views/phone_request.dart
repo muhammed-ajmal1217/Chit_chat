@@ -36,7 +36,7 @@ class _PhoneRequestPageState extends State<PhoneRequestPage> {
       body: Container(
         height: double.infinity,
         width: double.infinity,
-        decoration: BoxDecoration(gradient: backroundGradient()),
+        color: Colors.black,
         child: Stack(children: [
           Ellipses(),
           Padding(

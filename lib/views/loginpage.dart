@@ -5,7 +5,7 @@ import 'package:chitchat/mainwidgets/main_auth_button.dart';
 import 'package:chitchat/mainwidgets/media_auth_button.dart';
 import 'package:chitchat/mainwidgets/bacground_ellipse.dart';
 import 'package:chitchat/mainwidgets/toggle_signup_login.dart';
-import 'package:chitchat/views/chat_screen.dart';
+import 'package:chitchat/views/chat_screen/chat_screen.dart';
 import 'package:chitchat/views/phone_request.dart';
 import 'package:flutter/material.dart';
 
@@ -20,15 +20,18 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   @override
-  Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
-    return Scaffold(
-      backgroundColor: Color(0xff3A487A),
-      body: Container(
-        height: double.infinity,
-        width: double.infinity,
-        decoration: BoxDecoration(gradient: backroundGradient()),
+@override
+Widget build(BuildContext context) {
+  final screenHeight = MediaQuery.of(context).size.height;
+  final screenWidth = MediaQuery.of(context).size.width;
+  return Scaffold(
+    resizeToAvoidBottomInset: false, 
+    backgroundColor: Color(0xff3A487A),
+    body: SingleChildScrollView( 
+      child: Container(
+        height: screenHeight,
+        width: screenWidth,
+        color: Colors.black,
         child: Stack(
           children: [
             Ellipses(),
@@ -69,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                     screenWidth: screenWidth,
                     text1: 'Create New Account',
                     text2: 'Sign up',
-                    toggleScreen: ()=>widget.showSignUp(),
+                    toggleScreen: () => widget.showSignUp(),
                   ),
                   spacingHeight(screenHeight * 0.010),
                   Center(
@@ -116,6 +119,8 @@ class _LoginPageState extends State<LoginPage> {
           ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
+
 }

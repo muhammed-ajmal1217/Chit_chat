@@ -1,5 +1,7 @@
 import 'package:chitchat/helpers/helpers.dart';
+import 'package:chitchat/views/drawer/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CustomDrawer extends StatefulWidget {
   @override
@@ -7,20 +9,23 @@ class CustomDrawer extends StatefulWidget {
 }
 
 class _CustomDrawerState extends State<CustomDrawer> {
-  bool isOn=true;
 
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     return Drawer(
+      surfaceTintColor: Colors.black,
+      backgroundColor: Colors.black,
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
+
             decoration: BoxDecoration(
-              gradient: appBarGradient(),
+              gradient: mainGradient()
             ),
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
@@ -35,65 +40,46 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       children: [
                         Text(
                           'Username',
-                          style: TextStyle(
+                          style: GoogleFonts.raleway(
                             color: Colors.white,
                             fontSize: 20,
                           ),
                         ),
                         Text(
                           'username@gmail.com',
-                          style: TextStyle(
+                          style: GoogleFonts.raleway(
                             color: Colors.white,
                             fontSize: 15,
                           ),
                         ),
-                        
                       ],
                     ),
                   ],
                 ),
-                spacingHeight(height*0.05),
+                spacingHeight(height * 0.05),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Hello i am new to Chitchat',style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                              ),),
-                              Icon(Icons.edit,color: Colors.white,)
+                    Text(
+                      'Hello i am new to Chitchat',
+                      style: GoogleFonts.raleway(
+                        color: Colors.white,
+                        fontSize: 15,
+                      ),
+                    ),
+                    Icon(
+                      Icons.edit,
+                      color: Colors.white,
+                    )
                   ],
                 ),
               ],
             ),
           ),
-          ListTile(
-            title: Text('Terms & Conditions'),
-            onTap: () {},
-          ),
-          ListTile(
-            title: Text('Notification'),
-            onTap: () {},
-          ),
-          ListTile(
-            title: Text('Theme'),
-            onTap: () {},
-            trailing: Switch(
-              value: false,
-              onChanged: (value) {
-                setState(() {
-                  isOn=value;
-                });
-              },
-            ),
-          ),
-          ListTile(
-            title: Text('Log out'),
-            onTap: () {},
-          ),
-          ListTile(
-            title: Text('Delete my Account'),
-            onTap: () {},
-          ),
+          ListTiles(text: 'Terms & Conditions'),
+          ListTiles(text: 'Notification'),
+          ListTiles(text: 'Logout'),
+          ListTiles(text: 'Delete my Account'),
         ],
       ),
     );

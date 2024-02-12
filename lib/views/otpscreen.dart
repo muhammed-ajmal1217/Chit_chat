@@ -1,7 +1,7 @@
 import 'package:chitchat/helpers/helpers.dart';
 import 'package:chitchat/mainwidgets/main_auth_button.dart';
 import 'package:chitchat/mainwidgets/bacground_ellipse.dart';
-import 'package:chitchat/views/chat_screen.dart';
+import 'package:chitchat/views/chat_screen/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pinput/pinput.dart';
@@ -23,7 +23,7 @@ class _OtpScreenState extends State<OtpScreen> {
       body: Container(
         height: double.infinity,
         width: double.infinity,
-        decoration: BoxDecoration(gradient: backroundGradient()),
+        color: Colors.black,
         child: Stack(children: [
           Ellipses(),
           Padding(
