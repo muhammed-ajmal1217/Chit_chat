@@ -17,7 +17,7 @@ class Ellipses extends StatelessWidget {
               child: Image.asset(
                 'assets/Ellipse 1.png',
                 height:
-                    screenHeight * 0.85, 
+                    screenHeight * 0.95, 
               ),
             ),
             Positioned(
@@ -26,7 +26,7 @@ class Ellipses extends StatelessWidget {
               top: screenHeight *
                   0.10, 
               child: Image.asset(
-                'assets/Ellipse 1 (1).png',
+                'assets/Ellipse 1.png',
                 height:
                     screenHeight * 0.75, 
               ),
@@ -37,7 +37,7 @@ class Ellipses extends StatelessWidget {
               top: screenHeight *
                   0.24, 
               child: Image.asset(
-                'assets/Ellipse 3.png',
+                'assets/Ellipse 1.png',
                 height:
                     screenHeight * 0.85, 
               ),

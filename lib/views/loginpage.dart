@@ -6,6 +6,7 @@ import 'package:chitchat/mainwidgets/media_auth_button.dart';
 import 'package:chitchat/mainwidgets/bacground_ellipse.dart';
 import 'package:chitchat/mainwidgets/toggle_signup_login.dart';
 import 'package:chitchat/views/chat_screen/chat_screen.dart';
+import 'package:chitchat/views/forgot_password_page.dart';
 import 'package:chitchat/views/phone_request.dart';
 import 'package:flutter/material.dart';
 
@@ -54,9 +55,14 @@ Widget build(BuildContext context) {
                   spacingHeight(screenHeight * 0.03),
                   textFields(text: 'Password', fontSize: 13),
                   spacingHeight(screenHeight * 0.01),
-                  Text(
-                    'Forgot password?',
-                    style: TextStyle(color: Color(0xff02B4BF), fontSize: 11),
+                  InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => ForgotPassword(),));
+                    },
+                    child: Text(
+                      'Forgot password?',
+                      style: TextStyle(color: Color(0xff02B4BF), fontSize: 11),
+                    ),
                   ),
                   spacingHeight(screenHeight * 0.010),
                   MainButtons(

@@ -1,6 +1,8 @@
+import 'package:chitchat/controller/login_provider.dart';
 import 'package:chitchat/views/loginpage.dart';
 import 'package:chitchat/views/signuppage.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ToggleAuth extends StatefulWidget {
   const ToggleAuth({super.key});
@@ -10,18 +12,17 @@ class ToggleAuth extends StatefulWidget {
 }
 
 class _ToggleAuthState extends State<ToggleAuth> {
-  bool showLogin=true;
   @override
   Widget build(BuildContext context) {
-    if(showLogin){
-      return LoginPage(showSignUp:toggleScreen ,);
-    }else{
-      return SignUpPage(showLogin:toggleScreen ,);
+    final loginProvider = Provider.of<LoginProvider>(context);
+    if (loginProvider.showLogin) {
+      return LoginPage(
+        showSignUp: loginProvider.toggleScreen,
+      );
+    } else {
+      return SignUpPage(
+        showLogin: loginProvider.toggleScreen,
+      );
     }
-  }
-  toggleScreen(){
-    setState(() {
-      showLogin=!showLogin;
-    });
   }
 }
