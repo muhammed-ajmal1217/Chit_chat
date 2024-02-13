@@ -3,9 +3,11 @@ import 'package:google_fonts/google_fonts.dart';
 
 class ListTiles extends StatelessWidget {
   String text;
+  final VoidCallback onTap;
    ListTiles({
     super.key,
     required this.text,
+    required this.onTap,
   });
 
   @override
@@ -15,7 +17,7 @@ class ListTiles extends StatelessWidget {
           style: GoogleFonts.raleway(
             color: Colors.white,
           )),
-      onTap: () {},
+      onTap:onTap,
     );
   }
 }

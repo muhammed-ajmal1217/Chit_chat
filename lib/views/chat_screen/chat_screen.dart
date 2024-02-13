@@ -58,201 +58,242 @@ class _ChatScreenState extends State<ChatScreen> {
       backgroundColor: Colors.black,
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 15, right: 15),
-            child: SizedBox(
-              height: 50,
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30),bottomRight: Radius.circular(30),
+              
+              ),
+              
+            ),
+            height: 70,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 15,right: 15,bottom: 20),
               child: TextFormField(
                 decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.search),
-                    prefixStyle: TextStyle(color: Colors.grey),
-                    hintText: 'Search...',
-                    hintStyle: TextStyle(color: Colors.grey, fontSize: 14),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30))),
+                  prefixIcon: Icon(Icons.search),
+                  prefixStyle: TextStyle(color: Colors.grey),
+                  hintText: 'Search...',
+                  hintStyle: GoogleFonts.raleway(color: Colors.grey, fontSize: 14),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 10),
-            child: SizedBox(
-              height: 180,
+          Expanded(
+            child: SingleChildScrollView(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding:
-                        const EdgeInsets.only(top: 15, left: 10, bottom: 15),
-                    child: Text(
-                      'Relations',
-                      style: GoogleFonts.raleway(
-                          color: Colors.white, fontSize: 16),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        gradient: mainGradient(),
-                        borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(60),
-                            topLeft: Radius.circular(60))),
-                    height: 110,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: Row(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: SizedBox(
+                      height: 170,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle, color: Colors.white),
-                            child: Padding(
-                              padding: const EdgeInsets.all(0.1),
-                              child: CircleAvatar(
-                                radius: 35,
-                                backgroundColor: Colors.black,
-                                child: Icon(Icons.add, color: Colors.white),
-                              ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                top: 15, left: 10, bottom: 15),
+                            child: Text(
+                              'Relations',
+                              style: GoogleFonts.raleway(
+                                  color: Colors.white, fontSize: 16),
                             ),
                           ),
-                          spacingWidth(6),
-                          Expanded(
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: 20,
-                              itemBuilder: (context, index) {
-                                return Center(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 8, right: 8),
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                StoryViewerPage(
-                                                    story: stories[index]),
+                          Container(
+                            
+                            height: 100,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: Row(
+                                children: [
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Colors.white),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(0.1),
+                                          child: CircleAvatar(
+                                            radius: 35,
+                                            backgroundColor: Colors.black,
+                                            child: Icon(Icons.add,
+                                                color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                      spacingHeight(5),
+                                      Text(
+                                        'Add Story',
+                                        style: GoogleFonts.raleway(
+                                            color: Colors.white, fontSize: 10),
+                                      )
+                                    ],
+                                  ),
+                                  spacingWidth(6),
+                                  Expanded(
+                                    child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: 20,
+                                      itemBuilder: (context, index) {
+                                        return Center(
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.only(
+                                                        left: 8, right: 8),
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    Navigator.of(context).push(
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            StoryViewerPage(
+                                                                story: stories[
+                                                                    index]),
+                                                      ),
+                                                    );
+                                                  },
+                                                  child: GradientBorderCircleAvatar(
+                                                    imageUrl: 'assets/Designer.png',
+                                                    radius: 34.5,
+                                                    gradientColors: [
+                                                      Color.fromARGB(255, 163, 239, 249),
+                                                      Color.fromARGB(255, 9, 247, 255),
+                                                      Color.fromARGB(255, 6, 123, 121),
+                                                      Color.fromARGB(255, 57, 2, 255),
+                                                      Color.fromARGB(255, 13, 96, 100),
+                                                    ],
+                                                    borderWidth: 3.0,
+                                                  ),
+                                                ),
+                                              ),
+                                              spacingHeight(5),
+                                              Text(
+                                                'User ${personNumber + index}',
+                                                style: GoogleFonts.raleway(
+                                                    color: Colors.white,
+                                                    fontSize: 10),
+                                              ),
+                                            ],
                                           ),
                                         );
                                       },
-                                      child: GradientBorderCircleAvatar(
-                                        imageUrl: 'assets/Designer.png',
-                                        radius: 34.5,
-                                        gradientColors: [
-                                          Color.fromARGB(255, 163, 239, 249),
-                                          Color.fromARGB(255, 9, 247, 255),
-                                          Color.fromARGB(255, 6, 123, 121),
-                                          Color.fromARGB(255, 57, 2, 255),
-                                          Color.fromARGB(255, 13, 96, 100),
-                                        ],
-                                        borderWidth: 3.0,
-                                      ),
                                     ),
                                   ),
-                                );
-                              },
+                                ],
+                              ),
                             ),
                           ),
                         ],
                       ),
                     ),
                   ),
-                ],
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Your messages',
-                    style:
-                        GoogleFonts.raleway(color: Colors.white, fontSize: 13)),
-                Text('Unread messages$personNumber',
-                    style:
-                        GoogleFonts.raleway(color: Colors.red, fontSize: 13)),
-              ],
-            ),
-          ),
-          spacingHeight(10),
-          Expanded(
-            child: ListView.builder(
-              itemCount: 20,
-              itemBuilder: (context, index) {
-                final personNumber = index + 1;
-                return Padding(
-                  padding: const EdgeInsets.only(top: 8, bottom: 8, left: 8),
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ChatPage(
-                          person: personNumber,
-                        ),
-                      ));
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 5),
-                      child: Container(
-                        height: 80,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                            gradient: mainGradient(),
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(50),
-                                bottomLeft: Radius.circular(50))),
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 10),
-                          child: ListTile(
-                            title: Column(
-                              children: [
-                                Text(
-                                  'User $personNumber',
-                                  style: GoogleFonts.raleway(
-                                      color: Colors.white, fontSize: 14),
-                                ),
-                                Text(
-                                        'The last message will be displayed in here',
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20, right: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Your messages',
+                            style: GoogleFonts.raleway(
+                                color: Colors.white, fontSize: 13)),
+                        Text('Unread messages$personNumber',
+                            style: GoogleFonts.raleway(
+                                color: Colors.red, fontSize: 13)),
+                      ],
+                    ),
+                  ),
+                  spacingHeight(10),
+                  ListView.builder(
+                    shrinkWrap: true, 
+                    physics: NeverScrollableScrollPhysics(), 
+                    itemCount: 20,
+                    itemBuilder: (context, index) {
+                      final personNumber = index + 1;
+                      return Padding(
+                        padding:
+                            const EdgeInsets.only(top: 8, bottom: 8, left: 8),
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => ChatPage(
+                                person: personNumber,
+                              ),
+                            ));
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 5),
+                            child: Container(
+                              height: 80,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                  gradient: mainGradient(),
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(50),
+                                      bottomLeft: Radius.circular(50))),
+                              child: Padding(
+                                padding: const EdgeInsets.only(bottom: 15),
+                                child: ListTile(
+                                  title: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        'User $personNumber',
+                                        style: GoogleFonts.raleway(
+                                            color: Colors.white, fontSize: 14),
+                                      ),
+                                      Text(
+                                        'The last message displayed in here',
                                         style: TextStyle(
                                             fontSize: 10, color: Colors.white),
                                       ),
-                              ],
-                            ),
-                            leading: CircleAvatar(
-                              radius: 30,
-                              backgroundImage:
-                                  AssetImage('assets/Designer (2).png'),
-                            ),
-                            trailing: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                CircleAvatar(
-                                  radius: 10,
-                                  backgroundColor:
-                                      Color.fromARGB(255, 21, 191, 2),
-                                  child: Column(
+                                    ],
+                                  ),
+                                  leading: CircleAvatar(
+                                    radius: 30,
+                                    backgroundImage:
+                                        AssetImage('assets/Designer (2).png'),
+                                  ),
+                                  trailing: Column(
+                                    mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
-                                      Text(
-                                        '$personNumber',
-                                        style: TextStyle(
-                                            fontSize: 8, color: Colors.white),
+                                      CircleAvatar(
+                                        radius: 12,
+                                        backgroundColor:
+                                            Color.fromARGB(255, 2, 191, 156),
+                                        child: Center(
+                                          child: Text(
+                                            '$personNumber',
+                                            style: TextStyle(
+                                                fontSize: 8, color: Colors.white),
+                                          ),
+                                        ),
                                       ),
-                                      
+                                      spacingHeight(height * 0.004),
+                                      Text(
+                                        '${DateFormat('hh:mm a').format(DateTime.now())}',
+                                        style: TextStyle(
+                                            color: Colors.grey, fontSize: 8),
+                                      )
                                     ],
                                   ),
                                 ),
-                                spacingHeight(height * 0.004),
-                                Text(
-                                  '${DateFormat('hh:mm a').format(DateTime.now())}',
-                                  style: TextStyle(
-                                      color: Colors.grey, fontSize: 8),
-                                )
-                              ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ),
+                      );
+                    },
                   ),
-                );
-              },
+                ],
+              ),
             ),
           ),
         ],

@@ -64,7 +64,7 @@ InkWell goBackArrow(BuildContext context) {
                       end: Alignment.bottomRight,
                       colors: [              
                       Color.fromARGB(230, 8, 68, 95),
-                      Color.fromARGB(230, 7, 30, 52),
+                      Color.fromARGB(230, 4, 21, 36),
                     ]);
   }
 

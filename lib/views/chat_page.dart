@@ -1,5 +1,6 @@
 import 'package:chitchat/controller/chat_page_provider.dart';
 import 'package:chitchat/helpers/helpers.dart';
+import 'package:chitchat/views/user_profile/user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -12,11 +13,7 @@ class ChatPage extends StatefulWidget {
   State<ChatPage> createState() => _ChatPageState();
 }
 
-
-
 class _ChatPageState extends State<ChatPage> {
-  
-
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -37,9 +34,16 @@ class _ChatPageState extends State<ChatPage> {
               backgroundImage: AssetImage('assets/Designer.png'),
             ),
             spacingWidth(width * 0.02),
-            Text(
-              'User${widget.person}',
-              style: GoogleFonts.aBeeZee(color: Colors.white, fontSize: 17),
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => UserProfile(index: widget.person),
+                ));
+              },
+              child: Text(
+                'User${widget.person}',
+                style: GoogleFonts.aBeeZee(color: Colors.white, fontSize: 17),
+              ),
             ),
           ],
         ),
@@ -51,12 +55,52 @@ class _ChatPageState extends State<ChatPage> {
                 InkWell(
                     onTap: () {},
                     child: Icon(
+                      Icons.favorite_border_outlined,
+                      color: Colors.white,
+                    )),
+                spacingWidth(10),
+                InkWell(
+                    onTap: () {},
+                    child: Icon(
                       Icons.phone,
                       color: Colors.white,
                     )),
                 spacingWidth(10),
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    showMenu(
+                      color: Color.fromARGB(255, 26, 26, 26),
+                      context: context,
+                      position: RelativeRect.fromLTRB(
+                        MediaQuery.of(context).size.width,
+                        0,
+                        0,
+                        0,
+                      ),
+                      items: [
+                        PopupMenuItem(
+                          child: Text('View profile',style: GoogleFonts.raleway(color: Colors.white),),
+                          value:
+                              1,
+                        ),
+                        PopupMenuItem(
+                          child: Text('Media',style: GoogleFonts.raleway(color: Colors.white),),
+                          value:
+                              1,
+                        ),
+                        PopupMenuItem(
+                          child: Text('Clear chat',style: GoogleFonts.raleway(color: Colors.white),),
+                          value:
+                              1,
+                        ),
+                        PopupMenuItem(
+                          child: Text('Block user',style: GoogleFonts.raleway(color: Colors.white),),
+                          value: 2,
+                        ),
+                        
+                      ],
+                    );
+                  },
                   child: Icon(
                     Icons.more_vert,
                     color: Colors.white,
@@ -71,8 +115,7 @@ class _ChatPageState extends State<ChatPage> {
       body: Container(
         height: double.infinity,
         child: Consumer<ChatPageProvider>(
-          builder: (context, chatPageProvider, child) => 
-           Column(
+          builder: (context, chatPageProvider, child) => Column(
             children: [
               Expanded(
                 child: ListView.builder(
@@ -115,20 +158,75 @@ class _ChatPageState extends State<ChatPage> {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 15),
                         child: TextFormField(
-                          controller:chatPageProvider. messageController,
+                          controller: chatPageProvider.messageController,
                           style: TextStyle(fontSize: 15, color: Colors.white),
                           decoration: InputDecoration(
                             fillColor: Colors.black,
                             filled: true,
                             hintText: 'Message...',
-                            hintStyle: TextStyle(color: Colors.white),
+                            hintStyle: GoogleFonts.raleway(
+                                color: Colors.white, fontSize: 12),
                             floatingLabelStyle: TextStyle(color: Colors.white),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(50),
                             ),
-                            suffixIcon: Icon(
-                              Icons.mic,
-                              color: Colors.grey,
+                            suffixIcon: InkWell(
+                              onTap: () {
+                                showBottomSheet(
+                                  context: context,
+                                  builder: (context) {
+                                    return Container(
+                                      height: 150,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                          color: Colors.black,
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(20),
+                                            topRight: Radius.circular(20),
+                                          )),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          CircleAvatar(
+                                            radius: 30,
+                                            backgroundColor: Colors.amber,
+                                            child: Icon(
+                                              Icons.location_on_outlined,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          spacingWidth(20),
+                                          CircleAvatar(
+                                            radius: 30,
+                                            backgroundColor: Color.fromARGB(
+                                                255, 7, 247, 255),
+                                            child: Icon(
+                                              Icons.camera,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          spacingWidth(20),
+                                          CircleAvatar(
+                                            radius: 30,
+                                            backgroundColor:
+                                                Color.fromARGB(255, 255, 81, 7),
+                                            child: Icon(
+                                              Icons.description,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          spacingWidth(20),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                              child: Icon(
+                                Icons.attach_file,
+                                color: Colors.grey,
+                              ),
                             ),
                           ),
                         ),
@@ -136,13 +234,13 @@ class _ChatPageState extends State<ChatPage> {
                     ),
                     CircleAvatar(
                       child: Icon(
-                        Icons.camera,
+                        Icons.mic,
                         color: Colors.white,
                       ),
                       backgroundColor: Color.fromARGB(255, 26, 26, 26),
                       radius: height * 0.036,
                     ),
-                    spacingWidth(width * 0.02),
+                    spacingWidth(width * 0.003),
                     InkWell(
                       onTap: () {
                         chatPageProvider.addMessage();
@@ -156,7 +254,7 @@ class _ChatPageState extends State<ChatPage> {
                         radius: height * 0.036,
                       ),
                     ),
-                    spacingWidth(width * 0.02),
+                    spacingWidth(width * 0.01),
                   ],
                 ),
               ),
@@ -166,6 +264,4 @@ class _ChatPageState extends State<ChatPage> {
       ),
     );
   }
-
-
 }
