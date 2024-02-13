@@ -1,8 +1,10 @@
 import 'package:chitchat/controller/chat_page_provider.dart';
 import 'package:chitchat/helpers/helpers.dart';
 import 'package:chitchat/views/user_profile/user_profile.dart';
+import 'package:chitchat/views/user_profile/widgets/bottomsheet_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 
 class ChatPage extends StatefulWidget {
@@ -175,51 +177,7 @@ class _ChatPageState extends State<ChatPage> {
                                 showBottomSheet(
                                   context: context,
                                   builder: (context) {
-                                    return Container(
-                                      height: 150,
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                          color: Colors.black,
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(20),
-                                            topRight: Radius.circular(20),
-                                          )),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          CircleAvatar(
-                                            radius: 30,
-                                            backgroundColor: Colors.amber,
-                                            child: Icon(
-                                              Icons.location_on_outlined,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                          spacingWidth(20),
-                                          CircleAvatar(
-                                            radius: 30,
-                                            backgroundColor: Color.fromARGB(
-                                                255, 7, 247, 255),
-                                            child: Icon(
-                                              Icons.camera,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                          spacingWidth(20),
-                                          CircleAvatar(
-                                            radius: 30,
-                                            backgroundColor:
-                                                Color.fromARGB(255, 255, 81, 7),
-                                            child: Icon(
-                                              Icons.description,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                          spacingWidth(20),
-                                        ],
-                                      ),
-                                    );
+                                    return BottomSheetPage();
                                   },
                                 );
                               },
@@ -265,3 +223,5 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 }
+
+

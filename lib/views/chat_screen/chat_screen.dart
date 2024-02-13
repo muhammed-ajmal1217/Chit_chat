@@ -60,20 +60,21 @@ class _ChatScreenState extends State<ChatScreen> {
         children: [
           Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30),bottomRight: Radius.circular(30),
-              
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(30),
+                bottomRight: Radius.circular(30),
               ),
-              
             ),
             height: 70,
             child: Padding(
-              padding: const EdgeInsets.only(left: 15,right: 15,bottom: 20),
+              padding: const EdgeInsets.only(left: 15, right: 15, bottom: 20),
               child: TextFormField(
                 decoration: InputDecoration(
                   prefixIcon: Icon(Icons.search),
                   prefixStyle: TextStyle(color: Colors.grey),
                   hintText: 'Search...',
-                  hintStyle: GoogleFonts.raleway(color: Colors.grey, fontSize: 14),
+                  hintStyle:
+                      GoogleFonts.raleway(color: Colors.grey, fontSize: 14),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
@@ -85,69 +86,70 @@ class _ChatScreenState extends State<ChatScreen> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10),
-                    child: SizedBox(
-                      height: 170,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                top: 15, left: 10, bottom: 15),
-                            child: Text(
-                              'Relations',
-                              style: GoogleFonts.raleway(
-                                  color: Colors.white, fontSize: 16),
-                            ),
+                  SizedBox(
+                    height: 170,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              top: 15, left: 10, bottom: 15),
+                          child: Text(
+                            'Relations',
+                            style: GoogleFonts.raleway(
+                                color: Colors.white, fontSize: 16),
                           ),
-                          Container(
-                            
-                            height: 100,
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 10),
-                              child: Row(
-                                children: [
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: Colors.white),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(0.1),
-                                          child: CircleAvatar(
-                                            radius: 35,
-                                            backgroundColor: Colors.black,
-                                            child: Icon(Icons.add,
+                        ),
+                        Container(
+                          height: 100,
+                          child: Row(
+                            children: [
+                              spacingWidth(6),
+                              Expanded(
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: 20,
+                                  itemBuilder: (context, index) {
+                                    if (index == 0) {
+                                      return Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
                                                 color: Colors.white),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(0.1),
+                                              child: CircleAvatar(
+                                                radius: 35,
+                                                backgroundColor: Colors.black,
+                                                child: Icon(Icons.add,
+                                                    color: Colors.white),
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                      ),
-                                      spacingHeight(5),
-                                      Text(
-                                        'Add Story',
-                                        style: GoogleFonts.raleway(
-                                            color: Colors.white, fontSize: 10),
-                                      )
-                                    ],
-                                  ),
-                                  spacingWidth(6),
-                                  Expanded(
-                                    child: ListView.builder(
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount: 20,
-                                      itemBuilder: (context, index) {
-                                        return Center(
+                                          spacingHeight(5),
+                                          Text(
+                                            'Add Story',
+                                            style: GoogleFonts.raleway(
+                                                color: Colors.white,
+                                                fontSize: 10),
+                                          )
+                                        ],
+                                      );
+                                    } else {
+                                      return Padding(
+                                        padding: const EdgeInsets.only(left: 5),
+                                        child: Center(
                                           child: Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
                                             children: [
                                               Padding(
-                                                padding:
-                                                    const EdgeInsets.only(
-                                                        left: 8, right: 8),
+                                                padding: const EdgeInsets.only(
+                                                    left: 8, right: 8),
                                                 child: GestureDetector(
                                                   onTap: () {
                                                     Navigator.of(context).push(
@@ -159,15 +161,22 @@ class _ChatScreenState extends State<ChatScreen> {
                                                       ),
                                                     );
                                                   },
-                                                  child: GradientBorderCircleAvatar(
-                                                    imageUrl: 'assets/Designer.png',
+                                                  child:
+                                                      GradientBorderCircleAvatar(
+                                                    imageUrl:
+                                                        'assets/Designer.png',
                                                     radius: 34.5,
                                                     gradientColors: [
-                                                      Color.fromARGB(255, 163, 239, 249),
-                                                      Color.fromARGB(255, 9, 247, 255),
-                                                      Color.fromARGB(255, 6, 123, 121),
-                                                      Color.fromARGB(255, 57, 2, 255),
-                                                      Color.fromARGB(255, 13, 96, 100),
+                                                      Color.fromARGB(
+                                                          255, 163, 239, 249),
+                                                      Color.fromARGB(
+                                                          255, 9, 247, 255),
+                                                      Color.fromARGB(
+                                                          255, 6, 123, 121),
+                                                      Color.fromARGB(
+                                                          255, 57, 2, 255),
+                                                      Color.fromARGB(
+                                                          255, 13, 96, 100),
                                                     ],
                                                     borderWidth: 3.0,
                                                   ),
@@ -182,16 +191,16 @@ class _ChatScreenState extends State<ChatScreen> {
                                               ),
                                             ],
                                           ),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ],
+                                        ),
+                                      );
+                                    }
+                                  },
+                                ),
                               ),
-                            ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                   Padding(
@@ -210,8 +219,8 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   spacingHeight(10),
                   ListView.builder(
-                    shrinkWrap: true, 
-                    physics: NeverScrollableScrollPhysics(), 
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
                     itemCount: 20,
                     itemBuilder: (context, index) {
                       final personNumber = index + 1;
@@ -256,10 +265,13 @@ class _ChatScreenState extends State<ChatScreen> {
                                       ),
                                     ],
                                   ),
-                                  leading: CircleAvatar(
-                                    radius: 30,
-                                    backgroundImage:
-                                        AssetImage('assets/Designer (2).png'),
+                                  leading: InkWell(
+                                    onTap: () {},
+                                    child: CircleAvatar(
+                                      radius: 30,
+                                      backgroundImage:
+                                          AssetImage('assets/Designer (2).png'),
+                                    ),
                                   ),
                                   trailing: Column(
                                     mainAxisAlignment: MainAxisAlignment.end,
@@ -272,7 +284,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                           child: Text(
                                             '$personNumber',
                                             style: TextStyle(
-                                                fontSize: 8, color: Colors.white),
+                                                fontSize: 8,
+                                                color: Colors.white),
                                           ),
                                         ),
                                       ),

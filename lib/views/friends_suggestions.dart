@@ -65,59 +65,61 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
                       final personNumber = index + 1;
                       return Padding(
                         padding: const EdgeInsets.all(2.0),
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) =>
-                                  UserProfile(index: personNumber),
-                            ));
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              gradient: mainGradient(),
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                CircleAvatar(
-                                  radius: 30,
-                                  backgroundImage:
-                                      AssetImage('assets/Designer.png'),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: mainGradient(),
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) =>
+                                        UserProfile(index: personNumber),
+                                  ));
+                                },
+                                child: Hero(
+                                  tag: personNumber,
+                                  child: CircleAvatar(
+                                    radius: 30,
+                                    backgroundImage:
+                                        AssetImage('assets/Designer.png'),
+                                  ),
                                 ),
-                                SizedBox(height: 8.0),
-                                Text(
-                                  'User $personNumber',
-                                  style: GoogleFonts.raleway(
-                                      fontSize: 15, color: Colors.white),
-                                ),
-                                SizedBox(height: 8.0),
-                                InkWell(
-                                  onTap: () {
-                                    friendSuggestionPro.isClickedon(index);
-                                  },
-                                  child: Container(
-                                    height: 30,
-                                    width: 90,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(50),
-                                      color:
-                                          friendSuggestionPro.isClicked[index]
-                                              ? Color(0xffFA7B06)
-                                              : Color(0xff02B4BF),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        friendSuggestionPro.isClicked[index]
-                                            ? 'Requested'
-                                            : 'Add Friend',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
+                              ),
+                              SizedBox(height: 8.0),
+                              Text(
+                                'User $personNumber',
+                                style: GoogleFonts.raleway(
+                                    fontSize: 15, color: Colors.white),
+                              ),
+                              SizedBox(height: 8.0),
+                              InkWell(
+                                onTap: () {
+                                  friendSuggestionPro.isClickedon(index);
+                                },
+                                child: Container(
+                                  height: 30,
+                                  width: 90,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(50),
+                                    color: friendSuggestionPro.isClicked[index]
+                                        ? Color(0xffFA7B06)
+                                        : Color(0xff02B4BF),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      friendSuggestionPro.isClicked[index]
+                                          ? 'Requested'
+                                          : 'Add Friend',
+                                      style: TextStyle(color: Colors.white),
                                     ),
                                   ),
-                                )
-                              ],
-                            ),
+                                ),
+                              )
+                            ],
                           ),
                         ),
                       );

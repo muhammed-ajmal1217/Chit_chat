@@ -22,26 +22,33 @@ class friends_list extends StatelessWidget {
               height: 80,
               width: double.infinity,
               decoration: BoxDecoration(
-                
-                   gradient: mainGradient(),
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(60),bottomLeft: Radius.circular(60),topRight: Radius.circular(30)),
+                gradient: mainGradient(),
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(60),
+                    bottomLeft: Radius.circular(60),
+                    topRight: Radius.circular(30)),
               ),
               child: Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: ListTile(
                   title: Text(
                     'Friend  $personNumber',
-                    style: GoogleFonts.raleway(
-                        color: Colors.white, fontSize: 14),
+                    style:
+                        GoogleFonts.raleway(color: Colors.white, fontSize: 14),
                   ),
                   leading: GestureDetector(
                     onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserProfile(index: personNumber),));
-                  },
-                    child: CircleAvatar(
-                      radius: 30,
-                      backgroundImage:
-                          AssetImage('assets/Designer (2).png'),
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => UserProfile(
+                              index: personNumber,
+                              )));
+                    },
+                    child: Hero(
+                      tag: index,
+                      child: CircleAvatar(
+                        radius: 30,
+                        backgroundImage: AssetImage('assets/Designer (2).png'),
+                      ),
                     ),
                   ),
                   trailing: Row(
@@ -49,7 +56,10 @@ class friends_list extends StatelessWidget {
                     children: [
                       InkWell(
                         onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => ChatPage(person: personNumber),));
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) =>
+                                ChatPage(person: personNumber),
+                          ));
                         },
                         child: Icon(
                           Icons.message,
