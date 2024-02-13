@@ -78,6 +78,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
           ),
           ListTiles(text: 'Terms & Conditions'),
           ListTiles(text: 'Notification'),
+          ListTiles(text: "Favourite chat's"),
           ListTiles(text: 'Logout'),
           ListTiles(text: 'Delete my Account'),
         ],

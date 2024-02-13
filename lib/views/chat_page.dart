@@ -106,7 +106,7 @@ class _ChatPageState extends State<ChatPage> {
                 ),
               ),
               Container(
-                height: 80,
+                height: 50,
                 width: double.infinity,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,

@@ -62,11 +62,9 @@ InkWell goBackArrow(BuildContext context) {
     return LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
-                      colors: [
-                      Color.fromARGB(255, 0, 17, 22),
-                      Color.fromARGB(230, 8, 33, 56),
-                      Color.fromARGB(255, 0, 17, 22),
-                      Color.fromARGB(230, 8, 33, 56),
+                      colors: [              
+                      Color.fromARGB(230, 8, 68, 95),
+                      Color.fromARGB(230, 7, 30, 52),
                     ]);
   }
 
