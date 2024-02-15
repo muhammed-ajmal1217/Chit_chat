@@ -16,6 +16,8 @@ class FriendsSuggestions extends StatefulWidget {
 class _FriendsSuggestionsState extends State<FriendsSuggestions> {
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.white,
@@ -34,7 +36,7 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
             Padding(
               padding: const EdgeInsets.all(15),
               child: SizedBox(
-                height: 40,
+                height: height*0.05,
                 child: TextFormField(
                   decoration: InputDecoration(
                     prefixIcon: Icon(Icons.search),
@@ -48,7 +50,7 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
                 ),
               ),
             ),
-            spacingHeight(20),
+            spacingHeight(height*0.020),
             Consumer<FriendSuggestionProvider>(
               builder: (context, friendSuggestionPro, child) => Expanded(
                 child: Padding(
@@ -83,26 +85,26 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
                                 child: Hero(
                                   tag: personNumber,
                                   child: CircleAvatar(
-                                    radius: 30,
+                                    radius: height*0.038,
                                     backgroundImage:
                                         AssetImage('assets/Designer.png'),
                                   ),
                                 ),
                               ),
-                              SizedBox(height: 8.0),
+                              spacingHeight(height*0.01),
                               Text(
                                 'User $personNumber',
                                 style: GoogleFonts.raleway(
                                     fontSize: 15, color: Colors.white),
                               ),
-                              SizedBox(height: 8.0),
+                              spacingHeight(height*0.01),
                               InkWell(
                                 onTap: () {
                                   friendSuggestionPro.isClickedon(index);
                                 },
                                 child: Container(
-                                  height: 30,
-                                  width: 90,
+                                  height: height*0.035,
+                                  width: width*0.3,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(50),
                                     color: friendSuggestionPro.isClicked[index]

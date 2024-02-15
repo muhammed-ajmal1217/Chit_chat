@@ -11,6 +11,8 @@ class friends_list extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return Expanded(
       child: ListView.builder(
         itemCount: 20,
@@ -19,7 +21,7 @@ class friends_list extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: Container(
-              height: 80,
+              height: height*0.09,
               width: double.infinity,
               decoration: BoxDecoration(
                 gradient: mainGradient(),
@@ -46,7 +48,7 @@ class friends_list extends StatelessWidget {
                     child: Hero(
                       tag: index,
                       child: CircleAvatar(
-                        radius: 30,
+                        radius: height*0.035,
                         backgroundImage: AssetImage('assets/Designer (2).png'),
                       ),
                     ),
@@ -66,7 +68,7 @@ class friends_list extends StatelessWidget {
                           color: Color.fromARGB(255, 10, 213, 189),
                         ),
                       ),
-                      spacingWidth(20),
+                      spacingWidth(width*0.06),
                       Icon(
                         Icons.remove_circle_outline,
                         color: Color.fromARGB(255, 244, 79, 54),

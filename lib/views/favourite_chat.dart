@@ -49,7 +49,7 @@ class _FavouriteChatListState extends State<FavouriteChatList> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 5),
                             child: Container(
-                              height: 80,
+                              height: height*0.090,
                               width: double.infinity,
                               decoration: BoxDecoration(
                                   gradient: mainGradient(),
@@ -67,35 +67,20 @@ class _FavouriteChatListState extends State<FavouriteChatList> {
                                       Text(
                                         'User $personNumber',
                                         style: GoogleFonts.raleway(
-                                            color: Colors.white, fontSize: 14),
+                                            color: Colors.white, fontSize: height*0.02),
                                       ),
-                                      Text(
-                                        'The last message displayed in here',
-                                        style: TextStyle(
-                                            fontSize: 10, color: Colors.white),
-                                      ),
+                                      
                                     ],
                                   ),
                                   leading: CircleAvatar(
-                                    radius: 30,
+                                    radius: height*0.03,
                                     backgroundImage:
                                         AssetImage('assets/Designer (2).png'),
                                   ),
                                   trailing: Column(
-                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      CircleAvatar(
-                                        radius: 12,
-                                        backgroundColor:
-                                            Color.fromARGB(255, 2, 191, 156),
-                                        child: Center(
-                                          child: Text(
-                                            '$personNumber',
-                                            style: TextStyle(
-                                                fontSize: 8, color: Colors.white),
-                                          ),
-                                        ),
-                                      ),
+                                      Icon(Icons.favorite,color: Colors.red,),
                                       spacingHeight(height * 0.004),
                                       
                                     ],

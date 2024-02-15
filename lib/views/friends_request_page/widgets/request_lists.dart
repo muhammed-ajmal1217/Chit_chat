@@ -13,6 +13,8 @@ class FriendsRequest extends StatefulWidget {
 class _FriendsRequestState extends State<FriendsRequest> {
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.black,
       body: ListView.builder(
@@ -24,7 +26,7 @@ class _FriendsRequestState extends State<FriendsRequest> {
             child: InkWell(
               onTap: () {},
               child: Container(
-                height: 80,
+                height: height*0.09,
                 width: double.infinity,
                 decoration: BoxDecoration(
                   gradient: mainGradient(),
@@ -39,15 +41,15 @@ class _FriendsRequestState extends State<FriendsRequest> {
                           GoogleFonts.raleway(color: Colors.white, fontSize: 14),
                     ),
                     leading: CircleAvatar(
-                      radius: 30,
+                      radius: height*0.035,
                       backgroundImage: AssetImage('assets/Designer (2).png'),
                     ),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        requestAccept_Reject(Icons.check),
-                        spacingWidth(9),
-                        requestAccept_Reject(Icons.close),
+                        requestAccept_Reject(Icons.check,height),
+                        spacingWidth(width*0.03),
+                        requestAccept_Reject(Icons.close,height),
                       ],
                     ),
                   ),

@@ -30,9 +30,9 @@ class _Friends_RequestPageState extends State<Friends_RequestPage> {
             labelStyle: GoogleFonts.raleway(color: Color(0xff02B4BF)),
             tabs: [
               Tab(
-                child: tabBarContent(icon: Icons.check, text: 'Friends'),
+                child: tabBarContent(icon: Icons.check, text: 'Friends',height: height),
               ),
-              Tab(child: tabBarContent(icon: Icons.group, text: 'Requests')),
+              Tab(child: tabBarContent(icon: Icons.group, text: 'Requests',height: height)),
             ],
           ),
         ),
@@ -46,7 +46,7 @@ class _Friends_RequestPageState extends State<Friends_RequestPage> {
                     padding:
                         const EdgeInsets.only(left: 15, right: 15, top: 30),
                     child: SizedBox(
-                      height: 50,
+                      height: height*0.050,
                       child: TextFormField(
                         decoration: InputDecoration(
                           fillColor: Color.fromARGB(163, 255, 255, 255)

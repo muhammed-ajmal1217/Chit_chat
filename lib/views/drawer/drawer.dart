@@ -14,6 +14,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return Drawer(
       surfaceTintColor: Colors.black,
       backgroundColor: Colors.black,
@@ -29,7 +30,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 Row(
                   children: [
                     CircleAvatar(
-                      radius: 30,
+                      radius: width*0.065,
                       backgroundImage: AssetImage('assets/Designer.png'),
                     ),
                     spacingWidth(5),
@@ -41,21 +42,21 @@ class _CustomDrawerState extends State<CustomDrawer> {
                           'Username',
                           style: GoogleFonts.raleway(
                             color: Colors.white,
-                            fontSize: 20,
+                            fontSize: width*0.040,
                           ),
                         ),
                         Text(
                           'username@gmail.com',
                           style: GoogleFonts.raleway(
                             color: Colors.white,
-                            fontSize: 15,
+                            fontSize: width*0.030,
                           ),
                         ),
                       ],
                     ),
                   ],
                 ),
-                spacingHeight(height * 0.04),
+                spacingHeight(height * 0.02),
                 Padding(
                   padding: const EdgeInsets.only(left: 8, right: 8),
                   child: Row(
@@ -65,7 +66,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         'Hello i am new to Chitchat',
                         style: GoogleFonts.raleway(
                           color: Colors.white,
-                          fontSize: 15,
+                          fontSize: width*0.040,
                         ),
                       ),
                       Icon(

@@ -1,14 +1,14 @@
 import 'package:chitchat/helpers/helpers.dart';
 import 'package:flutter/material.dart';
 
-Container requestAccept_Reject(IconData icon) {
+Container requestAccept_Reject(IconData icon,double height) {
   return Container(
       decoration:
           BoxDecoration(shape: BoxShape.circle, color: Colors.transparent),
       child: Padding(
         padding: const EdgeInsets.all(0.1),
         child: CircleAvatar(
-          radius: 16,
+          radius: height*0.02,
           backgroundColor: Color.fromARGB(163, 255, 255, 255).withOpacity(0.07),
           child: Icon(
             icon,
@@ -18,12 +18,12 @@ Container requestAccept_Reject(IconData icon) {
       ));
 }
 
-Row tabBarContent({required IconData icon, required String text}) {
+Row tabBarContent({required IconData icon, required String text,required double height}) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
       Icon(icon),
-      spacingWidth(5),
+      spacingWidth(height*0.01),
       Text(text),
     ],
   );
