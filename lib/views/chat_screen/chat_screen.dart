@@ -1,6 +1,8 @@
 import 'package:chitchat/helpers/helpers.dart';
 import 'package:chitchat/model/story_view_mode.dart';
 import 'package:chitchat/views/chat_screen/widgets/circle_border_widget.dart';
+import 'package:chitchat/views/chat_screen/widgets/floating_action_button.dart';
+import 'package:chitchat/views/chat_screen/widgets/helpers.dart';
 import 'package:chitchat/views/drawer/drawer.dart';
 import 'package:chitchat/views/chat_page.dart';
 import 'package:chitchat/views/friends_request_page/friends_request_page.dart';
@@ -35,18 +37,19 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: Colors.black,
         title: Row(
           children: [
-            spacingWidth(10),
+            spacingWidth(width * 0.02),
             CircleAvatar(
-              radius: 15,
+              radius: height * 0.02,
               backgroundImage: AssetImage('assets/Designer (2).png'),
             ),
-            spacingWidth(20),
+            spacingWidth(width * 0.03),
             Text(
               'Chitchat',
               style: GoogleFonts.aBeeZee(color: Colors.white),
@@ -65,7 +68,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 bottomRight: Radius.circular(30),
               ),
             ),
-            height: 70,
+            height: height * 0.08,
             child: Padding(
               padding: const EdgeInsets.only(left: 15, right: 15, bottom: 20),
               child: TextFormField(
@@ -87,13 +90,13 @@ class _ChatScreenState extends State<ChatScreen> {
               child: Column(
                 children: [
                   SizedBox(
-                    height: 170,
+                    height: height * 0.210,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(
-                              top: 15, left: 10, bottom: 15),
+                              top: 10, left: 10, bottom: 4),
                           child: Text(
                             'Relations',
                             style: GoogleFonts.raleway(
@@ -101,10 +104,10 @@ class _ChatScreenState extends State<ChatScreen> {
                           ),
                         ),
                         Container(
-                          height: 100,
+                          height: height * 0.15,
                           child: Row(
                             children: [
-                              spacingWidth(6),
+                              spacingWidth(width * 0.018),
                               Expanded(
                                 child: ListView.builder(
                                   scrollDirection: Axis.horizontal,
@@ -130,12 +133,12 @@ class _ChatScreenState extends State<ChatScreen> {
                                               ),
                                             ),
                                           ),
-                                          spacingHeight(5),
+                                          spacingHeight(height * 0.01),
                                           Text(
                                             'Add Story',
                                             style: GoogleFonts.raleway(
                                                 color: Colors.white,
-                                                fontSize: 10),
+                                                fontSize: height * 0.012),
                                           )
                                         ],
                                       );
@@ -165,7 +168,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                                       GradientBorderCircleAvatar(
                                                     imageUrl:
                                                         'assets/Designer.png',
-                                                    radius: 34.5,
+                                                    radius: height * 0.042,
                                                     gradientColors: [
                                                       Color.fromARGB(
                                                           255, 163, 239, 249),
@@ -182,12 +185,12 @@ class _ChatScreenState extends State<ChatScreen> {
                                                   ),
                                                 ),
                                               ),
-                                              spacingHeight(5),
+                                              spacingHeight(height * 0.01),
                                               Text(
                                                 'User ${personNumber + index}',
                                                 style: GoogleFonts.raleway(
                                                     color: Colors.white,
-                                                    fontSize: 10),
+                                                    fontSize: height * 0.012),
                                               ),
                                             ],
                                           ),
@@ -208,12 +211,16 @@ class _ChatScreenState extends State<ChatScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Your messages',
-                            style: GoogleFonts.raleway(
-                                color: Colors.white, fontSize: 13)),
-                        Text('Unread messages$personNumber',
-                            style: GoogleFonts.raleway(
-                                color: Colors.red, fontSize: 13)),
+                        messageHeadText(
+                            height: height,
+                            height1: 0.017,
+                            color: Colors.white,
+                            text: 'Your message'),
+                        messageHeadText(
+                            height: height,
+                            height1: 0.017,
+                            color: Colors.red,
+                            text: 'Unread message(${personNumber})'),
                       ],
                     ),
                   ),
@@ -238,7 +245,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 5),
                             child: Container(
-                              height: 80,
+                              height: height * 0.095,
                               width: double.infinity,
                               decoration: BoxDecoration(
                                   gradient: mainGradient(),
@@ -256,19 +263,21 @@ class _ChatScreenState extends State<ChatScreen> {
                                       Text(
                                         'User $personNumber',
                                         style: GoogleFonts.raleway(
-                                            color: Colors.white, fontSize: 14),
+                                            color: Colors.white,
+                                            fontSize: height * 0.017),
                                       ),
                                       Text(
                                         'The last message displayed in here',
                                         style: TextStyle(
-                                            fontSize: 10, color: Colors.white),
+                                            fontSize: height * 0.014,
+                                            color: Colors.white),
                                       ),
                                     ],
                                   ),
                                   leading: InkWell(
                                     onTap: () {},
                                     child: CircleAvatar(
-                                      radius: 30,
+                                      radius: height * 0.03,
                                       backgroundImage:
                                           AssetImage('assets/Designer (2).png'),
                                     ),
@@ -277,14 +286,14 @@ class _ChatScreenState extends State<ChatScreen> {
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       CircleAvatar(
-                                        radius: 12,
+                                        radius: height * 0.012,
                                         backgroundColor:
                                             Color.fromARGB(255, 2, 191, 156),
                                         child: Center(
                                           child: Text(
                                             '$personNumber',
                                             style: TextStyle(
-                                                fontSize: 8,
+                                                fontSize: height * 0.014,
                                                 color: Colors.white),
                                           ),
                                         ),
@@ -293,7 +302,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                       Text(
                                         '${DateFormat('hh:mm a').format(DateTime.now())}',
                                         style: TextStyle(
-                                            color: Colors.grey, fontSize: 8),
+                                            color: Colors.grey,
+                                            fontSize: height * 0.010),
                                       )
                                     ],
                                   ),
@@ -311,16 +321,9 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => Friends_RequestPage(),
-          ));
-        },
-        backgroundColor: Color(0xff02B4BF),
-        shape: CircleBorder(),
-        child: Icon(Icons.chat_bubble_outline, color: Colors.white),
-      ),
+      floatingActionButton: NavigateToFriends(),
     );
   }
+
+
 }

@@ -47,6 +47,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   spacingHeight(screenHeight * 0.030),
                   MainButtons(
                     screenHeight: screenHeight,
+                    screenWidth: screenWidth,
                     text: 'Reset password',
                     onPressed: () => Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => ChatScreen(),

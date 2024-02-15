@@ -74,6 +74,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       spacingHeight(height * 0.02),
                       MainButtons(
                         screenHeight: height,
+                        screenWidth: width,
                         text: 'Sign up',
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(

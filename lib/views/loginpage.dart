@@ -28,26 +28,26 @@ Widget build(BuildContext context) {
   return Scaffold(
     resizeToAvoidBottomInset: false, 
     backgroundColor: Color(0xff3A487A),
-    body: SingleChildScrollView( 
-      child: Container(
-        height: screenHeight,
-        width: screenWidth,
-        color: Colors.black,
-        child: Stack(
-          children: [
-            Ellipses(),
-            Padding(
-              padding: EdgeInsets.only(
-                top: screenHeight * 0.06,
-                left: screenWidth * 0.05,
-                right: screenWidth * 0.05,
-              ),
+    body: Container(
+      height: screenHeight,
+      width: screenWidth,
+      color: Colors.black,
+      child: Stack(
+        children: [
+          Ellipses(),
+          Padding(
+            padding: EdgeInsets.only(
+              top: screenHeight * 0.06,
+              left: screenWidth * 0.05,
+              right: screenWidth * 0.05,
+            ),
+            child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   spacingHeight(screenHeight * 0.01),
                   titlesofAuth(
-                      screenHeight: screenHeight,
+                      screenHeight: screenHeight*0.9,
                       title:
                           "Lets Connect\nWith your new\nFriends & Have a\nChitChat"),
                   spacingHeight(screenHeight * 0.02),
@@ -67,6 +67,7 @@ Widget build(BuildContext context) {
                   spacingHeight(screenHeight * 0.010),
                   MainButtons(
                     screenHeight: screenHeight,
+                    screenWidth: screenWidth,
                     text: 'Login',
                     onPressed: () => Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => ChatScreen(),
@@ -122,8 +123,8 @@ Widget build(BuildContext context) {
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     ),
   );

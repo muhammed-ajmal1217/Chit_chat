@@ -110,6 +110,7 @@ class _PhoneRequestPageState extends State<PhoneRequestPage> {
                     },
                     child: MainButtons(
                       screenHeight: height,
+                      screenWidth: width,
                       text: 'Send request',
                       onPressed: () =>
                           Navigator.of(context).push(MaterialPageRoute(

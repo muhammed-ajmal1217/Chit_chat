@@ -67,6 +67,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 spacingHeight(height*0.04),
                 MainButtons(
                   screenHeight: height,
+                  screenWidth: width,
                   text: 'Submit',
                   onPressed: () => Navigator.of(context).push(
                       MaterialPageRoute(builder: (context) => ChatScreen())),
