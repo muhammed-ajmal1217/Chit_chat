@@ -46,4 +46,18 @@ class AuthenticationProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  signinWithPhone(
+      {required String name,
+      required String email,
+      required String phoneNumber,
+      required BuildContext context}) async {
+    try {
+      await authService.signinWithPhone(
+          name: name, email: email, phoneNumber: phoneNumber, context: context);
+    } catch (e) {
+      throw Exception('Phone auth interrupted$e');
+    }
+    notifyListeners();
+  }
 }

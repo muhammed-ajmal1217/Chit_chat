@@ -1,8 +1,9 @@
+import 'package:chitchat/controller/auth_provider.dart';
 import 'package:chitchat/controller/phone_request_provider.dart';
 import 'package:chitchat/helpers/helpers.dart';
 import 'package:chitchat/mainwidgets/bacground_ellipse.dart';
 import 'package:chitchat/mainwidgets/main_auth_button.dart';
-import 'package:chitchat/views/otpscreen.dart';
+import 'package:chitchat/service/auth_service.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +16,8 @@ class PhoneRequestPage extends StatefulWidget {
 }
 
 class _PhoneRequestPageState extends State<PhoneRequestPage> {
+  TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -37,91 +40,92 @@ class _PhoneRequestPageState extends State<PhoneRequestPage> {
               left: width * 0.05,
               right: width * 0.05,
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                goBackArrow(context),
-                spacingHeight(height * 0.01),
-                titlesofAuth(
-                    screenHeight: height,
-                    title: 'Hello\nPlease Enter\nyour\nPhonenumber '),
-                spacingHeight(height * 0.02),
-                TextFormField(
-                  controller: phoneReqPro.phoneController,
-                  onChanged: (value) {
-                    phoneReqPro.newCountry(value);
-                  },
-                  style: TextStyle(color: Colors.white),
-                  keyboardType: TextInputType.phone,
-                  decoration: InputDecoration(
-                      hintText: 'Enter your number',
-                      hintStyle: TextStyle(color: Colors.white),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      suffixIcon: phoneReqPro.phoneController.text.length > 9
-                          ? Icon(
-                              Icons.done_sharp,
-                              color: Colors.green,
-                            )
-                          : null,
-                      prefixIcon: InkWell(
-                        onTap: () {
-                          showCountryPicker(
-                            countryListTheme: CountryListThemeData(
-                                borderRadius: BorderRadius.circular(20),
-                                textStyle: TextStyle(color: Colors.white),
-                                searchTextStyle: TextStyle(
-                                    color: Colors.white,
-                                    backgroundColor: Colors.white,
-                                    height: 0.5,
-                                    fontStyle: FontStyle.italic),
-                                bottomSheetHeight: 500,
-                                backgroundColor:
-                                    Color.fromARGB(255, 33, 44, 149)),
-                            context: context,
-                            onSelect: (newValue) {
-                              phoneReqPro.onselectValue(newValue);
-                            },
-                          );
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.only(
-                              top: 16, bottom: 15, left: 15, right: 5),
-                          child: Text(
-                            "${phoneReqPro.selectedCountry.flagEmoji}"
-                            '+'
-                            "${phoneReqPro.selectedCountry.phoneCode}",
-                            style: TextStyle(color: Colors.white, fontSize: 16),
-                          ),
-                        ),
-                      )),
-                ),
-                spacingHeight(height * 0.02),
-                textFields(text: 'Name', fontSize: 13),
-                spacingHeight(height * 0.02),
-                textFields(text: 'E-mail', fontSize: 13),
-                spacingHeight(height * 0.04),
-                InkWell(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => OtpScreen(),
-                      ));
+            child: Consumer<AuthenticationProvider>(
+              builder: (context, authPro, child) => Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  goBackArrow(context),
+                  spacingHeight(height * 0.01),
+                  titlesofAuth(
+                      screenHeight: height,
+                      title: 'Hello\nPlease Enter\nyour\nPhonenumber '),
+                  spacingHeight(height * 0.02),
+                  TextFormField(
+                    controller: phoneReqPro.phoneController,
+                    onChanged: (value) {
+                      phoneReqPro.newCountry(value);
                     },
-                    child: MainButtons(
+                    style: TextStyle(color: Colors.white),
+                    keyboardType: TextInputType.phone,
+                    decoration: InputDecoration(
+                        hintText: 'Enter your number',
+                        hintStyle: TextStyle(color: Colors.white),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        suffixIcon: phoneReqPro.phoneController.text.length > 9
+                            ? Icon(
+                                Icons.done_sharp,
+                                color: Colors.green,
+                              )
+                            : null,
+                        prefixIcon: InkWell(
+                          onTap: () {
+                            showCountryPicker(
+                              countryListTheme: CountryListThemeData(
+                                  borderRadius: BorderRadius.circular(20),
+                                  searchTextStyle: TextStyle(
+                                      color: Colors.white,
+                                      height: 0.5,
+                                      fontStyle: FontStyle.italic),
+                                  bottomSheetHeight: 500,
+                                  backgroundColor:
+                                      Color.fromARGB(255, 13, 13, 14)),
+                              context: context,
+                              onSelect: (newValue) {
+                                phoneReqPro.onselectValue(newValue);
+                              },
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.only(
+                                top: 16, bottom: 15, left: 15, right: 5),
+                            child: Text(
+                              "${phoneReqPro.selectedCountry.flagEmoji}"
+                              '+'
+                              "${phoneReqPro.selectedCountry.phoneCode}",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
+                            ),
+                          ),
+                        )),
+                  ),
+                  spacingHeight(height * 0.02),
+                  textFields(
+                      text: 'Name', fontSize: 13, controller: nameController),
+                  spacingHeight(height * 0.02),
+                  textFields(
+                      text: 'E-mail',
+                      fontSize: 13,
+                      controller: emailController),
+                  spacingHeight(height * 0.04),
+                  MainButtons(
                       screenHeight: height,
                       screenWidth: width,
                       text: 'Send request',
-                      onPressed: () =>
-                          Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => OtpScreen(),
-                      )),
-                    )),
-              ],
+                      onPressed: () => authPro.signinWithPhone(
+                          name: nameController.text.trim(),
+                          email: emailController.text.trim(),
+                          phoneNumber: '+'+ phoneReqPro.selectedCountry.phoneCode +
+                              phoneReqPro.phoneController.text.trim(),
+                          context: context)),
+                ],
+              ),
             ),
           )
         ]),
       ),
     );
   }
+
 }

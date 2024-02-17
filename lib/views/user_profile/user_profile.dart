@@ -32,7 +32,7 @@ class _UserProfileState extends State<UserProfile> {
               height: screenHeight * 0.75,
               width: double.infinity,
               decoration: BoxDecoration(
-              
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20)),
                 color: Colors.black,
               ),
               child: SingleChildScrollView(

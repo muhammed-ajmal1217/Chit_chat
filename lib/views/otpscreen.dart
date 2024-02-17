@@ -1,19 +1,17 @@
 import 'package:chitchat/helpers/helpers.dart';
 import 'package:chitchat/mainwidgets/main_auth_button.dart';
 import 'package:chitchat/mainwidgets/bacground_ellipse.dart';
+import 'package:chitchat/service/auth_service.dart';
 import 'package:chitchat/views/chat_screen/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pinput/pinput.dart';
 
-class OtpScreen extends StatefulWidget {
-  const OtpScreen({super.key});
+class OtpScreen extends StatelessWidget {
+  String verificationId;
+   OtpScreen({super.key, required this.verificationId});
+   TextEditingController otpController = TextEditingController();
 
-  @override
-  State<OtpScreen> createState() => _OtpScreenState();
-}
-
-class _OtpScreenState extends State<OtpScreen> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -69,8 +67,7 @@ class _OtpScreenState extends State<OtpScreen> {
                   screenHeight: height,
                   screenWidth: width,
                   text: 'Submit',
-                  onPressed: () => Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => ChatScreen())),
+                  onPressed: () => verifyOtp(context,otpController.text),
                 )
               ],
             ),
@@ -78,5 +75,19 @@ class _OtpScreenState extends State<OtpScreen> {
         ]),
       ),
     );
+  }
+
+   void verifyOtp(context, String userotp) {
+   AuthenticationService authService =AuthenticationService();
+    authService.verifyOtp(
+        verificationId: verificationId,
+        otp: userotp,
+        onSuccess: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ChatScreen(),
+              ));
+        });
   }
 }

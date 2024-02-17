@@ -1,6 +1,5 @@
-
-
 import 'package:chitchat/model/user_model.dart';
+import 'package:chitchat/views/otpscreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -46,8 +45,8 @@ class AuthenticationService {
       UserCredential user = await authentication.createUserWithEmailAndPassword(
           email: email, password: password);
       UserModel userData =
-          UserModel(email: email, userName: userName, userId: user.user!.uid);
-      firestore.collection('users').doc(user.user!.uid).set(userData.toJson());
+          UserModel(email: email, userName: userName, userId: user.user?.uid);
+      firestore.collection('users').doc(user.user?.uid).set(userData.toJson());
       return user;
     } on FirebaseAuthException catch (e) {
       throw Exception('Signup is interrupted because$e');
@@ -70,6 +69,59 @@ class AuthenticationService {
       firestore.collection('users').doc(googleUser.uid).set(userData.toJson());
     } on FirebaseAuthException catch (e) {
       throw Exception('Signin with google was interrupted because$e');
+    }
+  }
+
+  signinWithPhone(
+      {required String name,
+      required String email,
+      required String phoneNumber,
+      required BuildContext context}) async {
+    try {
+      await authentication.verifyPhoneNumber(
+        phoneNumber: phoneNumber,
+        verificationCompleted: (phoneAuthCredential) async {
+          var credential =
+              await authentication.signInWithCredential(phoneAuthCredential);
+          final UserModel userData = UserModel(
+            email: email,
+            userName: name,
+            phoneNumber: credential.user!.phoneNumber,
+          );
+          firestore
+              .collection('users')
+              .doc(credential.user!.uid)
+              .set(userData.toJson());
+        },
+        verificationFailed: (error) {
+          throw Exception(error);
+        },
+        codeSent: (verificationId, forceResendingToken) {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => OtpScreen(verificationId: verificationId),
+          ));
+        },
+        codeAutoRetrievalTimeout: (verificationId) {},
+      );
+    } on FirebaseAuthException catch (e) {
+      throw Exception('Phone auth is interrupted$e');
+    }
+  }
+
+  verifyOtp(
+      {required String verificationId,
+      required String otp,
+      required Function onSuccess}) async {
+    try {
+      PhoneAuthCredential credential = PhoneAuthProvider.credential(
+          verificationId: verificationId, smsCode: otp);
+      User? user = (await authentication.signInWithCredential(credential)).user;
+
+      if (user != null) {
+        onSuccess();
+      }
+    } on FirebaseAuthException catch (e) {
+      throw Exception(e);
     }
   }
 

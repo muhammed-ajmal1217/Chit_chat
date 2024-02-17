@@ -104,22 +104,20 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       spacingHeight(screenHeight * 0.01),
                       AuthButtons(
-                          image: 'assets/facebook.png',
-                          screenHeight: screenHeight,
-                          text: 'Sign in with facebook',
-                          onPressed: () {
-                            
-                          },
-                          ),
+                        image: 'assets/facebook.png',
+                        screenHeight: screenHeight,
+                        text: 'Sign in with facebook',
+                        onPressed: () {},
+                      ),
                       spacingHeight(screenHeight * 0.01),
                       AuthButtons(
-                          screenHeight: screenHeight,
-                          image: 'assets/google.png',
-                          text: 'Sign in with google',
-                          onPressed: () {
-                            authProvider.signInWithGoogle();
-                          },
-                          ),
+                        screenHeight: screenHeight,
+                        image: 'assets/google.png',
+                        text: 'Sign in with google',
+                        onPressed: () {
+                          authProvider.signInWithGoogle();
+                        },
+                      ),
                       Center(
                         child: Text(
                           '____________________________________________________',
@@ -129,22 +127,16 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       spacingHeight(screenHeight * 0.01),
-                      InkWell(
-                          borderRadius: BorderRadius.circular(50),
-                          hoverColor: Color.fromARGB(255, 127, 39, 161),
-                          onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => PhoneRequestPage(),
-                            ));
-                          },
-                          child: AuthButtons(
-                              screenHeight: screenHeight,
-                              image: 'assets/phone.png',
-                              text: 'Sign in with phone',
-                              onPressed: () {
-                                
-                              },
-                              ))
+                      AuthButtons(
+                        screenHeight: screenHeight,
+                        image: 'assets/phone.png',
+                        text: 'Sign in with phone',
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => PhoneRequestPage(),
+                          ));
+                        },
+                      )
                     ],
                   ),
                 ),
@@ -155,6 +147,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
+
   @override
   void dispose() {
     emailController.dispose();
