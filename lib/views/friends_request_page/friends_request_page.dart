@@ -1,8 +1,8 @@
 import 'package:chitchat/helpers/helpers.dart';
+import 'package:chitchat/views/friends_request_page/widgets/floating_action_button.dart';
 import 'package:chitchat/views/friends_request_page/widgets/friends_list.dart';
 import 'package:chitchat/views/friends_request_page/widgets/helpers_widgets.dart';
 import 'package:chitchat/views/friends_request_page/widgets/request_lists.dart';
-import 'package:chitchat/views/friends_suggestions.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -73,20 +73,10 @@ class _Friends_RequestPageState extends State<Friends_RequestPage> {
             FriendsRequest(),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => FriendsSuggestions(),
-            ));
-          },
-          shape: CircleBorder(),
-          backgroundColor: Color(0xffFA7B06),
-          child: Icon(
-            Icons.add,
-            color: Colors.white,
-          ),
-        ),
+        floatingActionButton: NavigatetoFriendsAdding(),
       ),
     );
   }
 }
+
+

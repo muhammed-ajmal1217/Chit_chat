@@ -9,6 +9,7 @@ class NavigateToFriends extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
+      
       onPressed: () {
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => Friends_RequestPage(),

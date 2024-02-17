@@ -9,11 +9,12 @@ class BottomSheetPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
     return Container(
-      height: 150,
+      height: height*0.15,
       width: double.infinity,
       decoration: BoxDecoration(
-          color: Colors.black,
+          color: Color.fromARGB(255, 23, 23, 23),
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20),
             topRight: Radius.circular(20),
@@ -23,7 +24,7 @@ class BottomSheetPage extends StatelessWidget {
             MainAxisAlignment.center,
         children: [
           CircleAvatar(
-            radius: 30,
+            radius: height*0.03,
             backgroundColor: Colors.amber,
             child: Icon(
               Iconsax.location,
@@ -32,7 +33,7 @@ class BottomSheetPage extends StatelessWidget {
           ),
           spacingWidth(20),
           CircleAvatar(
-            radius: 30,
+            radius: height*0.03,
             backgroundColor: Color.fromARGB(
                 255, 7, 247, 255),
             child: Icon(
@@ -42,7 +43,7 @@ class BottomSheetPage extends StatelessWidget {
           ),
           spacingWidth(20),
           CircleAvatar(
-            radius: 30,
+            radius: height*0.03,
             backgroundColor:
                 Color.fromARGB(255, 255, 81, 7),
             child: Icon(
@@ -52,7 +53,7 @@ class BottomSheetPage extends StatelessWidget {
           ),
           spacingWidth(20),
           CircleAvatar(
-            radius: 30,
+            radius: height*0.03,
             backgroundColor:
                 Color.fromARGB(255, 255, 81, 7),
             child: Icon(

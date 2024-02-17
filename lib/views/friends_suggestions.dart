@@ -1,6 +1,5 @@
 import 'package:chitchat/controller/friend_suggestion_provider.dart';
 import 'package:chitchat/helpers/helpers.dart';
-import 'package:chitchat/mainwidgets/bacground_ellipse.dart';
 import 'package:chitchat/views/user_profile/user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -36,7 +35,7 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
             Padding(
               padding: const EdgeInsets.all(15),
               child: SizedBox(
-                height: height*0.05,
+                height: height * 0.05,
                 child: TextFormField(
                   decoration: InputDecoration(
                     prefixIcon: Icon(Icons.search),
@@ -50,11 +49,11 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
                 ),
               ),
             ),
-            spacingHeight(height*0.020),
+            spacingHeight(height * 0.020),
             Consumer<FriendSuggestionProvider>(
               builder: (context, friendSuggestionPro, child) => Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 8,right: 8),
+                  padding: const EdgeInsets.only(left: 8, right: 8),
                   child: GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
@@ -69,8 +68,9 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
                         padding: const EdgeInsets.all(2.0),
                         child: Container(
                           decoration: BoxDecoration(
-                            gradient: mainGradient(),
-                            borderRadius: BorderRadius.circular(10.0),
+                            color: Color.fromARGB(255, 41, 33, 53)
+                                .withOpacity(0.5),
+                            borderRadius: BorderRadius.circular(25.0),
                           ),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -84,27 +84,31 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
                                 },
                                 child: Hero(
                                   tag: personNumber,
-                                  child: CircleAvatar(
-                                    radius: height*0.038,
-                                    backgroundImage:
-                                        AssetImage('assets/Designer.png'),
+                                  child: Container(
+                                    height: height * 0.085,
+                                    width: height * 0.085,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                        image: DecorationImage(
+                                            image: AssetImage(
+                                                'assets/Designer (2).png'))),
                                   ),
                                 ),
                               ),
-                              spacingHeight(height*0.01),
+                              spacingHeight(height * 0.01),
                               Text(
                                 'User $personNumber',
                                 style: GoogleFonts.raleway(
                                     fontSize: 15, color: Colors.white),
                               ),
-                              spacingHeight(height*0.01),
+                              spacingHeight(height * 0.01),
                               InkWell(
                                 onTap: () {
                                   friendSuggestionPro.isClickedon(index);
                                 },
                                 child: Container(
-                                  height: height*0.035,
-                                  width: width*0.3,
+                                  height: height * 0.035,
+                                  width: width * 0.3,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(50),
                                     color: friendSuggestionPro.isClicked[index]

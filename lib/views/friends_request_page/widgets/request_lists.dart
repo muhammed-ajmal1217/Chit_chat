@@ -26,24 +26,30 @@ class _FriendsRequestState extends State<FriendsRequest> {
             child: InkWell(
               onTap: () {},
               child: Container(
-                height: height*0.09,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  gradient: mainGradient(),
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(60),bottomLeft: Radius.circular(60),topRight: Radius.circular(30)),
+                height: height * 0.09,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Color.fromARGB(255, 41, 33, 53).withOpacity(0.5),
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    bottomLeft: Radius.circular(20),
+                    topRight: Radius.circular(20)),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 10),
+                child: Center(
                   child: ListTile(
                     title: Text(
                       'User  $personNumber',
                       style:
                           GoogleFonts.raleway(color: Colors.white, fontSize: 14),
                     ),
-                    leading: CircleAvatar(
-                      radius: height*0.035,
-                      backgroundImage: AssetImage('assets/Designer (2).png'),
-                    ),
+                    leading: Container(
+                        height: height * 0.065,
+                        width: height * 0.065,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            image: DecorationImage(
+                                image: AssetImage('assets/Designer (2).png'))),
+                      ),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [

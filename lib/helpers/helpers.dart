@@ -13,17 +13,24 @@ SizedBox spacingWidth(double width) {
   );
 }
 
-TextFormField textFields({required String text, required double fontSize}) {
+TextFormField textFields({
+  required String text,
+  required double fontSize,
+  TextEditingController? controller, 
+}) {
   return TextFormField(
-    style: TextStyle(fontSize: fontSize),
+    style: TextStyle(fontSize: fontSize,color: Colors.white),
+    controller: controller,
     decoration: InputDecoration(
-        hintText: text,
-        hintStyle: TextStyle(fontSize: fontSize, color: Colors.white),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-        )),
+      hintText: text,
+      hintStyle: TextStyle(fontSize: fontSize, color: Colors.white),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+    ),
   );
 }
+
 
 LinearGradient circleAvatarGradient() {
   return LinearGradient(
@@ -58,13 +65,24 @@ InkWell goBackArrow(BuildContext context) {
         color: Colors.white,
       ));
 }
-  LinearGradient mainGradient() {
-    return LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [              
-                      Color.fromARGB(230, 8, 68, 95),
-                      Color.fromARGB(230, 4, 21, 36),
-                    ]);
-  }
 
+LinearGradient mainGradient() {
+  return LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [
+        Color.fromARGB(230, 8, 68, 95),
+        Color.fromARGB(230, 4, 21, 36),
+      ]);
+}
+
+LinearGradient storyGradient() {
+  return LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [
+        Color.fromARGB(230, 0, 173, 252),
+        Color.fromARGB(230, 4, 21, 36),
+        Color.fromARGB(230, 24, 125, 213),
+      ]);
+}

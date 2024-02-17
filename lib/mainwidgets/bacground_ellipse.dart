@@ -57,3 +57,49 @@ class Ellipses extends StatelessWidget {
       );
   }
 }
+class Ellipses1 extends StatelessWidget {
+  const Ellipses1({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    return  Stack(
+        children: [
+            Positioned(
+              right: screenWidth *
+                  0.28, 
+              top: screenHeight *
+                  0.15, 
+              child: Image.asset(
+                'assets/Ellipse 1.png',
+                height:
+                    screenHeight * 0.75, 
+              ),
+            ),
+            Positioned(
+              left: screenWidth *
+                  0.12, 
+              top: screenHeight *
+                  0.20, 
+              child: Image.asset(
+                'assets/Ellipse 1.png',
+                height:
+                    screenHeight * 0.85, 
+              ),
+            ),
+            Positioned(
+              right: screenWidth *
+                  0.01, 
+              top: screenHeight *
+                  0.30, 
+              child: Image.asset(
+                'assets/Ellipse 1.png',
+                height:
+                    screenHeight * 0.85, 
+              ),
+            ),
+        ],
+      );
+  }
+}

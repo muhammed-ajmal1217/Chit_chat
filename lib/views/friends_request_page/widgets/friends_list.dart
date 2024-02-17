@@ -21,18 +21,18 @@ class friends_list extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: Container(
-              height: height*0.09,
+              height: height * 0.09,
               width: double.infinity,
               decoration: BoxDecoration(
-                gradient: mainGradient(),
+                color: Color.fromARGB(255, 41, 33, 53).withOpacity(0.5),
                 borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(60),
-                    bottomLeft: Radius.circular(60),
-                    topRight: Radius.circular(30)),
+                    topLeft: Radius.circular(20),
+                    bottomLeft: Radius.circular(20),
+                    topRight: Radius.circular(20)),
               ),
-              child: Padding(
-                padding: const EdgeInsets.only(top: 10),
+              child: Center(
                 child: ListTile(
+                  
                   title: Text(
                     'Friend  $personNumber',
                     style:
@@ -42,14 +42,18 @@ class friends_list extends StatelessWidget {
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => UserProfile(
-                              index: personNumber,
+                                index: personNumber,
                               )));
                     },
                     child: Hero(
                       tag: index,
-                      child: CircleAvatar(
-                        radius: height*0.035,
-                        backgroundImage: AssetImage('assets/Designer (2).png'),
+                      child: Container(
+                        height: height * 0.065,
+                        width: height * 0.065,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            image: DecorationImage(
+                                image: AssetImage('assets/Designer (2).png'))),
                       ),
                     ),
                   ),
@@ -68,7 +72,7 @@ class friends_list extends StatelessWidget {
                           color: Color.fromARGB(255, 10, 213, 189),
                         ),
                       ),
-                      spacingWidth(width*0.06),
+                      spacingWidth(width * 0.06),
                       Icon(
                         Icons.remove_circle_outline,
                         color: Color.fromARGB(255, 244, 79, 54),

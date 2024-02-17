@@ -1,10 +1,13 @@
+import 'package:chitchat/controller/auth_provider.dart';
 import 'package:chitchat/helpers/helpers.dart';
 import 'package:chitchat/mainwidgets/main_auth_button.dart';
 import 'package:chitchat/mainwidgets/bacground_ellipse.dart';
 import 'package:chitchat/mainwidgets/toggle_signup_login.dart';
+import 'package:chitchat/service/auth_service.dart';
 import 'package:chitchat/views/chat_screen/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class SignUpPage extends StatefulWidget {
   final VoidCallback showLogin;
@@ -16,6 +19,13 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  TextEditingController nameController = TextEditingController();
+
+  TextEditingController emailController = TextEditingController();
+
+  TextEditingController passwordController = TextEditingController();
+
+  TextEditingController confirmController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -48,9 +58,9 @@ class _SignUpPageState extends State<SignUpPage> {
                         title: "Create new\nAccount\nSign-up with\nEmail"
                       ),
                       spacingHeight(height * 0.02),
-                      textFields(text: 'Name', fontSize: 13),
+                      textFields(controller: nameController,text: 'Name', fontSize: 13),
                       spacingHeight(height * 0.02),
-                      textFields(text: 'E-mail', fontSize: 13),
+                      textFields(controller: emailController,text: 'E-mail', fontSize: 13),
                       spacingHeight(height * 0.01),
                       Text(
                         "Password must include 8 characters",
@@ -60,9 +70,9 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                       ),
                       spacingHeight(height * 0.01),
-                      textFields(text: 'Create password', fontSize: 13),
+                      textFields(controller: passwordController,text: 'Create password', fontSize: 13),
                       spacingHeight(height * 0.02),
-                      textFields(text: 'Confirm password', fontSize: 13),
+                      textFields(controller: confirmController,text: 'Confirm password', fontSize: 13),
                       spacingHeight(height * 0.01),
                       ToggleScreen(
                         screenHeight: height,
@@ -77,9 +87,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         screenWidth: width,
                         text: 'Sign up',
                         onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => ChatScreen(),
-                          ));
+                          signUp();
                         },
                       ),
                     ],
@@ -91,5 +99,23 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
       ),
     );
+  }
+@override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    confirmController.dispose();
+    super.dispose();
+  }
+  void signUp(){
+    final authProvider=Provider.of<AuthenticationProvider>(context,listen: false);
+    if(passwordController.text!=confirmController.text){
+       ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Pssword not matching'))
+      );
+    }else{
+      authProvider.signupWithEmail(email: emailController.text.trim(), password: passwordController.text.trim(), userName: nameController.text.trim());
+    }
   }
 }
