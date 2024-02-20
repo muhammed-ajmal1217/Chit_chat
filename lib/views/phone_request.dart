@@ -3,7 +3,6 @@ import 'package:chitchat/controller/phone_request_provider.dart';
 import 'package:chitchat/helpers/helpers.dart';
 import 'package:chitchat/mainwidgets/bacground_ellipse.dart';
 import 'package:chitchat/mainwidgets/main_auth_button.dart';
-import 'package:chitchat/service/auth_service.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +17,7 @@ class PhoneRequestPage extends StatefulWidget {
 class _PhoneRequestPageState extends State<PhoneRequestPage> {
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
+ 
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -52,9 +52,7 @@ class _PhoneRequestPageState extends State<PhoneRequestPage> {
                   spacingHeight(height * 0.02),
                   TextFormField(
                     controller: phoneReqPro.phoneController,
-                    onChanged: (value) {
-                      phoneReqPro.newCountry(value);
-                    },
+                    onChanged: (value) {},
                     style: TextStyle(color: Colors.white),
                     keyboardType: TextInputType.phone,
                     decoration: InputDecoration(
@@ -127,5 +125,4 @@ class _PhoneRequestPageState extends State<PhoneRequestPage> {
       ),
     );
   }
-
 }

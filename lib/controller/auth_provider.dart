@@ -15,16 +15,7 @@ class AuthenticationProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
-
-  signout() async {
-    try {
-      await authService.signout();
-    } catch (e) {
-      throw Exception('error sign out becauase$e');
-    }
-    notifyListeners();
-  }
-
+  
   signupWithEmail(
       {required String email,
       required String password,
@@ -46,8 +37,7 @@ class AuthenticationProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
-
-  signinWithPhone(
+    signinWithPhone(
       {required String name,
       required String email,
       required String phoneNumber,
@@ -60,4 +50,21 @@ class AuthenticationProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
+  verifyOtp({required String verificationId,required String otp,required Function onSuccess,required String name,required String email}){
+    try{
+      authService.verifyOtp(verificationId: verificationId, otp: otp, onSuccess: onSuccess,email: email,name: name);
+    }catch(e){
+      throw Exception('otp verification interrupted because$e');
+    }
+    notifyListeners();
+  }
+    signout() async {
+    try {
+      await authService.signout();
+    } catch (e) {
+      throw Exception('error sign out becauase$e');
+    }
+    notifyListeners();
+  }
 }
+

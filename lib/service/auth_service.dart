@@ -3,13 +3,14 @@ import 'package:chitchat/views/otpscreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthenticationService {
   FirebaseAuth authentication = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-
+  String userEmail='';
   signinWithEmail(
       {required String email,
       required String password,
@@ -46,7 +47,7 @@ class AuthenticationService {
           email: email, password: password);
       UserModel userData =
           UserModel(email: email, userName: userName, userId: user.user?.uid);
-      firestore.collection('users').doc(user.user?.uid).set(userData.toJson());
+      firestore.collection('users').doc(userName).set(userData.toJson());
       return user;
     } on FirebaseAuthException catch (e) {
       throw Exception('Signup is interrupted because$e');
@@ -66,13 +67,12 @@ class AuthenticationService {
           userId: googleUser.uid,
           email: googleUser.email,
           userName: googleUser.displayName);
-      firestore.collection('users').doc(googleUser.uid).set(userData.toJson());
+      firestore.collection('users').doc(googleUser.displayName).set(userData.toJson());
     } on FirebaseAuthException catch (e) {
       throw Exception('Signin with google was interrupted because$e');
     }
   }
-
-  signinWithPhone(
+    signinWithPhone(
       {required String name,
       required String email,
       required String phoneNumber,
@@ -80,25 +80,26 @@ class AuthenticationService {
     try {
       await authentication.verifyPhoneNumber(
         phoneNumber: phoneNumber,
+        
         verificationCompleted: (phoneAuthCredential) async {
-          var credential =
-              await authentication.signInWithCredential(phoneAuthCredential);
-          final UserModel userData = UserModel(
-            email: email,
-            userName: name,
-            phoneNumber: credential.user!.phoneNumber,
-          );
-          firestore
-              .collection('users')
-              .doc(credential.user!.uid)
-              .set(userData.toJson());
+          // var credential =
+          //     await authentication.signInWithCredential(phoneAuthCredential);
+          // final UserModel userData = UserModel(
+          //   email: email,
+          //   userName: name,
+          //   phoneNumber: credential.user!.phoneNumber,
+          // );
+          // firestore
+          //     .collection('users')
+          //     .doc(credential.user!.uid)
+          //     .set(userData.toJson());
         },
         verificationFailed: (error) {
           throw Exception(error);
         },
         codeSent: (verificationId, forceResendingToken) {
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => OtpScreen(verificationId: verificationId),
+            builder: (context) => OtpScreen(verificationId: verificationId,email: email,name: name,),
           ));
         },
         codeAutoRetrievalTimeout: (verificationId) {},
@@ -111,6 +112,8 @@ class AuthenticationService {
   verifyOtp(
       {required String verificationId,
       required String otp,
+      required String name,
+      required String email,
       required Function onSuccess}) async {
     try {
       PhoneAuthCredential credential = PhoneAuthProvider.credential(
@@ -118,13 +121,24 @@ class AuthenticationService {
       User? user = (await authentication.signInWithCredential(credential)).user;
 
       if (user != null) {
+        final UserModel userdata =
+            UserModel(email: email, userName: name, userId: user.uid);
+        firestore.collection('users').doc(name).set(userdata.toJson());
         onSuccess();
       }
     } on FirebaseAuthException catch (e) {
       throw Exception(e);
     }
   }
-
+    Future<UserCredential> signInWithFacebook() async {
+      final LoginResult loginResult = await FacebookAuth.instance.login(
+        permissions: ['email','public_profile','user_birthday']
+      );
+      final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken!.token);
+      final userData = await FacebookAuth.instance.getUserData();
+      userEmail=userData['email'];
+      return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
+    }
   signout() async {
     GoogleSignIn googleSignIn = GoogleSignIn();
     try {

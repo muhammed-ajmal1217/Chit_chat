@@ -6,8 +6,11 @@ import 'package:chitchat/mainwidgets/main_auth_button.dart';
 import 'package:chitchat/mainwidgets/media_auth_button.dart';
 import 'package:chitchat/mainwidgets/bacground_ellipse.dart';
 import 'package:chitchat/mainwidgets/toggle_signup_login.dart';
+import 'package:chitchat/service/auth_service.dart';
+import 'package:chitchat/views/chat_screen/chat_screen.dart';
 import 'package:chitchat/views/forgot_password_page.dart';
 import 'package:chitchat/views/phone_request.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -107,7 +110,21 @@ class _LoginPageState extends State<LoginPage> {
                         image: 'assets/facebook.png',
                         screenHeight: screenHeight,
                         text: 'Sign in with facebook',
-                        onPressed: () {},
+                        onPressed: () async {
+                          try {
+                            final UserCredential userCredential =
+                                await AuthenticationService()
+                                    .signInWithFacebook();
+                            if (userCredential != null && context.mounted) {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => ChatScreen()));
+                            } else {
+                              print('Authentication failes');
+                            }
+                          } catch (e) {
+                            print('Error signing in with Facebook: $e');
+                          }
+                        },
                       ),
                       spacingHeight(screenHeight * 0.01),
                       AuthButtons(
@@ -147,7 +164,6 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-
   @override
   void dispose() {
     emailController.dispose();

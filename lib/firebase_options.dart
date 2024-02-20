@@ -67,6 +67,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '434760967247',
     projectId: 'chatapp-6baa4',
     storageBucket: 'chatapp-6baa4.appspot.com',
+    androidClientId: '434760967247-eae428hbp2es5umuhsmt9sh8tjqdnnjm.apps.googleusercontent.com',
+    iosClientId: '434760967247-3jjjrmlb48fer6ul6f79q4mq743hmmkl.apps.googleusercontent.com',
     iosBundleId: 'com.example.chitchat',
   );
 
@@ -76,6 +78,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '434760967247',
     projectId: 'chatapp-6baa4',
     storageBucket: 'chatapp-6baa4.appspot.com',
+    androidClientId: '434760967247-eae428hbp2es5umuhsmt9sh8tjqdnnjm.apps.googleusercontent.com',
+    iosClientId: '434760967247-hudfrddh1m17df3atjtu0sr2rsk6pstp.apps.googleusercontent.com',
     iosBundleId: 'com.example.chitchat.RunnerTests',
   );
 }
