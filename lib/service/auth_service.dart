@@ -130,15 +130,27 @@ class AuthenticationService {
       throw Exception(e);
     }
   }
-    Future<UserCredential> signInWithFacebook() async {
-      final LoginResult loginResult = await FacebookAuth.instance.login(
-        permissions: ['email','public_profile','user_birthday']
-      );
-      final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken!.token);
-      final userData = await FacebookAuth.instance.getUserData();
-      userEmail=userData['email'];
-      return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
-    }
+    
+
+Future<UserCredential?> signInWithFacebook() async {
+  final List<String> permissions = ['public_profile'];
+
+  final LoginResult loginResult = await FacebookAuth.instance.login(permissions: permissions);
+
+  if (loginResult.status == LoginStatus.success) {
+    final OAuthCredential facebookAuthCredential =
+        FacebookAuthProvider.credential(loginResult.accessToken!.token);
+
+    return await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
+  } else {
+    throw FirebaseAuthException(
+      code: 'Facebook login failed',
+      message: 'Failed to sign in with Facebook. Please try again.',
+    );
+  }
+}
+
+
   signout() async {
     GoogleSignIn googleSignIn = GoogleSignIn();
     try {

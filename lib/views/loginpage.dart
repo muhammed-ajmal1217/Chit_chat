@@ -112,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                         text: 'Sign in with facebook',
                         onPressed: () async {
                           try {
-                            final UserCredential userCredential =
+                            final UserCredential? userCredential =
                                 await AuthenticationService()
                                     .signInWithFacebook();
                             if (userCredential != null && context.mounted) {
