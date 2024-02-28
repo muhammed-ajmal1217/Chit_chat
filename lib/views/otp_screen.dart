@@ -11,11 +11,13 @@ class OtpScreen extends StatelessWidget {
   String verificationId;
   String name;
   String email;
+  String phone;
   OtpScreen({
     super.key,
     required this.verificationId,
     required this.name,
     required this.email,
+    required this.phone,
   });
 
   TextEditingController otpController = TextEditingController();
@@ -73,7 +75,7 @@ class OtpScreen extends StatelessWidget {
                 spacingHeight(height * 0.04),
                 InkWell(
                     onTap: () {
-                      verifyOtp(context, otpController.text);
+                      verifyOtp(context, otpController.text,phone);
                     },
                     child: Container(
                       height: height * 0.06,
@@ -81,6 +83,7 @@ class OtpScreen extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: Color(0xffFA7B06),
                         borderRadius: BorderRadius.circular(50),
+
                       ),
                       child: Center(
                         child: Text(
@@ -101,18 +104,19 @@ class OtpScreen extends StatelessWidget {
     );
   }
 
-  void verifyOtp(context, String userotp) {
-    final authPro=Provider.of<AuthenticationProvider>(context);
+  void verifyOtp(context, String userotp,String phonenumber) {
+    final authPro=Provider.of<AuthenticationProvider>(context,listen: false);
     authPro.verifyOtp(
         verificationId: verificationId,
         otp: userotp,
         email: email,
         name: name,
+        phone: phonenumber,
         onSuccess: () {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ChatScreen(),
+                builder: (context) => ChatListPage(),
               ));
         });
   }

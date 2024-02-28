@@ -40,11 +40,11 @@ class _FavouriteChatListState extends State<FavouriteChatList> {
                             const EdgeInsets.only(top: 8, bottom: 8, left: 8),
                         child: InkWell(
                           onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => ChatPage(
-                                person: personNumber,
-                              ),
-                            ));
+                            // Navigator.of(context).push(MaterialPageRoute(
+                            //   builder: (context) => ChatPage(
+                            //     person: personNumber,
+                            //   ),
+                            // ));
                           },
                           child: Padding(
                             padding: const EdgeInsets.only(left: 5),

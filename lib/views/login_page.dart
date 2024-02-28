@@ -117,7 +117,7 @@ class _LoginPageState extends State<LoginPage> {
                                     .signInWithFacebook();
                             if (userCredential != null && context.mounted) {
                               Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => ChatScreen()));
+                                  builder: (context) => ChatListPage()));
                             } else {
                               print('Authentication failes');
                             }

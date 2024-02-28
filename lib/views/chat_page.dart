@@ -1,24 +1,38 @@
-import 'package:chitchat/controller/chat_page_provider.dart';
+import 'package:chitchat/controller/chat_provider.dart';
 import 'package:chitchat/helpers/helpers.dart';
+import 'package:chitchat/model/user_model.dart';
+import 'package:chitchat/service/auth_service.dart';
+import 'package:chitchat/service/chat_service.dart';
+import 'package:chitchat/views/chat_bubble.dart';
 import 'package:chitchat/views/user_profile/user_profile.dart';
 import 'package:chitchat/views/user_profile/widgets/bottomsheet_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-class ChatPage extends StatefulWidget {
-  int person;
-  ChatPage({Key? key, required this.person});
+class ChatScreen extends StatefulWidget {
+  const ChatScreen({super.key, required this.user});
+  final UserModel user;
 
   @override
-  State<ChatPage> createState() => _ChatPageState();
+  State<ChatScreen> createState() => _ChatScreenState();
 }
 
-class _ChatPageState extends State<ChatPage> {
+class _ChatScreenState extends State<ChatScreen> {
+  TextEditingController messagecontroller = TextEditingController();
+  AuthenticationService service = AuthenticationService();
+
+  @override
+  void initState() {
+    super.initState();
+    final currentuserid = service.authentication.currentUser!.uid;
+    Provider.of<FirebaseProvider>(context, listen: false)
+        .getMessages(currentuserid, widget.user.userId ?? '');
+  }
+
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -29,21 +43,21 @@ class _ChatPageState extends State<ChatPage> {
         title: Row(
           children: [
             goBackArrow(context),
-            spacingWidth(width * 0.02),
+            spacingWidth(size.width * 0.02),
             CircleAvatar(
-              radius: height * 0.027,
+              radius: size.height * 0.027,
               backgroundImage: AssetImage('assets/Designer.png'),
             ),
-            spacingWidth(width * 0.02),
+            spacingWidth(size.width * 0.02),
             GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => UserProfile(index: widget.person),
-                ));
-              },
+              onTap: () {},
               child: Text(
-                'User${widget.person}',
-                style: GoogleFonts.aBeeZee(color: Colors.white, fontSize: 17),
+                widget.user.userName!,
+                style: GoogleFonts.raleway(
+                  color: Colors.white,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
           ],
@@ -80,25 +94,37 @@ class _ChatPageState extends State<ChatPage> {
                       ),
                       items: [
                         PopupMenuItem(
-                          child: Text('View profile',style: GoogleFonts.raleway(color: Colors.white),),
-                          value:
-                              1,
+                          child: Text(
+                            'View profile',
+                            style: GoogleFonts.raleway(color: Colors.white),
+                          ),
+                          value: 1,
                         ),
                         PopupMenuItem(
-                          child: Text('Media',style: GoogleFonts.raleway(color: Colors.white),),
-                          value:
-                              1,
-                        ),
-                        PopupMenuItem(
-                          child: Text('Clear chat',style: GoogleFonts.raleway(color: Colors.white),),
-                          value:
-                              1,
-                        ),
-                        PopupMenuItem(
-                          child: Text('Block user',style: GoogleFonts.raleway(color: Colors.white),),
+                          child: Text(
+                            'Media',
+                            style: GoogleFonts.raleway(color: Colors.white),
+                          ),
                           value: 2,
                         ),
-                        
+                        PopupMenuItem(
+                          onTap: () => Provider.of<FirebaseProvider>(context,listen: false)
+                              .clearChat(
+                                  service.authentication.currentUser!.uid,
+                                  widget.user.userId!),
+                          child: Text(
+                            'Clear chat',
+                            style: GoogleFonts.raleway(color: Colors.white),
+                          ),
+                          value: 3,
+                        ),
+                        PopupMenuItem(
+                          child: Text(
+                            'Block user',
+                            style: GoogleFonts.raleway(color: Colors.white),
+                          ),
+                          value: 4,
+                        ),
                       ],
                     );
                   },
@@ -112,115 +138,105 @@ class _ChatPageState extends State<ChatPage> {
           )
         ],
       ),
-      backgroundColor: Colors.black,
-      body: Container(
-        height: double.infinity,
-        child: Consumer<ChatPageProvider>(
-          builder: (context, chatPageProvider, child) => Column(
-            children: [
-              Expanded(
-                child: ListView.builder(
-                  itemCount: chatPageProvider.messageList.length,
-                  itemBuilder: (context, index) {
-                    Color color = index % 2 == 0
-                        ? Color.fromARGB(255, 65, 65, 65).withOpacity(0.6)
-                        : Color(0xff02B4BF);
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        width: 40,
-                        decoration: BoxDecoration(
-                            color: color,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(30),
-                                bottomRight: Radius.circular(20),
-                                topRight: Radius.circular(20))),
-                        height: height * 0.060,
-                        child: Center(
-                            child: Text(
-                          chatPageProvider.messageList[index],
-                          style: TextStyle(
-                              color: index % 2 == 0
-                                  ? Colors.white
-                                  : Color.fromARGB(255, 255, 255, 255)),
-                        )),
-                      ),
-                    );
-                  },
-                ),
-              ),
-              Container(
-                height: 50,
-                width: double.infinity,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                        child: TextFormField(
-                          controller: chatPageProvider.messageController,
-                          style: TextStyle(fontSize: 15, color: Colors.white),
-                          decoration: InputDecoration(
-                            fillColor: Colors.black,
-                            filled: true,
-                            hintText: 'Message...',
-                            hintStyle: GoogleFonts.raleway(
-                                color: Colors.white, fontSize: 12),
-                            floatingLabelStyle: TextStyle(color: Colors.white),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(50),
-                            ),
-                            suffixIcon: InkWell(
-                              onTap: () {
-                                showBottomSheet(
-                                  context: context,
-                                  builder: (context) {
-                                    return BottomSheetPage();
-                                  },
-                                );
-                              },
-                              child: Icon(
-                                Icons.attach_file,
-                                color: Colors.grey,
+      backgroundColor: Color(0xff131313),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: Stack(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10, bottom: 40),
+                    child: ChatBubble(service: service, size: size),
+                  ),
+                  Positioned(
+                    bottom: 10,
+                    left: 5,
+                    right: 5,
+                    child: Container(
+                      height: 50,
+                      width: double.infinity,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15),
+                              child: TextFormField(
+                                controller: messagecontroller,
+                                style: TextStyle(
+                                    fontSize: 15, color: Colors.white),
+                                decoration: InputDecoration(
+                                  fillColor: Colors.black,
+                                  filled: true,
+                                  hintText: 'Message...',
+                                  hintStyle: GoogleFonts.raleway(
+                                      color: Colors.white, fontSize: 12),
+                                  floatingLabelStyle:
+                                      TextStyle(color: Colors.white),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  suffixIcon: InkWell(
+                                    onTap: () {
+                                      showBottomSheet(
+                                        context: context,
+                                        builder: (context) {
+                                          return BottomSheetPage();
+                                        },
+                                      );
+                                    },
+                                    child: Icon(
+                                      Icons.attach_file,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
-                        ),
+                          CircleAvatar(
+                            child: Icon(
+                              Icons.mic,
+                              color: Colors.white,
+                            ),
+                            backgroundColor: Color.fromARGB(255, 26, 26, 26),
+                            radius: size.height * 0.036,
+                          ),
+                          spacingWidth(size.width * 0.003),
+                          InkWell(
+                            onTap: () {
+                              sendMessage();
+                            },
+                            child: CircleAvatar(
+                              child: Icon(
+                                Icons.send,
+                                color: Colors.white,
+                              ),
+                              backgroundColor: Color(0xff02B4BF),
+                              radius: size.height * 0.036,
+                            ),
+                          ),
+                          spacingWidth(size.width * 0.01),
+                        ],
                       ),
                     ),
-                    CircleAvatar(
-                      child: Icon(
-                        Icons.mic,
-                        color: Colors.white,
-                      ),
-                      backgroundColor: Color.fromARGB(255, 26, 26, 26),
-                      radius: height * 0.036,
-                    ),
-                    spacingWidth(width * 0.003),
-                    InkWell(
-                      onTap: () {
-                        chatPageProvider.addMessage();
-                      },
-                      child: CircleAvatar(
-                        child: Icon(
-                          Icons.send,
-                          color: Colors.white,
-                        ),
-                        backgroundColor: Color(0xff02B4BF),
-                        radius: height * 0.036,
-                      ),
-                    ),
-                    spacingWidth(width * 0.01),
-                  ],
-                ),
+                  )
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
+
+  sendMessage() async {
+    if (messagecontroller.text.isNotEmpty) {
+      await ChatService().sendMessage(
+          widget.user.userId ?? "", messagecontroller.text, "text");
+      messagecontroller.clear();
+    }
+  }
 }
-
-

@@ -104,7 +104,7 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
                               spacingHeight(height * 0.01),
                               InkWell(
                                 onTap: () {
-                                  friendSuggestionPro.isClickedon(index);
+
                                 },
                                 child: Container(
                                   height: height * 0.035,

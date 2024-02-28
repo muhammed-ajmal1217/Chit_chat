@@ -50,15 +50,15 @@ class AuthenticationProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
-  verifyOtp({required String verificationId,required String otp,required Function onSuccess,required String name,required String email}){
+  verifyOtp({required String verificationId,required String otp,required Function onSuccess,required String name,required String email,required String phone}){
     try{
-      authService.verifyOtp(verificationId: verificationId, otp: otp, onSuccess: onSuccess,email: email,name: name);
+      authService.verifyOtp(verificationId: verificationId, otp: otp, onSuccess: onSuccess,email: email,name: name,phone:phone );
     }catch(e){
       throw Exception('otp verification interrupted because$e');
     }
     notifyListeners();
   }
-    signout() async {
+    signOut() async {
     try {
       await authService.signout();
     } catch (e) {

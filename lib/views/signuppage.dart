@@ -41,9 +41,13 @@ class _SignUpPageState extends State<SignUpPage> {
           child: Stack(
             children: [
               Ellipses(),
+              Positioned(
+              top: 50,
+              left: 20,
+              child: goBackArrow(context)),
               Padding(
                 padding: EdgeInsets.only(
-                  top: height * 0.06,
+                  top: height * 0.10,
                   left: width * 0.05,
                   right: width * 0.05,
                   bottom: MediaQuery.of(context).viewInsets.bottom,

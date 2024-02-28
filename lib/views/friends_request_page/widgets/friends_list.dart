@@ -1,5 +1,4 @@
 import 'package:chitchat/helpers/helpers.dart';
-import 'package:chitchat/views/chat_page.dart';
 import 'package:chitchat/views/user_profile/user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -62,10 +61,10 @@ class friends_list extends StatelessWidget {
                     children: [
                       InkWell(
                         onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) =>
-                                ChatPage(person: personNumber),
-                          ));
+                          // Navigator.of(context).push(MaterialPageRoute(
+                          //   builder: (context) =>
+                          //       ChatScreen(user: ),
+                          // ));
                         },
                         child: Icon(
                           Icons.message,

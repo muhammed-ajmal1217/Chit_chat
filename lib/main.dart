@@ -1,5 +1,6 @@
 import 'package:chitchat/controller/auth_provider.dart';
 import 'package:chitchat/controller/chat_page_provider.dart';
+import 'package:chitchat/controller/chat_provider.dart';
 import 'package:chitchat/controller/friend_suggestion_provider.dart';
 import 'package:chitchat/controller/login_provider.dart';
 import 'package:chitchat/controller/phone_request_provider.dart';
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => FriendSuggestionProvider(),),
         ChangeNotifierProvider(create: (context) => PhoneReqProvider(),),
         ChangeNotifierProvider(create: (context) => AuthenticationProvider(),),
+        ChangeNotifierProvider(create: (context) => FirebaseProvider(),),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

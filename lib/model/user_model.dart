@@ -13,7 +13,7 @@ class UserModel{
     return UserModel(
       userName: json['name'],
       email: json['email'],
-      userId: json['uid'],
+      userId: json['userid'],
       phoneNumber: json['phone'],
     );
   }
@@ -23,6 +23,7 @@ class UserModel{
       'name':userName,
       'email':email,
       'phone':phoneNumber,
+      'userid':userId,
     };
   }
 }

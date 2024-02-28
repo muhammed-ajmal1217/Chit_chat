@@ -2,6 +2,7 @@ import 'package:chitchat/controller/auth_provider.dart';
 import 'package:chitchat/helpers/helpers.dart';
 import 'package:chitchat/views/drawer/widgets.dart';
 import 'package:chitchat/views/favourite_chat.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
@@ -11,15 +12,14 @@ class CustomDrawer extends StatefulWidget {
   @override
   State<CustomDrawer> createState() => _CustomDrawerState();
 }
-
+FirebaseAuth auth = FirebaseAuth.instance;
 class _CustomDrawerState extends State<CustomDrawer> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Consumer<AuthenticationProvider>(
-      builder: (context, authProvider, child) => 
-       Drawer(
+      builder: (context, authProvider, child) => Drawer(
         surfaceTintColor: Colors.black,
         backgroundColor: Colors.black,
         child: ListView(
@@ -34,7 +34,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   Row(
                     children: [
                       CircleAvatar(
-                        radius: width*0.065,
+                        radius: width * 0.065,
                         backgroundImage: AssetImage('assets/Designer.png'),
                       ),
                       spacingWidth(5),
@@ -43,17 +43,17 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Username',
+                            '${auth.currentUser?.displayName}',
                             style: GoogleFonts.raleway(
                               color: Colors.white,
-                              fontSize: width*0.040,
+                              fontSize: width * 0.040,
                             ),
                           ),
                           Text(
-                            'username@gmail.com',
+                            '${auth.currentUser?.email}',
                             style: GoogleFonts.raleway(
                               color: Colors.white,
-                              fontSize: width*0.030,
+                              fontSize: width * 0.030,
                             ),
                           ),
                         ],
@@ -70,7 +70,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                           'Hello i am new to Chitchat',
                           style: GoogleFonts.raleway(
                             color: Colors.white,
-                            fontSize: width*0.040,
+                            fontSize: width * 0.040,
                           ),
                         ),
                         Icon(
@@ -93,19 +93,21 @@ class _CustomDrawerState extends State<CustomDrawer> {
               onTap: () {},
             ),
             ListTiles(
-                        text: 'Notification',
-                        onTap: () {},
-                      ),
+              text: 'Notification',
+              onTap: () {},
+            ),
             ListTiles(
               text: "Favourite chat's",
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => FavouriteChatList(),));
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => FavouriteChatList(),
+                ));
               },
             ),
             ListTiles(
               text: 'Logout',
               onTap: () {
-                authProvider.signout();
+                authProvider.signOut();
               },
             ),
             ListTiles(
