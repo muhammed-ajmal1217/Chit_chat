@@ -1,8 +1,8 @@
 import 'package:chitchat/controller/auth_provider.dart';
 import 'package:chitchat/controller/phone_request_provider.dart';
 import 'package:chitchat/helpers/helpers.dart';
-import 'package:chitchat/mainwidgets/bacground_ellipse.dart';
-import 'package:chitchat/mainwidgets/main_auth_button.dart';
+import 'package:chitchat/main_widgets/bacground_ellipse.dart';
+import 'package:chitchat/main_widgets/main_auth_button.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

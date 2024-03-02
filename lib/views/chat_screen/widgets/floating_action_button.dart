@@ -2,7 +2,9 @@ import 'package:chitchat/views/friends_request_page/friends_request_page.dart';
 import 'package:flutter/material.dart';
 
 class NavigateToFriends extends StatelessWidget {
-  const NavigateToFriends({
+  String? userName;
+   NavigateToFriends({
+    this.userName,
     super.key,
   });
 
@@ -12,7 +14,7 @@ class NavigateToFriends extends StatelessWidget {
       
       onPressed: () {
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => Friends_RequestPage(),
+          builder: (context) => Friends_RequestPage(userName: userName,),
         ));
       },
       backgroundColor: Color(0xff02B4BF),

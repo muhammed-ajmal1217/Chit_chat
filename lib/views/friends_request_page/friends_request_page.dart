@@ -3,17 +3,14 @@ import 'package:chitchat/views/friends_request_page/widgets/floating_action_butt
 import 'package:chitchat/views/friends_request_page/widgets/friends_list.dart';
 import 'package:chitchat/views/friends_request_page/widgets/helpers_widgets.dart';
 import 'package:chitchat/views/friends_request_page/widgets/request_lists.dart';
+import 'package:chitchat/views/friends_suggestions.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class Friends_RequestPage extends StatefulWidget {
-  const Friends_RequestPage({Key? key}) : super(key: key);
+class Friends_RequestPage extends StatelessWidget {
+  String? userName;
+  Friends_RequestPage({Key? key,this.userName}) : super(key: key);
 
-  @override
-  State<Friends_RequestPage> createState() => _Friends_RequestPageState();
-}
-
-class _Friends_RequestPageState extends State<Friends_RequestPage> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -66,14 +63,27 @@ class _Friends_RequestPageState extends State<Friends_RequestPage> {
                     ),
                   ),
                   spacingHeight(height * 0.02),
-                  friends_list(),
+                  FriendsList(),
                 ],
               ),
             ),
-            FriendsRequest(),
+            FriendsRequest(userName: userName,),
           ],
         ),
-        floatingActionButton: NavigatetoFriendsAdding(),
+       
+      floatingActionButton: FloatingActionButton(
+      onPressed: () {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => FriendsSuggestions(userName: userName,),
+        ));
+      },
+      shape: CircleBorder(),
+      backgroundColor: Color(0xffFA7B06),
+      child: Icon(
+        Icons.add,
+        color: Colors.white,
+      ),
+    ),
       ),
     );
   }

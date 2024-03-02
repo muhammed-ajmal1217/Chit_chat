@@ -1,5 +1,6 @@
 import 'package:chitchat/controller/auth_provider.dart';
 import 'package:chitchat/helpers/helpers.dart';
+import 'package:chitchat/service/auth_service.dart';
 import 'package:chitchat/views/drawer/widgets.dart';
 import 'package:chitchat/views/favourite_chat.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,11 +10,28 @@ import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 
 class CustomDrawer extends StatefulWidget {
+  
+  CustomDrawer({
+    Key? key,
+  }) : super(key: key);
+
   @override
   State<CustomDrawer> createState() => _CustomDrawerState();
 }
-FirebaseAuth auth = FirebaseAuth.instance;
+
 class _CustomDrawerState extends State<CustomDrawer> {
+  AuthenticationService service = AuthenticationService();
+  String userName = ''; 
+  @override
+  void initState() {
+    super.initState();
+    service.getUserName().then((value) {
+      setState(() {
+        userName = value;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -43,7 +61,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            '${auth.currentUser?.displayName}',
+                            userName,
                             style: GoogleFonts.raleway(
                               color: Colors.white,
                               fontSize: width * 0.040,
@@ -124,3 +142,5 @@ class _CustomDrawerState extends State<CustomDrawer> {
     );
   }
 }
+
+FirebaseAuth auth = FirebaseAuth.instance;

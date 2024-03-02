@@ -12,6 +12,14 @@ class AuthenticationService {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   FacebookAuth facebookAuth = FacebookAuth.instance;
   String userEmail = '';
+  String userName='';
+  getUserName()async{
+    DocumentSnapshot? userCredential = await firestore.collection('users').doc(authentication.currentUser!.uid).get();
+    if(userCredential.exists){
+     userName = userCredential.get('name');
+    }
+    return userName;
+  }
   signinWithEmail(
       {required String email,
       required String password,
@@ -23,7 +31,7 @@ class AuthenticationService {
     } on FirebaseAuthException catch (error) {
       String errorCode = 'error with Sign-in';
       if (error.code == 'wrong-password' || error.code == 'user-not-found') {
-        errorCode = "Icorrect email or password";
+        errorCode = "Incorrect email or password";
       } else if (error.code == 'user-disabled') {
         errorCode = "User not found";
       } else {
@@ -48,7 +56,7 @@ class AuthenticationService {
           email: email, password: password);
       UserModel userData =
           UserModel(email: email, userName: userName, userId: user.user?.uid);
-      firestore.collection('users').doc(userName).set(userData.toJson());
+      firestore.collection('users').doc(user.user?.uid).set(userData.toJson());
       return user;
     } on FirebaseAuthException catch (e) {
       throw Exception('Signup is interrupted because$e');
@@ -58,9 +66,9 @@ class AuthenticationService {
   signinWithGoogle() async {
     try {
       GoogleSignInAccount? guser = await GoogleSignIn().signIn();
-      GoogleSignInAuthentication gauth = await guser!.authentication;
+      GoogleSignInAuthentication? gauth = await guser?.authentication;
       final credential = GoogleAuthProvider.credential(
-          accessToken: gauth.accessToken, idToken: gauth.idToken);
+          accessToken: gauth?.accessToken, idToken: gauth?.idToken);
       UserCredential user =
           await authentication.signInWithCredential(credential);
       User googleUser = user.user!;
@@ -70,7 +78,7 @@ class AuthenticationService {
           userName: googleUser.displayName);
       firestore
           .collection('users')
-          .doc(googleUser.displayName)
+          .doc(user.user?.uid)
           .set(userData.toJson());
     } on FirebaseAuthException catch (e) {
       throw Exception('Signin with google was interrupted because$e');
@@ -170,5 +178,16 @@ class AuthenticationService {
     } catch (e) {
       throw Exception('couldnt signout because$e');
     }
+  }
+   bool isGoogleSignIn() {
+    final currentUser = authentication.currentUser;
+    if (currentUser != null) {
+      for (final provider in currentUser.providerData) {
+        if (provider.providerId == 'google.com') {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 }

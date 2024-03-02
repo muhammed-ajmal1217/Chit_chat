@@ -1,18 +1,22 @@
-import 'package:chitchat/controller/friend_suggestion_provider.dart';
-import 'package:chitchat/helpers/helpers.dart';
-import 'package:chitchat/views/user_profile/user_profile.dart';
+import 'package:chitchat/controller/chat_provider.dart';
+import 'package:chitchat/controller/friends_request_accept_provider.dart';
+import 'package:chitchat/service/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class FriendsSuggestions extends StatefulWidget {
-  const FriendsSuggestions({Key? key}) : super(key: key);
+  String? userName;
+
+  FriendsSuggestions({Key? key,this.userName}) : super(key: key);
 
   @override
   State<FriendsSuggestions> createState() => _FriendsSuggestionsState();
 }
 
 class _FriendsSuggestionsState extends State<FriendsSuggestions> {
+  AuthenticationService service = AuthenticationService();
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -27,108 +31,111 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
         ),
       ),
       body: Container(
-        height: double.infinity,
-        width: double.infinity,
         color: Colors.black,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
               padding: const EdgeInsets.all(15),
-              child: SizedBox(
-                height: height * 0.05,
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.search),
-                    prefixStyle: TextStyle(color: Colors.grey),
-                    hintText: 'Search...',
-                    hintStyle: TextStyle(color: Colors.grey, fontSize: 14),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
+              child: TextFormField(
+                decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.search),
+                  prefixStyle: TextStyle(color: Colors.grey),
+                  hintText: 'Search...',
+                  hintStyle: TextStyle(color: Colors.grey, fontSize: 14),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
                   ),
                 ),
               ),
             ),
-            spacingHeight(height * 0.020),
-            Consumer<FriendSuggestionProvider>(
-              builder: (context, friendSuggestionPro, child) => Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 8, right: 8),
-                  child: GridView.builder(
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Consumer2<FriendshipProvider,FirebaseProvider>(
+                  builder: (context, pro,pro1, child) => GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       crossAxisSpacing: 8.0,
                       mainAxisSpacing: 8.0,
                       childAspectRatio: 1.0,
                     ),
-                    itemCount: 20,
+                    itemCount: pro1.users.length,
                     itemBuilder: (context, index) {
-                      final personNumber = index + 1;
-                      return Padding(
-                        padding: const EdgeInsets.all(2.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 41, 33, 53)
-                                .withOpacity(0.5),
-                            borderRadius: BorderRadius.circular(25.0),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) =>
-                                        UserProfile(index: personNumber),
-                                  ));
-                                },
-                                child: Hero(
-                                  tag: personNumber,
-                                  child: Container(
-                                    height: height * 0.085,
-                                    width: height * 0.085,
-                                    decoration: BoxDecoration(
+                      final userDetails = pro1.users[index];
+                      if (userDetails.userId !=
+                          service.authentication.currentUser!.uid) {
+                        return Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Color.fromARGB(255, 41, 33, 53)
+                                  .withOpacity(0.5),
+                              borderRadius: BorderRadius.circular(25.0),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    // Navigator.of(context).push(MaterialPageRoute(
+                                    //   builder: (context) =>
+                                    //       UserProfile(index: personNumber),
+                                    // ));
+                                  },
+                                  child: Hero(
+                                    tag: pro1.users[index],
+                                    child: Container(
+                                      height: height * 0.085,
+                                      width: height * 0.085,
+                                      decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(15),
                                         image: DecorationImage(
-                                            image: AssetImage(
-                                                'assets/Designer (2).png'))),
-                                  ),
-                                ),
-                              ),
-                              spacingHeight(height * 0.01),
-                              Text(
-                                'User $personNumber',
-                                style: GoogleFonts.raleway(
-                                    fontSize: 15, color: Colors.white),
-                              ),
-                              spacingHeight(height * 0.01),
-                              InkWell(
-                                onTap: () {
-
-                                },
-                                child: Container(
-                                  height: height * 0.035,
-                                  width: width * 0.3,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(50),
-                                    color: friendSuggestionPro.isClicked[index]
-                                        ? Color(0xffFA7B06)
-                                        : Color(0xff02B4BF),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      friendSuggestionPro.isClicked[index]
-                                          ? 'Requested'
-                                          : 'Add Friend',
-                                      style: TextStyle(color: Colors.white),
+                                          image: AssetImage(
+                                            'assets/Designer (2).png',
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
-                              )
-                            ],
+                                SizedBox(height: height * 0.01),
+                                Text(
+                                  ' ${userDetails.userName}',
+                                  style: GoogleFonts.raleway(
+                                    fontSize: 15,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                SizedBox(height: height * 0.01),
+                                InkWell(
+                                  onTap: () {
+                                    pro.sendFriendRequest(userDetails.userId!,widget.userName??'No name of person');
+                                  },
+                                  child: Container(
+                                    height: 30,
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30),
+                                      color: Colors.orange,
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        'Add Friend',
+                                        style: GoogleFonts.raleway(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      );
+                        );
+                      } else {
+                        return SizedBox();
+                      }
                     },
                   ),
                 ),

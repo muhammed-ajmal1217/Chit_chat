@@ -4,7 +4,6 @@ import 'package:chitchat/model/user_model.dart';
 import 'package:chitchat/service/auth_service.dart';
 import 'package:chitchat/service/chat_service.dart';
 import 'package:chitchat/views/chat_bubble.dart';
-import 'package:chitchat/views/user_profile/user_profile.dart';
 import 'package:chitchat/views/user_profile/widgets/bottomsheet_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -55,9 +54,10 @@ class _ChatScreenState extends State<ChatScreen> {
                 widget.user.userName!,
                 style: GoogleFonts.raleway(
                   color: Colors.white,
-                  fontSize: 22,
+                  fontSize: 15,
                   fontWeight: FontWeight.w500,
                 ),
+                overflow: TextOverflow.ellipsis,
               ),
             ),
           ],

@@ -1,72 +1,97 @@
-import 'package:chitchat/helpers/helpers.dart';
+
+import 'package:chitchat/controller/friends_request_accept_provider.dart';
+import 'package:chitchat/model/request_model.dart';
+import 'package:chitchat/views/drawer/drawer.dart';
 import 'package:chitchat/views/friends_request_page/widgets/helpers_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
-class FriendsRequest extends StatefulWidget {
-  const FriendsRequest({super.key});
+class FriendsRequest extends StatelessWidget {
+  String? userName;
+   FriendsRequest({Key? key,this.userName});
 
-  @override
-  State<FriendsRequest> createState() => _FriendsRequestState();
-}
-
-class _FriendsRequestState extends State<FriendsRequest> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.black,
-      body: ListView.builder(
-        itemCount: 20,
-        itemBuilder: (context, index) {
-          final personNumber = index + 1;
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: InkWell(
-              onTap: () {},
-              child: Container(
-                height: height * 0.09,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Color.fromARGB(255, 41, 33, 53).withOpacity(0.5),
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    bottomLeft: Radius.circular(20),
-                    topRight: Radius.circular(20)),
-                ),
-                child: Center(
-                  child: ListTile(
-                    title: Text(
-                      'User  $personNumber',
-                      style:
-                          GoogleFonts.raleway(color: Colors.white, fontSize: 14),
-                    ),
-                    leading: Container(
-                        height: height * 0.065,
-                        width: height * 0.065,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            image: DecorationImage(
-                                image: AssetImage('assets/Designer (2).png'))),
+      body: Consumer<FriendshipProvider>(
+        builder: (context, value, child) {
+          return StreamProvider<List<RequestModel>>(
+            create: (_) => value.getRequest(),
+            initialData: [],
+            builder: (context, snapshot) {
+              final requests = Provider.of<List<RequestModel>>(context);
+              return ListView.builder(
+                itemCount: requests.length,
+                itemBuilder: (context, index) {
+                  RequestModel requestData = requests[index];
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      height: height * 0.09,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Color.fromARGB(255, 41, 33, 53).withOpacity(0.5),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          bottomLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
+                        ),
                       ),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        requestAccept_Reject(Icons.check,height),
-                        spacingWidth(width*0.03),
-                        requestAccept_Reject(Icons.close,height),
-                      ],
+                      child: Center(
+                        child: ListTile(
+                          title: Text(
+                            '${requestData.senderName}',
+                            style: GoogleFonts.raleway(
+                              color: Colors.white,
+                              fontSize: 14,
+                            ),
+                          ),
+                          leading: GestureDetector(
+                            onTap: () {
+                              // Navigate to user profile
+                            },
+                            child: Hero(
+                              tag: index,
+                              child: Container(
+                                height: height * 0.065,
+                                width: height * 0.065,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  image: DecorationImage(
+                                    image:
+                                        AssetImage('assets/Designer (2).png'),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              requestAccept_Reject(Icons.check, height, () {}),
+                              SizedBox(width: width * 0.03),
+                              requestAccept_Reject(Icons.close, height, () {
+                                Provider.of<FriendshipProvider>(context,
+                                        listen: false)
+                                    .acceptFriendRequest(
+                                        requestData.senderId!,requestData.senderName!);
+                              }),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ),
-            ),
+                  );
+                },
+              );
+            },
           );
         },
       ),
     );
   }
-
-
 }

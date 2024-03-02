@@ -1,9 +1,8 @@
 import 'package:chitchat/controller/auth_provider.dart';
 import 'package:chitchat/helpers/helpers.dart';
-import 'package:chitchat/mainwidgets/main_auth_button.dart';
-import 'package:chitchat/mainwidgets/bacground_ellipse.dart';
-import 'package:chitchat/mainwidgets/toggle_signup_login.dart';
-import 'package:chitchat/service/auth_service.dart';
+import 'package:chitchat/main_widgets/main_auth_button.dart';
+import 'package:chitchat/main_widgets/bacground_ellipse.dart';
+import 'package:chitchat/main_widgets/toggle_signup_login.dart';
 import 'package:chitchat/views/chat_screen/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -41,10 +40,6 @@ class _SignUpPageState extends State<SignUpPage> {
           child: Stack(
             children: [
               Ellipses(),
-              Positioned(
-              top: 50,
-              left: 20,
-              child: goBackArrow(context)),
               Padding(
                 padding: EdgeInsets.only(
                   top: height * 0.10,
@@ -120,6 +115,7 @@ class _SignUpPageState extends State<SignUpPage> {
       );
     }else{
       authProvider.signupWithEmail(email: emailController.text.trim(), password: passwordController.text.trim(), userName: nameController.text.trim());
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => ChatListPage(userName: nameController.text.trim()),));
     }
   }
 }

@@ -2,10 +2,10 @@ import 'dart:ui';
 
 import 'package:chitchat/controller/auth_provider.dart';
 import 'package:chitchat/helpers/helpers.dart';
-import 'package:chitchat/mainwidgets/main_auth_button.dart';
-import 'package:chitchat/mainwidgets/media_auth_button.dart';
-import 'package:chitchat/mainwidgets/bacground_ellipse.dart';
-import 'package:chitchat/mainwidgets/toggle_signup_login.dart';
+import 'package:chitchat/main_widgets/main_auth_button.dart';
+import 'package:chitchat/main_widgets/media_auth_button.dart';
+import 'package:chitchat/main_widgets/bacground_ellipse.dart';
+import 'package:chitchat/main_widgets/toggle_signup_login.dart';
 import 'package:chitchat/service/auth_service.dart';
 import 'package:chitchat/views/chat_screen/chat_screen.dart';
 import 'package:chitchat/views/forgot_password_page.dart';

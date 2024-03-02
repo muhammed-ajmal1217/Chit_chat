@@ -1,6 +1,6 @@
 import 'package:chitchat/controller/login_provider.dart';
 import 'package:chitchat/views/login_page.dart';
-import 'package:chitchat/views/signuppage.dart';
+import 'package:chitchat/views/signup_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

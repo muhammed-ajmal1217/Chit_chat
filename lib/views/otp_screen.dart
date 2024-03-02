@@ -1,6 +1,6 @@
 import 'package:chitchat/controller/auth_provider.dart';
 import 'package:chitchat/helpers/helpers.dart';
-import 'package:chitchat/mainwidgets/bacground_ellipse.dart';
+import 'package:chitchat/main_widgets/bacground_ellipse.dart';
 import 'package:chitchat/views/chat_screen/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
