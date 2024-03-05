@@ -2,7 +2,7 @@ import 'package:chitchat/helpers/helpers.dart';
 import 'package:chitchat/main_widgets/bacground_ellipse.dart';
 import 'package:chitchat/main_widgets/main_auth_button.dart';
 import 'package:chitchat/service/auth_service.dart';
-import 'package:chitchat/views/chat_screen/chat_screen.dart';
+import 'package:chitchat/views/home_screen/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 

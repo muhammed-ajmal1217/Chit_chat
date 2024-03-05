@@ -7,7 +7,7 @@ import 'package:chitchat/main_widgets/media_auth_button.dart';
 import 'package:chitchat/main_widgets/bacground_ellipse.dart';
 import 'package:chitchat/main_widgets/toggle_signup_login.dart';
 import 'package:chitchat/service/auth_service.dart';
-import 'package:chitchat/views/chat_screen/chat_screen.dart';
+import 'package:chitchat/views/home_screen/home_screen.dart';
 import 'package:chitchat/views/forgot_password_page.dart';
 import 'package:chitchat/views/phone_request.dart';
 import 'package:firebase_auth/firebase_auth.dart';

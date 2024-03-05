@@ -1,9 +1,10 @@
 import 'package:chitchat/controller/chat_provider.dart';
 import 'package:chitchat/helpers/helpers.dart';
+import 'package:chitchat/model/request_model.dart';
 import 'package:chitchat/model/user_model.dart';
 import 'package:chitchat/service/auth_service.dart';
 import 'package:chitchat/service/chat_service.dart';
-import 'package:chitchat/views/chat_bubble.dart';
+import 'package:chitchat/chat_screen/widgets/chat_bubble.dart';
 import 'package:chitchat/views/user_profile/widgets/bottomsheet_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -108,7 +109,8 @@ class _ChatScreenState extends State<ChatScreen> {
                           value: 2,
                         ),
                         PopupMenuItem(
-                          onTap: () => Provider.of<FirebaseProvider>(context,listen: false)
+                          onTap: () => Provider.of<FirebaseProvider>(context,
+                                  listen: false)
                               .clearChat(
                                   service.authentication.currentUser!.uid,
                                   widget.user.userId!),
@@ -147,7 +149,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(top: 10, bottom: 40),
-                    child: ChatBubble(service: service, size: size),
+                    child: ChatBubble(service: service, size: size,),
                   ),
                   Positioned(
                     bottom: 10,
@@ -180,10 +182,13 @@ class _ChatScreenState extends State<ChatScreen> {
                                   ),
                                   suffixIcon: InkWell(
                                     onTap: () {
-                                      showBottomSheet(
+                                      showModalBottomSheet(
                                         context: context,
-                                        builder: (context) {
-                                          return BottomSheetPage();
+                                        builder: (BuildContext context) {
+                                          return Container(
+                                            height: size.height*0.15,
+                                            child: BottomSheetPage(user: widget.user,),
+                                          );
                                         },
                                       );
                                     },

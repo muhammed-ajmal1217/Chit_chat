@@ -1,12 +1,12 @@
 import 'package:chitchat/controller/chat_provider.dart';
 import 'package:chitchat/helpers/helpers.dart';
-import 'package:chitchat/model/message_model.dart';
+
 import 'package:chitchat/model/story_view_mode.dart';
-import 'package:chitchat/views/chat_screen/widgets/floating_action_button.dart';
-import 'package:chitchat/views/chat_screen/widgets/helpers.dart';
-import 'package:chitchat/views/chat_screen/widgets/story_view_list.dart';
+import 'package:chitchat/views/home_screen/widgets/floating_action_button.dart';
+import 'package:chitchat/views/home_screen/widgets/helpers.dart';
+import 'package:chitchat/views/home_screen/widgets/story_view_list.dart';
 import 'package:chitchat/views/drawer/drawer.dart';
-import 'package:chitchat/views/chat_page.dart';
+import 'package:chitchat/chat_screen/chat_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,8 +14,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 
 class ChatListPage extends StatefulWidget {
-  String? userName;
-   ChatListPage({Key? key,this.userName}) : super(key: key);
+   ChatListPage({Key? key}) : super(key: key);
 
   @override
   State<ChatListPage> createState() => _ChatScreenState();
@@ -46,15 +45,6 @@ class _ChatScreenState extends State<ChatListPage> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    String? displayName = widget.userName;
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user != null && user.providerData.isNotEmpty) {
-      for (var userInfo in user.providerData) {
-        if (userInfo.providerId == 'google.com') {
-          displayName = user.displayName;
-        }
-      }
-    }
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -187,78 +177,78 @@ class _ChatScreenState extends State<ChatListPage> {
                             ],
                           ),
                         ),
-                        // Expanded(
-                        //   child: Container(
-                        //     width: width,
-                        //     decoration: const BoxDecoration(
-                        //         color: Color(0xff1A1A22),
-                        //         borderRadius: BorderRadius.only(
-                        //             topLeft: Radius.circular(50),
-                        //             topRight: Radius.circular(50))),
-                        //     child: Consumer<FirebaseProvider>(
-                        //       builder: (context, value, child) {
-                        //         return ListView.builder(
-                        //           physics: const BouncingScrollPhysics(),
-                        //           itemCount: value.users.length,
-                        //           itemBuilder: (context, index) {
-                        //             final userdetails = value.users[index];
-                        //             if (userdetails.userId !=
-                        //                 FirebaseAuth
-                        //                     .instance.currentUser!.uid) {
-                        //               return Column(
-                        //                 children: [
-                        //                   Padding(
-                        //                     padding: const EdgeInsets.all(8.0),
-                        //                     child: InkWell(
-                        //                       splashColor: const Color.fromRGBO(
-                        //                           41, 15, 102, .3),
-                        //                       onTap: () => Navigator.push(
-                        //                           context,
-                        //                           MaterialPageRoute(
-                        //                             builder: (context) =>
-                        //                                 Scaffold(
-                        //                               body: ChatScreen(
-                        //                                   user: userdetails),
-                        //                             ),
-                        //                           )),
-                        //                       child: ListTile(
-                        //                         leading: Container(
-                        //                           height: height * 0.060,
-                        //                           width: height * 0.060,
-                        //                           decoration: BoxDecoration(
-                        //                               borderRadius:
-                        //                                   BorderRadius.circular(
-                        //                                       10),
-                        //                               image: DecorationImage(
-                        //                                   image: AssetImage(
-                        //                                       'assets/Designer.png'))),
-                        //                         ),
-                        //                         title: Text(
-                        //                           userdetails.userName!,
-                        //                           style: GoogleFonts.raleway(
-                        //                             color: Colors.white,
-                        //                           ),
-                        //                         ),
-                        //                         subtitle: Text(
-                        //                           "Tap to Chat",
-                        //                           style: GoogleFonts.raleway(
-                        //                               color: Colors.white,
-                        //                               fontSize: 13),
-                        //                         ),
-                        //                       ),
-                        //                     ),
-                        //                   ),
-                        //                 ],
-                        //               );
-                        //             } else {
-                        //               return const SizedBox();
-                        //             }
-                        //           },
-                        //         );
-                        //       },
-                        //     ),
-                        //   ),
-                        // )
+                        Expanded(
+                          child: Container(
+                            width: width,
+                            decoration: const BoxDecoration(
+                                color: Color(0xff1A1A22),
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(50),
+                                    topRight: Radius.circular(50))),
+                            child: Consumer<FirebaseProvider>(
+                              builder: (context, value, child) {
+                                return ListView.builder(
+                                  physics: const BouncingScrollPhysics(),
+                                  itemCount: value.users.length,
+                                  itemBuilder: (context, index) {
+                                    final userdetails = value.users[index];
+                                    if (userdetails.userId !=
+                                        FirebaseAuth
+                                            .instance.currentUser!.uid) {
+                                      return Column(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: InkWell(
+                                              splashColor: const Color.fromRGBO(
+                                                  41, 15, 102, .3),
+                                              onTap: () => Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        Scaffold(
+                                                      body: ChatScreen(
+                                                          user: userdetails),
+                                                    ),
+                                                  )),
+                                              child: ListTile(
+                                                leading: Container(
+                                                  height: height * 0.060,
+                                                  width: height * 0.060,
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                      image: DecorationImage(
+                                                          image: AssetImage(
+                                                              'assets/Designer.png'))),
+                                                ),
+                                                title: Text(
+                                                  userdetails.userName!,
+                                                  style: GoogleFonts.raleway(
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                                subtitle: Text(
+                                                  "Tap to Chat",
+                                                  style: GoogleFonts.raleway(
+                                                      color: Colors.white,
+                                                      fontSize: 13),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    } else {
+                                      return const SizedBox();
+                                    }
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                        )
                       ],
                     ),
                   )
@@ -268,7 +258,7 @@ class _ChatScreenState extends State<ChatListPage> {
           ),
         ],
       ),
-      floatingActionButton: NavigateToFriends(userName: widget.userName,),
+      floatingActionButton: NavigateToFriends(),
     );
   }
 }

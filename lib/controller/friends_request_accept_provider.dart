@@ -35,7 +35,8 @@ class FriendshipProvider extends ChangeNotifier {
     final request = RequestModel(
         senderId: senderId,
         senderName: senderName,
-        recieverId: recipientUserId);
+        recieverId: recipientUserId,
+        );
     authService.firestore
         .collection('users')
         .doc(recipientUserId)
@@ -43,9 +44,9 @@ class FriendshipProvider extends ChangeNotifier {
         .add(request.toJson());
   }
 
-void acceptFriendRequest(String senderId, String senderName,) {
+void acceptFriendRequest(String senderId, String senderName,String currentUserName) {
   final currentUserUid = authService.authentication.currentUser!.uid;
-  final currentUserName = authService.authentication.currentUser!.displayName;
+  // final currentUserName = authService.authentication.currentUser!.displayName;
   
   // Create friend models for both sender and receiver
   final senderFriend = RequestModel(senderId: senderId, senderName: senderName, recieverId: currentUserUid, recieverName: currentUserName);

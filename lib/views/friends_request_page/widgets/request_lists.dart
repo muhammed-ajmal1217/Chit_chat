@@ -1,5 +1,6 @@
 
 import 'package:chitchat/controller/friends_request_accept_provider.dart';
+import 'package:chitchat/controller/profile_provider.dart';
 import 'package:chitchat/model/request_model.dart';
 import 'package:chitchat/views/drawer/drawer.dart';
 import 'package:chitchat/views/friends_request_page/widgets/helpers_widgets.dart';
@@ -17,8 +18,8 @@ class FriendsRequest extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.black,
-      body: Consumer<FriendshipProvider>(
-        builder: (context, value, child) {
+      body: Consumer2<FriendshipProvider,ProfileProvider>(
+        builder: (context, value,value1, child) {
           return StreamProvider<List<RequestModel>>(
             create: (_) => value.getRequest(),
             initialData: [],
@@ -52,7 +53,7 @@ class FriendsRequest extends StatelessWidget {
                           ),
                           leading: GestureDetector(
                             onTap: () {
-                              // Navigate to user profile
+                              
                             },
                             child: Hero(
                               tag: index,
@@ -78,7 +79,7 @@ class FriendsRequest extends StatelessWidget {
                                 Provider.of<FriendshipProvider>(context,
                                         listen: false)
                                     .acceptFriendRequest(
-                                        requestData.senderId!,requestData.senderName!);
+                                        requestData.senderId!,requestData.senderName!,value1.userName);
                               }),
                             ],
                           ),

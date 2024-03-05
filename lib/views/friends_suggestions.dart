@@ -1,6 +1,8 @@
 import 'package:chitchat/controller/chat_provider.dart';
 import 'package:chitchat/controller/friends_request_accept_provider.dart';
+import 'package:chitchat/controller/profile_provider.dart';
 import 'package:chitchat/service/auth_service.dart';
+import 'package:chitchat/views/drawer/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -110,7 +112,7 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
                                 SizedBox(height: height * 0.01),
                                 InkWell(
                                   onTap: () {
-                                    pro.sendFriendRequest(userDetails.userId!,widget.userName??'No name of person');
+                                    pro.sendFriendRequest(userDetails.userId!,service.getUserName());
                                   },
                                   child: Container(
                                     height: 30,

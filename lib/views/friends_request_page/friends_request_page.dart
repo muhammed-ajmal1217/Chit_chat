@@ -1,5 +1,4 @@
 import 'package:chitchat/helpers/helpers.dart';
-import 'package:chitchat/views/friends_request_page/widgets/floating_action_button.dart';
 import 'package:chitchat/views/friends_request_page/widgets/friends_list.dart';
 import 'package:chitchat/views/friends_request_page/widgets/helpers_widgets.dart';
 import 'package:chitchat/views/friends_request_page/widgets/request_lists.dart';
@@ -8,8 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Friends_RequestPage extends StatelessWidget {
-  String? userName;
-  Friends_RequestPage({Key? key,this.userName}) : super(key: key);
+  Friends_RequestPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -67,14 +65,14 @@ class Friends_RequestPage extends StatelessWidget {
                 ],
               ),
             ),
-            FriendsRequest(userName: userName,),
+            FriendsRequest(),
           ],
         ),
        
       floatingActionButton: FloatingActionButton(
       onPressed: () {
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => FriendsSuggestions(userName: userName,),
+          builder: (context) => FriendsSuggestions(),
         ));
       },
       shape: CircleBorder(),

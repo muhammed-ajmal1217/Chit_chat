@@ -1,4 +1,5 @@
 import 'package:chitchat/controller/auth_provider.dart';
+import 'package:chitchat/controller/profile_provider.dart';
 import 'package:chitchat/helpers/helpers.dart';
 import 'package:chitchat/service/auth_service.dart';
 import 'package:chitchat/views/drawer/widgets.dart';
@@ -21,23 +22,19 @@ class CustomDrawer extends StatefulWidget {
 
 class _CustomDrawerState extends State<CustomDrawer> {
   AuthenticationService service = AuthenticationService();
-  String userName = ''; 
+  
   @override
   void initState() {
     super.initState();
-    service.getUserName().then((value) {
-      setState(() {
-        userName = value;
-      });
-    });
+    Provider.of<ProfileProvider>(context, listen: false).updateUserName();
   }
 
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    return Consumer<AuthenticationProvider>(
-      builder: (context, authProvider, child) => Drawer(
+    return Consumer2<AuthenticationProvider,ProfileProvider>(
+      builder: (context, authProvider,profilePro, child) => Drawer(
         surfaceTintColor: Colors.black,
         backgroundColor: Colors.black,
         child: ListView(
@@ -61,7 +58,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            userName,
+                            profilePro.userName,
                             style: GoogleFonts.raleway(
                               color: Colors.white,
                               fontSize: width * 0.040,

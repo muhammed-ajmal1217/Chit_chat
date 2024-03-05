@@ -1,5 +1,5 @@
 import 'package:chitchat/helpers/helpers.dart';
-import 'package:chitchat/views/chat_page.dart';
+import 'package:chitchat/chat_screen/chat_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

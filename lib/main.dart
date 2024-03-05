@@ -3,8 +3,10 @@ import 'package:chitchat/controller/chat_page_provider.dart';
 import 'package:chitchat/controller/chat_provider.dart';
 import 'package:chitchat/controller/friend_suggestion_provider.dart';
 import 'package:chitchat/controller/friends_request_accept_provider.dart';
+import 'package:chitchat/controller/image_provider.dart';
 import 'package:chitchat/controller/login_provider.dart';
 import 'package:chitchat/controller/phone_request_provider.dart';
+import 'package:chitchat/controller/profile_provider.dart';
 import 'package:chitchat/firebase_options.dart';
 import 'package:chitchat/main_widgets/auth_gate.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -29,6 +31,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => AuthenticationProvider(),),
         ChangeNotifierProvider(create: (context) => FirebaseProvider(),),
         ChangeNotifierProvider(create: (context) => FriendshipProvider(),),
+        ChangeNotifierProvider(create: (context) => ProfileProvider(),),
+        ChangeNotifierProvider(create: (context) => ImagesProvider(),),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
