@@ -79,7 +79,7 @@ Future<void> selectAndSendVideo(File videoFile, String recipientId) async {
 
 Future<String> uploadVideoToStorage(File videoFile) async {
   try {
-    final Reference storageRef = FirebaseStorage.instance.ref().child('videos').child('${DateTime.now().millisecondsSinceEpoch}.mp4');
+    final Reference storageRef = storage.child('videos').child('${DateTime.now().millisecondsSinceEpoch}.mp4');
     final TaskSnapshot uploadTask = await storageRef.putFile(videoFile);
     final String videoUrl = await uploadTask.ref.getDownloadURL();
     return videoUrl;
@@ -87,6 +87,14 @@ Future<String> uploadVideoToStorage(File videoFile) async {
     print('Error uploading video to Firebase Storage: $e');
     rethrow;
   }
+}
+uploadPdf(String recieverId,String fileName, File file)async{
+  final reference = storage.child("pdfs/$fileName.pdf");
+  final uploadTask = reference.putFile(file);
+  await uploadTask.whenComplete(() {});
+  final downloadLink = await reference.getDownloadURL();
+  sendMessage(recieverId,downloadLink,'pdf');
+  return downloadLink;
 }
 
 }

@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 class FriendsSuggestions extends StatefulWidget {
   String? userName;
 
-  FriendsSuggestions({Key? key,this.userName}) : super(key: key);
+  FriendsSuggestions({Key? key, this.userName}) : super(key: key);
 
   @override
   State<FriendsSuggestions> createState() => _FriendsSuggestionsState();
@@ -54,8 +54,8 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(8),
-                child: Consumer2<FriendshipProvider,FirebaseProvider>(
-                  builder: (context, pro,pro1, child) => GridView.builder(
+                child: Consumer2<FriendshipProvider, FirebaseProvider>(
+                  builder: (context, pro, pro1, child) => GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       crossAxisSpacing: 8.0,
@@ -112,7 +112,10 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
                                 SizedBox(height: height * 0.01),
                                 InkWell(
                                   onTap: () {
-                                    pro.sendFriendRequest(userDetails.userId!,service.getUserName());
+                                    pro.sendFriendRequest(
+                                        recipientUserId: userDetails.userId!,
+                                        recieverName: userDetails.userName!,
+                                        userName: widget.userName!);
                                   },
                                   child: Container(
                                     height: 30,

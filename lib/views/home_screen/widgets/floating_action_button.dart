@@ -2,7 +2,6 @@ import 'package:chitchat/views/friends_request_page/friends_request_page.dart';
 import 'package:flutter/material.dart';
 
 class NavigateToFriends extends StatelessWidget {
-
    NavigateToFriends({
     super.key,
   });

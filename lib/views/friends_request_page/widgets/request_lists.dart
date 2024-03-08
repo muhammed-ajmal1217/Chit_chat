@@ -9,8 +9,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class FriendsRequest extends StatelessWidget {
-  String? userName;
-   FriendsRequest({Key? key,this.userName});
+
+   FriendsRequest({Key? key,e});
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +79,7 @@ class FriendsRequest extends StatelessWidget {
                                 Provider.of<FriendshipProvider>(context,
                                         listen: false)
                                     .acceptFriendRequest(
-                                        requestData.senderId!,requestData.senderName!,value1.userName);
+                                        requestData.senderId!,requestData.senderName!);
                               }),
                             ],
                           ),

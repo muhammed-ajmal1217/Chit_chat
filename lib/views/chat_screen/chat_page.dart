@@ -4,30 +4,43 @@ import 'package:chitchat/model/request_model.dart';
 import 'package:chitchat/model/user_model.dart';
 import 'package:chitchat/service/auth_service.dart';
 import 'package:chitchat/service/chat_service.dart';
-import 'package:chitchat/chat_screen/widgets/chat_bubble.dart';
+import 'package:chitchat/views/chat_screen/widgets/chat_bubble.dart';
+import 'package:chitchat/views/drawer/drawer.dart';
 import 'package:chitchat/views/user_profile/widgets/bottomsheet_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({super.key, required this.user});
+   ChatScreen({Key? key, required this.user,}) : super(key: key);
   final UserModel user;
+
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  TextEditingController messagecontroller = TextEditingController();
+  bool isFavorite = false;
+  TextEditingController messageController = TextEditingController();
   AuthenticationService service = AuthenticationService();
 
   @override
   void initState() {
     super.initState();
-    final currentuserid = service.authentication.currentUser!.uid;
+    final currentUserId = service.authentication.currentUser!.uid;
     Provider.of<FirebaseProvider>(context, listen: false)
-        .getMessages(currentuserid, widget.user.userId ?? '');
+        .getMessages(currentUserId, widget.user.userId ?? '');
+    restoreFavoriteState();
+  }
+
+  void restoreFavoriteState() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool? favoriteList = prefs.getBool(widget.user.userId??'');
+    setState(() {
+      isFavorite = favoriteList ?? false;
+    });
   }
 
   @override
@@ -69,11 +82,40 @@ class _ChatScreenState extends State<ChatScreen> {
             child: Row(
               children: [
                 InkWell(
-                    onTap: () {},
-                    child: Icon(
-                      Icons.favorite_border_outlined,
-                      color: Colors.white,
-                    )),
+                  onTap: () async {
+                    final provider =
+                        Provider.of<FirebaseProvider>(context, listen: false);
+                    final currentUserId = auth.currentUser!.uid;
+
+                    if (!isFavorite) {
+                      await provider.addToFavorite(
+                        userId: currentUserId,
+                        name: widget.user.userName!,
+                        chatId: widget.user.userId!
+                      );
+                      storeFavoriteChatLocally(
+                        chatId: widget.user.userId!,
+                        isFavorite: true,
+                      );
+                    } else {
+                      await provider.removeFromFavorite(
+                         userId: currentUserId,
+                         chatId: widget.user.userId!
+                      );
+                      removeFavoriteChatLocally(chatId: widget.user.userId!);
+                    }
+
+                    setState(() {
+                      isFavorite = !isFavorite;
+                    });
+                  },
+                  child: Icon(
+                    isFavorite
+                        ? Icons.favorite
+                        : Icons.favorite_border_outlined,
+                    color: isFavorite ? Colors.red : Colors.white,
+                  ),
+                ),
                 spacingWidth(10),
                 InkWell(
                     onTap: () {},
@@ -137,7 +179,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
       backgroundColor: Color(0xff131313),
@@ -149,7 +191,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(top: 10, bottom: 40),
-                    child: ChatBubble(service: service, size: size,),
+                    child: ChatBubble(service: service, size: size),
                   ),
                   Positioned(
                     bottom: 10,
@@ -166,7 +208,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 15),
                               child: TextFormField(
-                                controller: messagecontroller,
+                                controller: messageController,
                                 style: TextStyle(
                                     fontSize: 15, color: Colors.white),
                                 decoration: InputDecoration(
@@ -186,8 +228,9 @@ class _ChatScreenState extends State<ChatScreen> {
                                         context: context,
                                         builder: (BuildContext context) {
                                           return Container(
-                                            height: size.height*0.15,
-                                            child: BottomSheetPage(user: widget.user,),
+                                            height: size.height * 0.15,
+                                            child: BottomSheetPage(
+                                                user: widget.user),
                                           );
                                         },
                                       );
@@ -238,10 +281,21 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   sendMessage() async {
-    if (messagecontroller.text.isNotEmpty) {
+    if (messageController.text.isNotEmpty) {
       await ChatService().sendMessage(
-          widget.user.userId ?? "", messagecontroller.text, "text");
-      messagecontroller.clear();
+          widget.user.userId ?? "", messageController.text, "text");
+      messageController.clear();
     }
   }
+
+  storeFavoriteChatLocally(
+      {required String chatId, required bool isFavorite}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool(chatId, isFavorite);
+  }
+  void removeFavoriteChatLocally({required String chatId}) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.remove(chatId);
+}
+
 }

@@ -1,6 +1,7 @@
 import 'dart:io';
 
-import 'package:chitchat/chat_screen/widgets/image_selector.dart';
+import 'package:chitchat/views/chat_screen/widgets/image_selector.dart';
+import 'package:chitchat/controller/chat_provider.dart';
 import 'package:chitchat/controller/image_provider.dart';
 import 'package:chitchat/helpers/helpers.dart';
 import 'package:chitchat/model/user_model.dart';
@@ -16,6 +17,7 @@ class BottomSheetPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final provider=Provider.of<FirebaseProvider>(context);
     final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -40,12 +42,17 @@ class BottomSheetPage extends StatelessWidget {
               ),
             ),
             spacingWidth(20),
-            CircleAvatar(
-              radius: size.height * 0.03,
-              backgroundColor: Color.fromARGB(255, 7, 222, 255),
-              child: Icon(
-                Iconsax.document,
-                color: Colors.white,
+            InkWell(
+              onTap: () {
+                provider.pickDocument(user!.userId!);
+              },
+              child: CircleAvatar(
+                radius: size.height * 0.03,
+                backgroundColor: Color.fromARGB(255, 7, 222, 255),
+                child: Icon(
+                  Iconsax.document,
+                  color: Colors.white,
+                ),
               ),
             ),
             spacingWidth(20),
@@ -82,11 +89,8 @@ class BottomSheetPage extends StatelessWidget {
                   );
                   if (result != null) {
                     final file = File(result.files.single.path!);
-                    // Store the selected video in Firebase when sending
                     ChatService().selectAndSendVideo(file, user!.userId!);
-                  } else {
-                    // User canceled the selection
-                  }
+                  } 
                 } catch (e) {
                   print('Error picking video: $e');
                 }

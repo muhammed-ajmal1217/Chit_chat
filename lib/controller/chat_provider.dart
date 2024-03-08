@@ -1,19 +1,21 @@
+import 'dart:io';
 import 'package:chitchat/model/message_model.dart';
 import 'package:chitchat/model/request_model.dart';
 import 'package:chitchat/model/user_model.dart';
 import 'package:chitchat/service/auth_service.dart';
 import 'package:chitchat/service/chat_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 class FirebaseProvider extends ChangeNotifier {
   List<UserModel> users = [];
   List<MessageModel> messages = [];
   List<RequestModel> requests = [];
+  List<UserModel> favoriteList = [];
+  List<UserModel>? filteredUsers = [];
   AuthenticationService authService = AuthenticationService();
   ChatService chatService = ChatService();
   ScrollController scrollController = ScrollController();
-  UserModel? userModel;
 
   List<UserModel> getAllUsers() {
     authService.firestore.collection('users').snapshots().listen((user) {
@@ -22,8 +24,6 @@ class FirebaseProvider extends ChangeNotifier {
     });
     return users;
   }
-
-
 
   List<MessageModel> getMessages(String currentuserid, String recieverid) {
     List ids = [currentuserid, recieverid];
@@ -58,4 +58,80 @@ class FirebaseProvider extends ChangeNotifier {
           scrollController.jumpTo(scrollController.position.maxScrollExtent);
         }
       });
+
+  void pickDocument(String recieverId) async {
+    final pickedFile = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf'],
+    );
+    if (pickedFile != null) {
+      String fileName = pickedFile.files[0].name;
+      File file = File(pickedFile.files[0].path!);
+      await chatService.uploadPdf(recieverId, fileName, file);
+      print('PDF upload Successful');
+    }
+  }
+
+  Future<void> addToFavorite({
+    required String userId,
+    required String name,
+    required String chatId,
+  }) async {
+    UserModel favouriteUser = UserModel(userName: name, userId: chatId);
+    try {
+      await chatService.firestore
+          .collection('users')
+          .doc(userId)
+          .collection('favourite_chats')
+          .doc(chatId)
+          .set(favouriteUser.toJson());
+      notifyListeners();
+    } catch (e) {
+      print('Error adding to favorite: $e');
+      rethrow;
+    }
+  }
+
+  Future<void> removeFromFavorite(
+      {required String userId, required String chatId}) async {
+    try {
+      await authService.firestore
+          .collection('users')
+          .doc(userId)
+          .collection('favourite_chats')
+          .doc(chatId)
+          .delete();
+      notifyListeners();
+    } catch (error) {
+      print("Error removing chat from favorites: $error");
+      throw error;
+    }
+  }
+
+  getAllFavorite() {
+    authService.firestore
+        .collection('users')
+        .doc(authService.authentication.currentUser!.uid)
+        .collection('favourite_chats')
+        .snapshots()
+        .listen((favorite) {
+      favoriteList =
+          favorite.docs.map((doc) => UserModel.fromJson(doc.data())).toList();
+    });
+    return favoriteList;
+  }
+
+  void filterUsers(String query) {
+    final lowercaseQuery = query.toLowerCase();
+    filteredUsers = users.where((user) {
+      final username = user.userName!.toLowerCase();
+      return username.contains(lowercaseQuery);
+    }).toList();
+    notifyListeners();
+  }
+
+  void updateFilteredUsers(List<UserModel> filteredUsersList) {
+    filteredUsers = filteredUsersList;
+    notifyListeners();
+  }
 }

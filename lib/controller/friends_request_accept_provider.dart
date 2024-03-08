@@ -26,7 +26,7 @@ class FriendshipProvider extends ChangeNotifier {
             .toList());
   }
 
-  void sendFriendRequest(String recipientUserId, String userName) {
+  void sendFriendRequest({required String recipientUserId,required String recieverName,required String userName}) {
     final isGoogleSignIn = authService.isGoogleSignIn();
     final senderId = authService.authentication.currentUser!.uid;
     final senderName = isGoogleSignIn
@@ -36,6 +36,7 @@ class FriendshipProvider extends ChangeNotifier {
         senderId: senderId,
         senderName: senderName,
         recieverId: recipientUserId,
+        recieverName: recieverName
         );
     authService.firestore
         .collection('users')
@@ -44,15 +45,11 @@ class FriendshipProvider extends ChangeNotifier {
         .add(request.toJson());
   }
 
-void acceptFriendRequest(String senderId, String senderName,String currentUserName) {
+void acceptFriendRequest(String senderId, String senderName,) {
   final currentUserUid = authService.authentication.currentUser!.uid;
-  // final currentUserName = authService.authentication.currentUser!.displayName;
-  
-  // Create friend models for both sender and receiver
+  final currentUserName = authService.authentication.currentUser!.displayName;
   final senderFriend = RequestModel(senderId: senderId, senderName: senderName, recieverId: currentUserUid, recieverName: currentUserName);
   final receiverFriend = RequestModel(senderId: currentUserUid, senderName: currentUserName, recieverId: senderId, recieverName: senderName);
-  
-  // Get the requested person's UID
   final requestedPersonUid = senderId;
 
   authService.firestore
@@ -64,22 +61,18 @@ void acceptFriendRequest(String senderId, String senderName,String currentUserNa
       .then((querySnapshot) {
     querySnapshot.docs.forEach((doc) {
       doc.reference.delete().then((_) {
-        // Add the current user to the requested person's friend list
         authService.firestore
             .collection('users')
             .doc(requestedPersonUid)
             .collection('friend_list')
             .add(receiverFriend.toJson())
             .then((_) {
-          // Friend added to requested person's friend list successfully
-          // Now, add the requested person to the current user's friend list
           authService.firestore
               .collection('users')
               .doc(currentUserUid)
               .collection('friend_list')
               .add(senderFriend.toJson())
               .then((_) {
-            // Friend request accepted successfully
           }).catchError((error) {
             print('Error adding friend to current user\'s friend list: $error');
           });

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Friends_RequestPage extends StatelessWidget {
+  
   Friends_RequestPage({Key? key}) : super(key: key);
 
   @override
