@@ -1,8 +1,8 @@
+import 'package:chitchat/constants/user_icon.dart';
 import 'package:chitchat/controller/chat_provider.dart';
+import 'package:chitchat/controller/profile_provider.dart';
 import 'package:chitchat/helpers/helpers.dart';
-import 'package:chitchat/model/message_model.dart';
 import 'package:chitchat/model/story_view_mode.dart';
-import 'package:chitchat/model/user_model.dart';
 import 'package:chitchat/views/home_screen/widgets/floating_action_button.dart';
 import 'package:chitchat/views/home_screen/widgets/helpers.dart';
 import 'package:chitchat/views/home_screen/widgets/story_view_list.dart';
@@ -40,12 +40,13 @@ class _ChatScreenState extends State<ChatListPage> {
   void initState() {
     super.initState();
     Provider.of<FirebaseProvider>(context, listen: false).getAllUsers();
+    Provider.of<ProfileProvider>(context,listen: false).retrieveProfilePictureUrl();
   }
-
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+    final pro=Provider.of<ProfileProvider>(context,listen: false);
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -59,7 +60,8 @@ class _ChatScreenState extends State<ChatListPage> {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
                   image: DecorationImage(
-                      image: AssetImage('assets/Designer (2).png'))),
+                    fit: BoxFit.cover,
+                      image: pro.profileUrl.isNotEmpty?NetworkImage(pro.profileUrl):NetworkImage(UserIcon.proFileIcon))),
             ),
             spacingWidth(width * 0.04),
             Text(
@@ -229,11 +231,12 @@ class _ChatScreenState extends State<ChatListPage> {
                                                         BorderRadius.circular(
                                                             10),
                                                     image: DecorationImage(
-                                                        image: AssetImage(
-                                                            'assets/Designer.png'))),
+                                                      fit: BoxFit.cover,
+                                                        image:userdetails.profilePicture!=null? NetworkImage(
+                                                            userdetails.profilePicture??''):NetworkImage(UserIcon.proFileIcon))),
                                               ),
                                               title: Text(
-                                                userdetails.userName!,
+                                                userdetails.userName??'',
                                                 style: GoogleFonts.raleway(
                                                   color: Colors.white,
                                                 ),

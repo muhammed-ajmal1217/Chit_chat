@@ -3,6 +3,7 @@ import 'package:chitchat/controller/friends_request_accept_provider.dart';
 import 'package:chitchat/model/request_model.dart';
 import 'package:chitchat/views/chat_screen/chat_page.dart';
 import 'package:chitchat/views/drawer/drawer.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +18,7 @@ class FriendsList extends StatefulWidget {
 }
 
 class _FriendsListState extends State<FriendsList> {
+  FirebaseAuth auth = FirebaseAuth.instance;
   @override
   void initState() {
     super.initState();
@@ -41,7 +43,7 @@ class _FriendsListState extends State<FriendsList> {
             if (friends.isEmpty) {
               return Center(
                 child: Text(
-                  'There are no Requests',
+                  'There are no Friends',
                   style: TextStyle(color: Colors.white),
                 ),
               );
@@ -77,7 +79,7 @@ class _FriendsListState extends State<FriendsList> {
                           child: Center(
                             child: ListTile(
                               title: Text(
-                                '${requestData.senderName == auth.currentUser!.displayName ? requestData.senderName : requestData.recieverName}',
+                                '${requestData.senderName}',
                                 style: GoogleFonts.raleway(
                                     color: Colors.white, fontSize: 14),
                               ),

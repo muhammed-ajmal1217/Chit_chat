@@ -7,15 +7,18 @@ import 'package:chitchat/service/chat_service.dart';
 import 'package:chitchat/views/chat_screen/widgets/chat_bubble.dart';
 import 'package:chitchat/views/drawer/drawer.dart';
 import 'package:chitchat/views/user_profile/widgets/bottomsheet_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ChatScreen extends StatefulWidget {
-   ChatScreen({Key? key, required this.user,}) : super(key: key);
+  ChatScreen({
+    Key? key,
+    required this.user,
+  }) : super(key: key);
   final UserModel user;
-
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -25,6 +28,7 @@ class _ChatScreenState extends State<ChatScreen> {
   bool isFavorite = false;
   TextEditingController messageController = TextEditingController();
   AuthenticationService service = AuthenticationService();
+  FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
   void initState() {
@@ -37,7 +41,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   void restoreFavoriteState() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool? favoriteList = prefs.getBool(widget.user.userId??'');
+    bool? favoriteList = prefs.getBool(widget.user.userId ?? '');
     setState(() {
       isFavorite = favoriteList ?? false;
     });
@@ -59,7 +63,7 @@ class _ChatScreenState extends State<ChatScreen> {
             spacingWidth(size.width * 0.02),
             CircleAvatar(
               radius: size.height * 0.027,
-              backgroundImage: AssetImage('assets/Designer.png'),
+              backgroundImage: NetworkImage(widget.user.profilePicture!),
             ),
             spacingWidth(size.width * 0.02),
             GestureDetector(
@@ -89,19 +93,16 @@ class _ChatScreenState extends State<ChatScreen> {
 
                     if (!isFavorite) {
                       await provider.addToFavorite(
-                        userId: currentUserId,
-                        name: widget.user.userName!,
-                        chatId: widget.user.userId!
-                      );
+                          userId: currentUserId,
+                          name: widget.user.userName!,
+                          chatId: widget.user.userId!);
                       storeFavoriteChatLocally(
                         chatId: widget.user.userId!,
                         isFavorite: true,
                       );
                     } else {
                       await provider.removeFromFavorite(
-                         userId: currentUserId,
-                         chatId: widget.user.userId!
-                      );
+                          userId: currentUserId, chatId: widget.user.userId!);
                       removeFavoriteChatLocally(chatId: widget.user.userId!);
                     }
 
@@ -293,9 +294,9 @@ class _ChatScreenState extends State<ChatScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool(chatId, isFavorite);
   }
-  void removeFavoriteChatLocally({required String chatId}) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  prefs.remove(chatId);
-}
 
+  void removeFavoriteChatLocally({required String chatId}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove(chatId);
+  }
 }

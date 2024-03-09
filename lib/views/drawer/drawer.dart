@@ -1,14 +1,23 @@
+import 'dart:io';
+
+import 'package:chitchat/constants/user_icon.dart';
 import 'package:chitchat/controller/auth_provider.dart';
+import 'package:chitchat/controller/chat_provider.dart';
+import 'package:chitchat/controller/image_provider.dart';
 import 'package:chitchat/controller/profile_provider.dart';
 import 'package:chitchat/helpers/helpers.dart';
 import 'package:chitchat/service/auth_service.dart';
-import 'package:chitchat/views/drawer/widgets.dart';
+import 'package:chitchat/service/chat_service.dart';
+import 'package:chitchat/views/chat_screen/widgets/image_selector.dart';
+import 'package:chitchat/views/drawer/widgets/profile_pic_selector.dart';
+import 'package:chitchat/views/drawer/widgets/widgets.dart';
 import 'package:chitchat/views/favourite_chat.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class CustomDrawer extends StatefulWidget {
@@ -22,19 +31,24 @@ class CustomDrawer extends StatefulWidget {
 
 class _CustomDrawerState extends State<CustomDrawer> {
   AuthenticationService service = AuthenticationService();
+  FirebaseAuth auth = FirebaseAuth.instance;
+  
 
   @override
   void initState() {
     super.initState();
-    Provider.of<ProfileProvider>(context, listen: false).updateUserName();
+    var profilePro = Provider.of<ProfileProvider>(context, listen: false);
+    profilePro.updateUserName();
+    profilePro.retrieveProfilePictureUrl();
   }
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
-    return Consumer2<AuthenticationProvider, ProfileProvider>(
-      builder: (context, authProvider, profilePro, child) => Drawer(
+    final size = MediaQuery.of(context).size;
+    return Consumer4<AuthenticationProvider, ProfileProvider, ImagesProvider,
+        FirebaseProvider>(
+      builder: (context, authProvider, profilePro, imagePro, chatPro, child) =>
+          Drawer(
         surfaceTintColor: Colors.black,
         backgroundColor: Colors.black,
         child: ListView(
@@ -52,13 +66,35 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         alignment: Alignment.bottomRight,
                         children: [
                           CircleAvatar(
-                            radius: width * 0.065,
-                            backgroundImage: AssetImage('assets/Designer.png'),
-                          ),
-                          CircleAvatar(
-                            radius: width * 0.025,
-                            backgroundColor: Color(0xffFA7B06),
-                            child: Icon(Iconsax.camera,color: Colors.white,size: 10,),
+                              radius: size.width * 0.065,
+                              backgroundColor: Colors.transparent,
+                              backgroundImage: profilePro.profileUrl.isNotEmpty
+                                  ? NetworkImage(profilePro.profileUrl.isNotEmpty?profilePro.profileUrl:UserIcon.proFileIcon)
+                                  : AssetImage('assets/person_icon.png')
+                                      as ImageProvider),
+                          InkWell(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  final pro =
+                                      Provider.of<ImagesProvider>(context);
+                                  return ProfilePicSelector(
+                                    pro: pro,
+                                    size: size,
+                                  );
+                                },
+                              );
+                            },
+                            child: CircleAvatar(
+                              radius: size.width * 0.030,
+                              backgroundColor: Color(0xffFA7B06),
+                              child: Icon(
+                                Iconsax.camera,
+                                color: Colors.white,
+                                size: 10,
+                              ),
+                            ),
                           ),
                         ],
                       ),
@@ -71,21 +107,21 @@ class _CustomDrawerState extends State<CustomDrawer> {
                             profilePro.userName,
                             style: GoogleFonts.raleway(
                               color: Colors.white,
-                              fontSize: width * 0.040,
+                              fontSize: size.width * 0.040,
                             ),
                           ),
                           Text(
                             '${auth.currentUser?.email}',
                             style: GoogleFonts.raleway(
                               color: Colors.white,
-                              fontSize: width * 0.030,
+                              fontSize: size.width * 0.020,
                             ),
                           ),
                         ],
                       ),
                     ],
                   ),
-                  spacingHeight(height * 0.02),
+                  spacingHeight(size.height * 0.02),
                   Padding(
                     padding: const EdgeInsets.only(left: 8, right: 8),
                     child: Row(
@@ -95,7 +131,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                           'Hello i am new to Chitchat',
                           style: GoogleFonts.raleway(
                             color: Colors.white,
-                            fontSize: width * 0.040,
+                            fontSize: size.width * 0.040,
                           ),
                         ),
                         Icon(
@@ -148,6 +184,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
       ),
     );
   }
-}
 
-FirebaseAuth auth = FirebaseAuth.instance;
+  addProfilePIc(context) async {
+    final pro = Provider.of<ImagesProvider>(context, listen: false);
+    if (pro.selectedimage != null) {
+      AuthenticationService()
+          .uploadProfilePicture(File(pro.selectedimage!.path));
+    }
+  }
+}

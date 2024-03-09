@@ -10,4 +10,5 @@ class ImagesProvider extends ChangeNotifier{
     selectedimage = File(returnedimage?.path??'');
     notifyListeners();
   }
+
 }

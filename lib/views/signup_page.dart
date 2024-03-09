@@ -117,4 +117,5 @@ class _SignUpPageState extends State<SignUpPage> {
       authProvider.signupWithEmail(email: emailController.text.trim(), password: passwordController.text.trim(), userName: nameController.text.trim());
     }
   }
+
 }

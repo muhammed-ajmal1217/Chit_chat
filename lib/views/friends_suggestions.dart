@@ -2,7 +2,6 @@ import 'package:chitchat/controller/chat_provider.dart';
 import 'package:chitchat/controller/friends_request_accept_provider.dart';
 import 'package:chitchat/controller/profile_provider.dart';
 import 'package:chitchat/service/auth_service.dart';
-import 'package:chitchat/views/drawer/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -17,12 +16,16 @@ class FriendsSuggestions extends StatefulWidget {
 }
 
 class _FriendsSuggestionsState extends State<FriendsSuggestions> {
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<ProfileProvider>(context, listen: false).updateUserName();
+  }
   AuthenticationService service = AuthenticationService();
 
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.white,
@@ -111,11 +114,14 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
                                 ),
                                 SizedBox(height: height * 0.01),
                                 InkWell(
-                                  onTap: () {
-                                    pro.sendFriendRequest(
+                                  onTap: ()async {
+                                    final profilePro=Provider.of<ProfileProvider>(context,listen: false);
+                                    print(userDetails.userName);
+                                    print('UserName : ${profilePro.userName}');
+                                    await pro.sendFriendRequest(
                                         recipientUserId: userDetails.userId!,
                                         recieverName: userDetails.userName!,
-                                        userName: widget.userName!);
+                                        userName:profilePro.userName);
                                   },
                                   child: Container(
                                     height: 30,

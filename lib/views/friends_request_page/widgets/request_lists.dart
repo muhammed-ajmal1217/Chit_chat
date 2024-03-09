@@ -76,10 +76,12 @@ class FriendsRequest extends StatelessWidget {
                               requestAccept_Reject(Icons.check, height, () {}),
                               SizedBox(width: width * 0.03),
                               requestAccept_Reject(Icons.close, height, () {
+                                final profilePro=Provider.of<ProfileProvider>(context,listen: false);
                                 Provider.of<FriendshipProvider>(context,
                                         listen: false)
+                                        //requestData.senderId!,requestData.senderName!,profilePro.userName
                                     .acceptFriendRequest(
-                                        requestData.senderId!,requestData.senderName!);
+                                        requestData,profilePro.userName);
                               }),
                             ],
                           ),

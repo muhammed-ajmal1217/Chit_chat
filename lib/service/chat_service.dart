@@ -1,16 +1,17 @@
 import 'dart:io';
-
 import 'package:chitchat/model/message_model.dart';
+import 'package:chitchat/service/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class ChatService {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  AuthenticationService authService = AuthenticationService();
   Reference storage=FirebaseStorage.instance.ref();
   String downloadurl = "";
+  
 
   sendMessage(String recieverId, String message, String messagetype) async {
     final String currentUserId = firebaseAuth.currentUser!.uid;
@@ -96,5 +97,4 @@ uploadPdf(String recieverId,String fileName, File file)async{
   sendMessage(recieverId,downloadLink,'pdf');
   return downloadLink;
 }
-
 }

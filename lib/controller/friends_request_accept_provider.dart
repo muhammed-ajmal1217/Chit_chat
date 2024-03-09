@@ -1,5 +1,6 @@
 
 import 'package:chitchat/model/request_model.dart';
+import 'package:chitchat/model/user_model.dart';
 import 'package:chitchat/service/auth_service.dart';
 import 'package:flutter/material.dart';
 
@@ -26,7 +27,7 @@ class FriendshipProvider extends ChangeNotifier {
             .toList());
   }
 
-  void sendFriendRequest({required String recipientUserId,required String recieverName,required String userName}) {
+  Future<void> sendFriendRequest({required String recipientUserId,required String recieverName,required String userName}) async{
     final isGoogleSignIn = authService.isGoogleSignIn();
     final senderId = authService.authentication.currentUser!.uid;
     final senderName = isGoogleSignIn
@@ -38,25 +39,26 @@ class FriendshipProvider extends ChangeNotifier {
         recieverId: recipientUserId,
         recieverName: recieverName
         );
-    authService.firestore
+   await authService.firestore
         .collection('users')
         .doc(recipientUserId)
         .collection('friend_request')
         .add(request.toJson());
   }
-
-void acceptFriendRequest(String senderId, String senderName,) {
+//String senderId, String senderName,
+void acceptFriendRequest(RequestModel? userData, String? currentUserName) async{
   final currentUserUid = authService.authentication.currentUser!.uid;
-  final currentUserName = authService.authentication.currentUser!.displayName;
-  final senderFriend = RequestModel(senderId: senderId, senderName: senderName, recieverId: currentUserUid, recieverName: currentUserName);
-  final receiverFriend = RequestModel(senderId: currentUserUid, senderName: currentUserName, recieverId: senderId, recieverName: senderName);
-  final requestedPersonUid = senderId;
+  final isGoogleSignIn = authService.isGoogleSignIn();
+  currentUserName = isGoogleSignIn?authService.authentication.currentUser!.displayName:currentUserName;
+  final senderFriend = RequestModel(senderId: userData?.senderId, senderName: userData?.senderName, recieverId: currentUserUid, recieverName: currentUserName);
+  final receiverFriend = RequestModel(senderId: currentUserUid, senderName: currentUserName, recieverId: userData?.senderId, recieverName: userData?.senderName);
+  final requestedPersonUid = userData?.senderId;
 
-  authService.firestore
+  await authService.firestore
       .collection('users')
       .doc(currentUserUid)
       .collection('friend_request')
-      .where('sender_id', isEqualTo: senderId)
+      .where('sender_id', isEqualTo: userData?.senderId)
       .get()
       .then((querySnapshot) {
     querySnapshot.docs.forEach((doc) {

@@ -1,24 +1,39 @@
+import 'dart:io';
 import 'package:chitchat/model/user_model.dart';
 import 'package:chitchat/views/otp_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:intl/intl.dart';
+
 
 class AuthenticationService {
   FirebaseAuth authentication = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   FacebookAuth facebookAuth = FacebookAuth.instance;
+  Reference storage=FirebaseStorage.instance.ref();
   String userEmail = '';
-  String userName='';
+  String? profileUrl="";
+    String userName='';
   getUserName()async{
     DocumentSnapshot? userCredential = await firestore.collection('users').doc(authentication.currentUser!.uid).get();
     if(userCredential.exists){
      userName = userCredential.get('name');
     }
     return userName;
+  }
+  Future<String> getProfilePictureUrl() async {
+      DocumentSnapshot<Map<String, dynamic>> userSnapshot =
+          await firestore
+              .collection('users')
+              .doc(authentication.currentUser!.uid)
+              .get();
+      profileUrl = userSnapshot.data()?['profile_picture'];
+      return profileUrl??'';
   }
   signinWithEmail(
       {required String email,
@@ -190,4 +205,22 @@ class AuthenticationService {
     }
     return false;
   }
+
+
+Future<void> uploadProfilePicture(File image) async {
+  try {
+    String timestamp = DateFormat('yyyyMMdd_HHmmss').format(DateTime.now());
+    String fileName = '$timestamp.jpg';
+    Reference profilePictureRef = storage.child('profile pictures/$fileName');
+    await profilePictureRef.putFile(image);
+    String profileUrl = await profilePictureRef.getDownloadURL();
+    Map<String, dynamic> profileData = {
+      'profile_picture': profileUrl,
+    };
+    await firestore.collection("users").doc(authentication.currentUser!.uid).update(profileData);
+    profileUrl = profileUrl;
+  } catch (e) {
+    throw Exception('Error uploading profile picture: $e');
+  }
+}  
 }
