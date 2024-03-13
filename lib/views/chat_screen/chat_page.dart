@@ -1,11 +1,10 @@
+import 'package:chitchat/constants/user_icon.dart';
 import 'package:chitchat/controller/chat_provider.dart';
 import 'package:chitchat/helpers/helpers.dart';
-import 'package:chitchat/model/request_model.dart';
 import 'package:chitchat/model/user_model.dart';
 import 'package:chitchat/service/auth_service.dart';
 import 'package:chitchat/service/chat_service.dart';
 import 'package:chitchat/views/chat_screen/widgets/chat_bubble.dart';
-import 'package:chitchat/views/drawer/drawer.dart';
 import 'package:chitchat/views/user_profile/widgets/bottomsheet_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +34,7 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
     final currentUserId = service.authentication.currentUser!.uid;
     Provider.of<FirebaseProvider>(context, listen: false)
-        .getMessages(currentUserId, widget.user.userId ?? '');
+        .getMessages(currentUserId,widget.user.userId??'');
     restoreFavoriteState();
   }
 
@@ -46,7 +45,6 @@ class _ChatScreenState extends State<ChatScreen> {
       isFavorite = favoriteList ?? false;
     });
   }
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -62,8 +60,11 @@ class _ChatScreenState extends State<ChatScreen> {
             goBackArrow(context),
             spacingWidth(size.width * 0.02),
             CircleAvatar(
+              backgroundColor: Colors.transparent,
               radius: size.height * 0.027,
-              backgroundImage: NetworkImage(widget.user.profilePicture!),
+              backgroundImage: widget.user.profilePicture == null
+                  ? NetworkImage(UserIcon.proFileIcon)
+                  : NetworkImage(widget.user.profilePicture ?? ''),
             ),
             spacingWidth(size.width * 0.02),
             GestureDetector(
@@ -281,9 +282,9 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  sendMessage() async {
+  sendMessage() {
     if (messageController.text.isNotEmpty) {
-      await ChatService().sendMessage(
+      ChatService().sendMessage(
           widget.user.userId ?? "", messageController.text, "text");
       messageController.clear();
     }

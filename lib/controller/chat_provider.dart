@@ -25,8 +25,8 @@ class FirebaseProvider extends ChangeNotifier {
     return users;
   }
 
-  List<MessageModel> getMessages(String currentuserid, String recieverid) {
-    List ids = [currentuserid, recieverid];
+  List<MessageModel> getMessages(String currentuserid,String recieverId) {
+    List ids = [currentuserid, recieverId];
     ids.sort();
     String chatroomid = ids.join("_");
     authService.firestore

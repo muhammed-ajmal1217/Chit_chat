@@ -22,7 +22,6 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
     Provider.of<ProfileProvider>(context, listen: false).updateUserName();
   }
   AuthenticationService service = AuthenticationService();
-
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -115,9 +114,10 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
                                 SizedBox(height: height * 0.01),
                                 InkWell(
                                   onTap: ()async {
+                                    
                                     final profilePro=Provider.of<ProfileProvider>(context,listen: false);
-                                    print(userDetails.userName);
-                                    print('UserName : ${profilePro.userName}');
+                                    print("'Current User : ${userDetails.userName}");
+                                    print('Current User : ${profilePro.userName}');
                                     await pro.sendFriendRequest(
                                         recipientUserId: userDetails.userId!,
                                         recieverName: userDetails.userName!,
@@ -128,7 +128,7 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
                                     width: 100,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(30),
-                                      color: Colors.orange,
+                                      color:Colors.orange,
                                     ),
                                     child: Center(
                                       child: Text(

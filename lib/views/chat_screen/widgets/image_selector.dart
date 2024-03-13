@@ -95,8 +95,8 @@ class ImageSelectorDialog extends StatelessWidget {
                   height: size.height * 0.06,
                   width: size.width * 0.6,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: const Color.fromARGB(255, 153, 166, 225)),
+                      borderRadius: BorderRadius.circular(50),
+                      color: Colors.orange),
                   child: Center(
                       child: Text(
                     "Send",

@@ -1,8 +1,11 @@
 import 'package:chitchat/constants/user_icon.dart';
 import 'package:chitchat/controller/chat_provider.dart';
+import 'package:chitchat/controller/friends_request_accept_provider.dart';
 import 'package:chitchat/controller/profile_provider.dart';
 import 'package:chitchat/helpers/helpers.dart';
+import 'package:chitchat/model/read_unread_model.dart';
 import 'package:chitchat/model/story_view_mode.dart';
+import 'package:chitchat/service/chat_service.dart';
 import 'package:chitchat/views/home_screen/widgets/floating_action_button.dart';
 import 'package:chitchat/views/home_screen/widgets/helpers.dart';
 import 'package:chitchat/views/home_screen/widgets/story_view_list.dart';
@@ -15,7 +18,9 @@ import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 
 class ChatListPage extends StatefulWidget {
-  ChatListPage({Key? key,}) : super(key: key);
+  ChatListPage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<ChatListPage> createState() => _ChatScreenState();
@@ -40,13 +45,16 @@ class _ChatScreenState extends State<ChatListPage> {
   void initState() {
     super.initState();
     Provider.of<FirebaseProvider>(context, listen: false).getAllUsers();
-    Provider.of<ProfileProvider>(context,listen: false).retrieveProfilePictureUrl();
+    Provider.of<ProfileProvider>(context, listen: false)
+        .retrieveProfilePictureUrl();
   }
+
+  FirebaseAuth auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    final pro=Provider.of<ProfileProvider>(context,listen: false);
+    final pro = Provider.of<ProfileProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -60,8 +68,10 @@ class _ChatScreenState extends State<ChatListPage> {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
                   image: DecorationImage(
-                    fit: BoxFit.cover,
-                      image: pro.profileUrl.isNotEmpty?NetworkImage(pro.profileUrl):NetworkImage(UserIcon.proFileIcon))),
+                      fit: BoxFit.cover,
+                      image: pro.profileUrl.isNotEmpty
+                          ? NetworkImage(pro.profileUrl)
+                          : NetworkImage(UserIcon.proFileIcon))),
             ),
             spacingWidth(width * 0.04),
             Text(
@@ -74,8 +84,7 @@ class _ChatScreenState extends State<ChatListPage> {
       endDrawer: CustomDrawer(),
       backgroundColor: Colors.black,
       body: Consumer<FirebaseProvider>(
-        builder: (context, value, child) => 
-         Column(
+        builder: (context, value, child) => Column(
           children: [
             Container(
               decoration: BoxDecoration(
@@ -117,7 +126,8 @@ class _ChatScreenState extends State<ChatListPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(left: 20, bottom: 15),
+                            padding:
+                                const EdgeInsets.only(left: 20, bottom: 15),
                             child: Text(
                               'Relations',
                               style: GoogleFonts.raleway(
@@ -172,7 +182,8 @@ class _ChatScreenState extends State<ChatListPage> {
                                       child: messageHeadText(
                                           height: height,
                                           height1: 0.015,
-                                          color: Color.fromARGB(255, 69, 88, 93),
+                                          color:
+                                              Color.fromARGB(255, 69, 88, 93),
                                           text: "($personNumber)"),
                                     ),
                                     Icon(
@@ -199,13 +210,12 @@ class _ChatScreenState extends State<ChatListPage> {
                                     ? value.filteredUsers!.length
                                     : value.users.length,
                                 itemBuilder: (context, index) {
-                                  final userdetails =
+                                  final userDetails =
                                       value.filteredUsers!.isNotEmpty
                                           ? value.filteredUsers![index]
                                           : value.users[index];
-                                  if (userdetails.userId !=
-                                      FirebaseAuth
-                                          .instance.currentUser!.uid) {
+                                  if (userDetails.userId !=
+                                      FirebaseAuth.instance.currentUser!.uid) {
                                     return Column(
                                       children: [
                                         Padding(
@@ -219,34 +229,101 @@ class _ChatScreenState extends State<ChatListPage> {
                                                   builder: (context) =>
                                                       Scaffold(
                                                     body: ChatScreen(
-                                                        user: userdetails),
+                                                        user: userDetails),
                                                   ),
                                                 )),
-                                            child: ListTile(
-                                              leading: Container(
-                                                height: height * 0.060,
-                                                width: height * 0.060,
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                    image: DecorationImage(
-                                                      fit: BoxFit.cover,
-                                                        image:userdetails.profilePicture!=null? NetworkImage(
-                                                            userdetails.profilePicture??''):NetworkImage(UserIcon.proFileIcon))),
-                                              ),
-                                              title: Text(
-                                                userdetails.userName??'',
-                                                style: GoogleFonts.raleway(
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                              subtitle: Text(
-                                                "Tap to Chat",
-                                                style: GoogleFonts.raleway(
-                                                    color: Colors.white,
-                                                    fontSize: 13),
-                                              ),
+                                            child: StreamBuilder(
+                                              stream: ChatService()
+                                                  .getUnreadMessageCountStream(
+                                                      userDetails.userId ?? ''),
+                                              builder: (context, snapshot) {
+                                                if (snapshot.connectionState ==
+                                                    ConnectionState.waiting) {
+                                                  return Text('');
+                                                } else if (snapshot.hasError) {
+                                                  return Center(
+                                                    child: Text(
+                                                        'Snapshot has error'),
+                                                  );
+                                                } else {
+                                                  return ListTile(
+                                                    leading: Container(
+                                                      height: height * 0.060,
+                                                      width: height * 0.060,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                        image: DecorationImage(
+                                                          fit: BoxFit.cover,
+                                                          image: userDetails
+                                                                      .profilePicture !=
+                                                                  null
+                                                              ? NetworkImage(
+                                                                  userDetails
+                                                                      .profilePicture!)
+                                                              : NetworkImage(
+                                                                  UserIcon
+                                                                      .proFileIcon),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    title: Text(
+                                                      userDetails.userName ??
+                                                          '',
+                                                      style:
+                                                          GoogleFonts.raleway(
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                    subtitle: Text(
+                                                      snapshot.data?.lastMsg ??
+                                                          '',
+                                                      style:
+                                                          GoogleFonts.raleway(
+                                                        color: Colors.white,
+                                                        fontSize: 13,
+                                                      ),
+                                                    ),
+                                                    trailing: (snapshot.data
+                                                                    ?.fromMessages !=
+                                                                null &&
+                                                            snapshot.data!
+                                                                    .fromMessages !=
+                                                                0)
+                                                        ? Container(
+                                                            height: 15,
+                                                            width: 15,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          2),
+                                                              color: Color
+                                                                  .fromARGB(
+                                                                      255,
+                                                                      33,
+                                                                      219,
+                                                                      243),
+                                                            ),
+                                                            child: Center(
+                                                              child: Text(
+                                                                snapshot.data!
+                                                                    .fromMessages
+                                                                    .toString(),
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          )
+                                                        : SizedBox.shrink(),
+                                                  );
+                                                }
+                                              },
                                             ),
                                           ),
                                         ),
