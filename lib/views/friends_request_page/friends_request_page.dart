@@ -18,9 +18,9 @@ class Friends_RequestPage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           foregroundColor: Colors.white,
-          backgroundColor: Colors.black,
+          backgroundColor: Color.fromARGB(255, 19, 25, 35),
           bottom: TabBar(
-            dividerColor: Colors.black,
+            dividerColor: Color.fromARGB(255, 33, 43, 61),
             unselectedLabelColor: Colors.white,
             indicatorColor: Color(0xff02B4BF),
             labelStyle: GoogleFonts.raleway(color: Color(0xff02B4BF)),
@@ -35,7 +35,7 @@ class Friends_RequestPage extends StatelessWidget {
         body: TabBarView(
           children: [
             Container(
-              color: Colors.black,
+              color:Color.fromARGB(255, 19, 25, 35),
               child: Column(
                 children: [
                   Padding(

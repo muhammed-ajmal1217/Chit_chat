@@ -1,3 +1,4 @@
+import 'package:chitchat/constants/user_icon.dart';
 import 'package:chitchat/controller/chat_provider.dart';
 import 'package:chitchat/controller/friends_request_accept_provider.dart';
 import 'package:chitchat/controller/profile_provider.dart';
@@ -5,11 +6,10 @@ import 'package:chitchat/service/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-
 class FriendsSuggestions extends StatefulWidget {
-  String? userName;
 
-  FriendsSuggestions({Key? key, this.userName}) : super(key: key);
+
+  FriendsSuggestions({Key? key, }) : super(key: key);
 
   @override
   State<FriendsSuggestions> createState() => _FriendsSuggestionsState();
@@ -28,14 +28,14 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.white,
-        backgroundColor: Colors.black,
+        backgroundColor: Color.fromARGB(255, 19, 25, 35),
         title: Text(
           'Suggestions for you',
           style: GoogleFonts.aBeeZee(color: Colors.white),
         ),
       ),
       body: Container(
-        color: Colors.black,
+        color:  Color.fromARGB(255, 19, 25, 35),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -57,24 +57,26 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
               child: Padding(
                 padding: const EdgeInsets.all(8),
                 child: Consumer2<FriendshipProvider, FirebaseProvider>(
-                  builder: (context, pro, pro1, child) => GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 8.0,
-                      mainAxisSpacing: 8.0,
-                      childAspectRatio: 1.0,
-                    ),
-                    itemCount: pro1.users.length,
-                    itemBuilder: (context, index) {
-                      final userDetails = pro1.users[index];
-                      if (userDetails.userId !=
-                          service.authentication.currentUser!.uid) {
+                  builder: (context, pro, pro1, child) {
+                    final filteredUsers = pro1.users.where((user) =>
+                        user.userId !=
+                        service.authentication.currentUser!.uid).toList();
+                    return GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 8.0,
+                        mainAxisSpacing: 8.0,
+                        childAspectRatio: 1.0,
+                      ),
+                      itemCount: filteredUsers.length,
+                      itemBuilder: (context, index) {
+                        final userDetails = filteredUsers[index];
                         return Padding(
                           padding: const EdgeInsets.all(2.0),
                           child: Container(
                             decoration: BoxDecoration(
-                              color: Color.fromARGB(255, 41, 33, 53)
-                                  .withOpacity(0.5),
+                              color: Color.fromARGB(255, 33, 43, 61)
+                                .withOpacity(0.5),
                               borderRadius: BorderRadius.circular(25.0),
                             ),
                             child: Column(
@@ -88,16 +90,16 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
                                     // ));
                                   },
                                   child: Hero(
-                                    tag: pro1.users[index],
+                                    tag: userDetails,
                                     child: Container(
                                       height: height * 0.085,
                                       width: height * 0.085,
                                       decoration: BoxDecoration(
+                                        color: Color.fromARGB(255, 40, 49, 62),
                                         borderRadius: BorderRadius.circular(15),
                                         image: DecorationImage(
-                                          image: AssetImage(
-                                            'assets/Designer (2).png',
-                                          ),
+                                          fit: BoxFit.cover,
+                                          image:userDetails.profilePicture!=null? NetworkImage(userDetails.profilePicture??''):NetworkImage(UserIcon.proFileIcon)
                                         ),
                                       ),
                                     ),
@@ -114,14 +116,14 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
                                 SizedBox(height: height * 0.01),
                                 InkWell(
                                   onTap: ()async {
-                                    
                                     final profilePro=Provider.of<ProfileProvider>(context,listen: false);
-                                    print("'Current User : ${userDetails.userName}");
+                                    print("'Reciever User : ${userDetails.userName}");
                                     print('Current User : ${profilePro.userName}');
                                     await pro.sendFriendRequest(
-                                        recipientUserId: userDetails.userId!,
-                                        recieverName: userDetails.userName!,
-                                        userName:profilePro.userName);
+                                        userData: userDetails,
+                                        userName:profilePro.userName,
+                                        profilePic: profilePro.profileUrl
+                                        );
                                   },
                                   child: Container(
                                     height: 30,
@@ -144,11 +146,9 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
                             ),
                           ),
                         );
-                      } else {
-                        return SizedBox();
-                      }
-                    },
-                  ),
+                      },
+                    );
+                  },
                 ),
               ),
             ),
@@ -158,3 +158,4 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
     );
   }
 }
+

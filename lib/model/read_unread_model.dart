@@ -1,32 +1,35 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class ReadUnReadModel{
-  int? fromMessages;
-  int? toMessages;
+  int? msgNum;
   String? senderId;
   String? recieverId;
   String? lastMsg;
+  Timestamp? time;
   ReadUnReadModel({
-    this.fromMessages,
-    this.toMessages,
+    this.msgNum,
     this.senderId,
     this.recieverId,
     this.lastMsg,
+    this.time
+    
   });
   factory ReadUnReadModel.fromJson(Map<String,dynamic>json){
     return ReadUnReadModel(
-      fromMessages: json['from_msg'],
-      toMessages: json['to_msg'],
+      msgNum: json['msgNum'],
       senderId: json['sender_id'],
       recieverId: json['reciever_id'],
       lastMsg: json['last_msg'],
+      time: json['time'],
     );
   }
   Map<String,dynamic> toJson(){
     return {
-      'from_msg':fromMessages,
-      'to_msg':toMessages,
+      'msgNum':msgNum,
       'sender_id':senderId,
       'reciever_id':recieverId,
       'last_msg':lastMsg,
+      'time':time,
     };
   }
 }

@@ -33,71 +33,91 @@ class ChatService {
         .doc(chatroomid)
         .collection("messages")
         .add(newmessage.toJson());
-        await addMsgCount(recieverId, message);
+    await addMsgCount(recieverId, message, messagetype);
   }
-Future<void> addMsgCount(String receiverId, String message) async {
-  try {
-    final String currentUserId = firebaseAuth.currentUser!.uid;
-    List<String> ids = [currentUserId, receiverId];
-    ids.sort();
-    String chatRoomId = ids.join("_");
 
-    final DocumentSnapshot<Map<String, dynamic>> docSnapshot = await firestore.collection("chat_room").doc(chatRoomId).get();
-    if (docSnapshot.exists) {
-      int currentCount = docSnapshot.data()!['from_msg'] ?? 0;
-      int newCount = currentCount + 1;
+  Future<void> addMsgCount(
+      String receiverId, String message, String messageType) async {
+    try {
+      final String currentUserId = firebaseAuth.currentUser!.uid;
+      List<String> ids = [currentUserId, receiverId];
+      ids.sort();
+      String chatRoomId = ids.join("_");
+
+      final DocumentSnapshot<Map<String, dynamic>> docSnapshot =
+          await firestore.collection("chat_room").doc(chatRoomId).get();
+      final Timestamp timestamp = Timestamp.now();
+      if (messageType == 'video') {
+        message = 'Video';
+      } else if (messageType == 'image') {
+        message = 'Image';
+      } else if (messageType == 'pdf') {
+        message = 'PDF';
+      } else if (messageType=='mp3'){
+        message = 'Voice Message';
+      }
       ReadUnReadModel unReadModel = ReadUnReadModel(
         senderId: currentUserId,
         recieverId: receiverId,
-        fromMessages: newCount,
-        toMessages: 0,
+        msgNum: 0,
         lastMsg: message,
-      );
-      await firestore.collection("chat_room").doc(chatRoomId).update(unReadModel.toJson());
-    } else {
-      ReadUnReadModel unReadModel = ReadUnReadModel(
-        senderId: currentUserId,
-        recieverId: receiverId,
-        fromMessages: 1,
-        toMessages: 0,
-        lastMsg: message,
+        time: timestamp,
       );
 
-      await firestore.collection("chat_room").doc(chatRoomId).set(unReadModel.toJson());
+      if (docSnapshot.exists) {
+        await firestore
+            .collection("chat_room")
+            .doc(chatRoomId)
+            .update(unReadModel.toJson());
+      } else {
+        await firestore
+            .collection("chat_room")
+            .doc(chatRoomId)
+            .set(unReadModel.toJson());
+      }
+    } catch (e) {
+      print('Error updating message count: $e');
     }
-  } catch (e) {
-    print('Error updating message count: $e');
   }
-}
-Stream<ReadUnReadModel?> getUnreadMessageCountStream(String receiverId) {
-  try {
+
+  Stream<ReadUnReadModel?> getUnreadMessageCountStream(String receiverId) {
+    try {
+      final String currentUserId = FirebaseAuth.instance.currentUser!.uid;
+      List<String> userIds = [currentUserId, receiverId];
+      userIds.sort();
+      String chatRoomId = userIds.join("_");
+      return FirebaseFirestore.instance
+          .collection("chat_room")
+          .doc(chatRoomId)
+          .snapshots()
+          .map((snapshot) {
+        if (snapshot.exists && snapshot.data()!.containsKey('msgNum')) {
+          Map<String, dynamic> data = snapshot.data()!;
+          return ReadUnReadModel(
+              senderId: data['sender_id'],
+              recieverId: data['receiver_id'],
+              msgNum: data['msgNum'],
+              lastMsg: data['last_msg'],
+              time: data['time']);
+        } else {
+          return null;
+        }
+      });
+    } catch (e) {
+      print('Error getting unread message count: $e');
+      return Stream.empty();
+    }
+  }
+
+  clearUnreadMsg(String receiverId) async {
     final String currentUserId = FirebaseAuth.instance.currentUser!.uid;
     List<String> userIds = [currentUserId, receiverId];
     userIds.sort();
     String chatRoomId = userIds.join("_");
-    return FirebaseFirestore.instance
-        .collection("chat_room")
-        .doc(chatRoomId)
-        .snapshots()
-        .map((snapshot) {
-      if (snapshot.exists && snapshot.data()!.containsKey('from_msg')) {
-        Map<String, dynamic> data = snapshot.data()!;
-        return ReadUnReadModel(
-          senderId: data['sender_id'],
-          recieverId: data['receiver_id'],
-          fromMessages: data['from_msg'],
-          toMessages: data['to_msg'],
-          lastMsg: data['last_msg'],
-        );
-      } else {
-        return null;
-      }
+    await firestore.collection("chat_room").doc(chatRoomId).update({
+      'msgNum': 0,
     });
-  } catch (e) {
-    print('Error getting unread message count: $e');
-    return Stream.empty();
   }
-}
 
   Future<void> clearChat(String currentuserid, String recieverid) async {
     List ids = [currentuserid, recieverid];
@@ -178,4 +198,20 @@ Stream<ReadUnReadModel?> getUnreadMessageCountStream(String receiverId) {
     return downloadLink;
   }
 
+  Future<String?> uploadAudio(String receiverId, String filePath) async {
+    try {
+      final file = File(filePath);
+      final storageRef = FirebaseStorage.instance
+          .ref()
+          .child('audio/${DateTime.now().millisecondsSinceEpoch}.mp3');
+      final uploadTask = storageRef.putFile(file);
+      final snapshot = await uploadTask.whenComplete(() => null);
+      final downloadUrl = await snapshot.ref.getDownloadURL();
+      sendMessage(receiverId, downloadUrl, 'mp3');
+      return downloadUrl;
+    } catch (e) {
+      print('Error uploading audio: $e');
+      return null;
+    }
+  }
 }

@@ -7,6 +7,8 @@ class ProfileProvider extends ChangeNotifier {
   String profileUrl = '';
   String _userName = '';
   String get userName => _userName;
+  bool _isFavorite = false;
+  bool get isFavorite => _isFavorite;
 
   Future<void> updateUserName() async {
     _userName = await service.getUserName();
@@ -16,6 +18,19 @@ class ProfileProvider extends ChangeNotifier {
   Future<void> retrieveProfilePictureUrl() async {
     profileUrl = await service.getProfilePictureUrl();
     notifyListeners(); 
+  }
+
+  Future<void> restoreFavoriteState(String userId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool? favoriteList = prefs.getBool(userId);
+    _isFavorite = favoriteList ?? false;
+    notifyListeners();
+  }
+    Future<void> toggleFavoriteState(String userId) async {
+    _isFavorite = !_isFavorite;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(userId, _isFavorite);
+    notifyListeners();
   }
   
 }

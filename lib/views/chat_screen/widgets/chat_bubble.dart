@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:chitchat/controller/chat_provider.dart';
 import 'package:chitchat/service/auth_service.dart';
 import 'package:chitchat/views/chat_screen/widgets/video_player.dart';
@@ -8,18 +9,32 @@ import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
-class ChatBubble extends StatelessWidget {
-  const ChatBubble({
+class ChatBubble extends StatefulWidget {
+  ChatBubble({
     Key? key,
     required this.service,
     required this.size,
+    this.audioFilePath,
+    this.audioPlayer,
   }) : super(key: key);
 
   final AuthenticationService service;
   final Size size;
+  final String? audioFilePath;
+  AudioPlayer? audioPlayer;
 
   @override
+  State<ChatBubble> createState() => _ChatBubbleState();
+}
+
+class _ChatBubbleState extends State<ChatBubble> {
+  void initState() {
+    super.initState();
+    widget.audioPlayer = AudioPlayer();
+  }
+  @override
   Widget build(BuildContext context) {
+
     return Consumer<FirebaseProvider>(builder: (context, value, child) {
       if (value.messages.isEmpty) {
         return Center(
@@ -33,21 +48,23 @@ class ChatBubble extends StatelessWidget {
           controller: value.scrollController,
           itemCount: value.messages.length,
           itemBuilder: (context, index) {
+                List<bool> isMessagePlayingList = List.filled(
+        value.messages.length, false);
             final chats = value.messages[index];
             DateTime dateTime = chats.time!.toDate();
             String formattedTime = DateFormat.jm().format(dateTime);
 
             var alignment =
-                chats.senderId == service.authentication.currentUser!.uid
+                chats.senderId == widget.service.authentication.currentUser!.uid
                     ? Alignment.centerRight
                     : Alignment.centerLeft;
             var bubblecolor =
-                chats.senderId == service.authentication.currentUser!.uid
-                    ? Color.fromARGB(255, 53, 53, 53)
+                chats.senderId == widget.service.authentication.currentUser!.uid
+                    ? Color.fromARGB(255, 47, 60, 68)
                     : Color.fromARGB(255, 4, 93, 108);
 
             var borderradius =
-                chats.senderId == service.authentication.currentUser!.uid
+                chats.senderId == widget.service.authentication.currentUser!.uid
                     ? const BorderRadius.only(
                         topLeft: Radius.circular(15),
                         bottomLeft: Radius.circular(15),
@@ -66,9 +83,9 @@ class ChatBubble extends StatelessWidget {
                   alignment: alignment,
                   child: ConstrainedBox(
                     constraints: BoxConstraints(
-                      minHeight: size.height * 0.05,
-                      minWidth: size.width * 0.2,
-                      maxWidth: size.width * 0.7,
+                      minHeight: widget.size.height * 0.05,
+                      minWidth: widget.size.width * 0.2,
+                      maxWidth: widget.size.width * 0.7,
                     ),
                     child: Container(
                       decoration: BoxDecoration(
@@ -88,7 +105,7 @@ class ChatBubble extends StatelessWidget {
                               ),
                             ),
                             SizedBox(
-                              width: size.width * 0.2,
+                              width: widget.size.width * 0.2,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
@@ -116,8 +133,8 @@ class ChatBubble extends StatelessWidget {
                   alignment: alignment,
                   child: ConstrainedBox(
                     constraints: BoxConstraints(
-                      minHeight: size.height * 0.05,
-                      minWidth: size.width * 0.2,
+                      minHeight: widget.size.height * 0.05,
+                      minWidth: widget.size.width * 0.2,
                     ),
                     child: Container(
                       decoration: BoxDecoration(
@@ -138,7 +155,7 @@ class ChatBubble extends StatelessWidget {
                               ),
                             ),
                             SizedBox(
-                              width: size.width * 0.2,
+                              width: widget.size.width * 0.2,
                               child: Align(
                                 alignment: Alignment.centerRight,
                                 child: Text(
@@ -165,8 +182,8 @@ class ChatBubble extends StatelessWidget {
                   alignment: alignment,
                   child: ConstrainedBox(
                     constraints: BoxConstraints(
-                      minHeight: size.height * 0.05,
-                      minWidth: size.width * 0.2,
+                      minHeight: widget.size.height * 0.05,
+                      minWidth: widget.size.width * 0.2,
                     ),
                     child: Container(
                       decoration: BoxDecoration(
@@ -180,7 +197,7 @@ class ChatBubble extends StatelessWidget {
                           children: [
                             VideoPlayerWidget(videoUrl: chats.content!),
                             SizedBox(
-                              width: size.width * 0.2,
+                              width: widget.size.width * 0.2,
                               child: Align(
                                 alignment: Alignment.centerRight,
                                 child: Text(
@@ -206,8 +223,8 @@ class ChatBubble extends StatelessWidget {
                   alignment: alignment,
                   child: ConstrainedBox(
                     constraints: BoxConstraints(
-                      minHeight: size.height * 0.05,
-                      minWidth: size.width * 0.2,
+                      minHeight: widget.size.height * 0.05,
+                      minWidth: widget.size.width * 0.2,
                     ),
                     child: Container(
                       decoration: BoxDecoration(
@@ -229,7 +246,7 @@ class ChatBubble extends StatelessWidget {
                                 color: Colors.white,
                               ),
                               SizedBox(
-                                width: size.width * 0.2,
+                                width: widget.size.width * 0.2,
                                 child: Align(
                                   alignment: Alignment.centerRight,
                                   child: Text(
@@ -243,6 +260,68 @@ class ChatBubble extends StatelessWidget {
                               ),
                             ],
                           ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            } else if (chats.messagetype == "mp3") {
+              return Padding(
+                padding: const EdgeInsets.fromLTRB(10, 0, 10, 20),
+                child: Align(
+                  alignment: alignment,
+                  child: SizedBox(
+                    width: widget.size.width * 0.7,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: bubblecolor,
+                        borderRadius: borderradius,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: InkWell(
+                          onTap: () {
+                            if (!isMessagePlayingList[index]) {
+                              playVoice(
+                                  chats.content!, isMessagePlayingList, index);
+                            } else {
+                              widget.audioPlayer?.pause();
+                            }
+                            setState(() {
+                              isMessagePlayingList[index] =
+                                  !isMessagePlayingList[index];
+                            });
+                          },
+                          child: !isMessagePlayingList[index]
+                              ? Row(
+                                  children: [
+                                    Icon(
+                                      Icons.play_arrow,
+                                      color: Colors.white,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        height: 1,
+                                        width: widget.size.width * 0.55,
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                  ],
+                                )
+                              : Row(
+                                  children: [
+                                    Icon(
+                                      Icons.pause,
+                                      color: Colors.white,
+                                    ),
+                                    Lottie.asset(
+                                      "assets/Animation - 1710842378300.json",
+                                      width: 230,
+                                    ),
+                                  ],
+                                ),
                         ),
                       ),
                     ),
@@ -267,6 +346,23 @@ class ChatBubble extends StatelessWidget {
       ),
     );
   }
+
+  playVoice(
+      String audioFilePath, List<bool> isMessagePlayingList, int index) async {
+    try {
+      await widget.audioPlayer?.play(UrlSource(audioFilePath));
+      widget.audioPlayer?.onPlayerComplete.listen((event) {
+        setState(() {
+          isMessagePlayingList[index] = false;
+        });
+      });
+    } catch (e) {
+      print('Voice play error: $e');
+    }
+  }
+
+  void dispose() {
+    widget.audioPlayer!.dispose();
+    super.dispose();
+  }
 }
-
-

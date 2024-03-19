@@ -45,7 +45,7 @@ class StoryList extends StatelessWidget {
                           );
                         },
                         child: Container(
-                          height: height * 0.17,
+                          height: height * 0.15,
                           width: height * 0.13,
                           decoration: BoxDecoration(
                             borderRadius:

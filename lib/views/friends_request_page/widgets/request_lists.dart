@@ -1,4 +1,3 @@
-
 import 'package:chitchat/controller/friends_request_accept_provider.dart';
 import 'package:chitchat/controller/profile_provider.dart';
 import 'package:chitchat/model/request_model.dart';
@@ -9,17 +8,16 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class FriendsRequest extends StatelessWidget {
-
-   FriendsRequest({Key? key,e});
+  FriendsRequest({Key? key, e});
 
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Colors.black,
-      body: Consumer2<FriendshipProvider,ProfileProvider>(
-        builder: (context, value,value1, child) {
+      backgroundColor:Color.fromARGB(255, 19, 25, 35),
+      body: Consumer2<FriendshipProvider, ProfileProvider>(
+        builder: (context, value, value1, child) {
           return StreamProvider<List<RequestModel>>(
             create: (_) => value.getRequest(),
             initialData: [],
@@ -35,7 +33,8 @@ class FriendsRequest extends StatelessWidget {
                       height: height * 0.09,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 41, 33, 53).withOpacity(0.5),
+                        color:  Color.fromARGB(255, 33, 43, 61)
+                                .withOpacity(0.5),
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(20),
                           bottomLeft: Radius.circular(20),
@@ -52,9 +51,7 @@ class FriendsRequest extends StatelessWidget {
                             ),
                           ),
                           leading: GestureDetector(
-                            onTap: () {
-                              
-                            },
+                            onTap: () {},
                             child: Hero(
                               tag: index,
                               child: Container(
@@ -63,8 +60,9 @@ class FriendsRequest extends StatelessWidget {
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15),
                                   image: DecorationImage(
+                                    fit: BoxFit.cover,
                                     image:
-                                        AssetImage('assets/Designer (2).png'),
+                                        NetworkImage(requestData.profilePicture??''),
                                   ),
                                 ),
                               ),
@@ -76,12 +74,20 @@ class FriendsRequest extends StatelessWidget {
                               requestAccept_Reject(Icons.check, height, () {}),
                               SizedBox(width: width * 0.03),
                               requestAccept_Reject(Icons.close, height, () {
-                                final profilePro=Provider.of<ProfileProvider>(context,listen: false);
+                                final profilePro = Provider.of<ProfileProvider>(
+                                    context,
+                                    listen: false);
+                                print(
+                                    "'Sender User : ${requestData.senderName}");
+                                print('Current User : ${profilePro.userName}');
                                 Provider.of<FriendshipProvider>(context,
                                         listen: false)
-                                        //requestData.senderId!,requestData.senderName!,profilePro.userName
+                                    //requestData.senderId!,requestData.senderName!,profilePro.userName
                                     .acceptFriendRequest(
-                                        requestData,profilePro.userName);
+                                        userData: requestData,
+                                        currentUserName: profilePro.userName,
+                                        profilePic: profilePro.profileUrl
+                                        );
                               }),
                             ],
                           ),

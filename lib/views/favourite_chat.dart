@@ -1,7 +1,6 @@
 import 'package:chitchat/controller/chat_provider.dart';
 import 'package:chitchat/helpers/helpers.dart';
 import 'package:chitchat/views/chat_screen/chat_page.dart';
-import 'package:chitchat/views/drawer/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
