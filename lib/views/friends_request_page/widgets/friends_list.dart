@@ -1,6 +1,7 @@
+import 'package:chitchat/constants/user_icon.dart';
 import 'package:chitchat/controller/chat_provider.dart';
 import 'package:chitchat/controller/friends_request_accept_provider.dart';
-import 'package:chitchat/model/request_model.dart';
+import 'package:chitchat/model/user_model.dart';
 import 'package:chitchat/views/chat_screen/chat_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +32,7 @@ class _FriendsListState extends State<FriendsList> {
     final width = MediaQuery.of(context).size.width;
     final provider = Provider.of<FriendshipProvider>(context);
     return Expanded(
-      child: StreamBuilder<List<RequestModel>>(
+      child: StreamBuilder<List<UserModel>>(
         stream: provider.getFriends(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -39,7 +40,7 @@ class _FriendsListState extends State<FriendsList> {
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
-            List<RequestModel> friends = snapshot.data ?? [];
+            List<UserModel> friends = snapshot.data ?? [];
             if (friends.isEmpty) {
               return Center(
                 child: Text(
@@ -50,18 +51,18 @@ class _FriendsListState extends State<FriendsList> {
             } else {
               return Consumer<FirebaseProvider>(
                 builder: (context, value, child) {
-                  final List<RequestModel> friendsWithChats =
+                  final List<UserModel> friendsWithChats =
                       friends.where((friend) {
                     return value.users
-                        .any((user) => user.userId == friend.senderId);
+                        .any((user) => user.userId == friend.userId);
                   }).toList();
 
                   return ListView.builder(
                     itemCount: friendsWithChats.length,
                     itemBuilder: (context, index) {
-                      RequestModel requestData = friendsWithChats[index];
+                      UserModel requestData = friendsWithChats[index];
                       final userDetails = value.users.firstWhere(
-                          (user) => user.userId == requestData.recieverId);
+                          (user) => user.userId == requestData.receiverId);
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
@@ -79,7 +80,7 @@ class _FriendsListState extends State<FriendsList> {
                           child: Center(
                             child: ListTile(
                               title: Text(
-                                '${auth.currentUser!.uid==requestData.recieverId?requestData.senderName:requestData.recieverName}',
+                                '${auth.currentUser!.uid == requestData.receiverId ? requestData.userName : requestData.recieverName}',
                                 style: GoogleFonts.raleway(
                                     color: Colors.white, fontSize: 14),
                               ),
@@ -94,7 +95,14 @@ class _FriendsListState extends State<FriendsList> {
                                       borderRadius: BorderRadius.circular(15),
                                       image: DecorationImage(
                                         fit: BoxFit.cover,
-                                        image: NetworkImage(requestData.profilePicture??''),
+                                        image: requestData.profilePicture !=
+                                                    null &&
+                                                requestData
+                                                    .profilePicture!.isNotEmpty
+                                            ? NetworkImage(
+                                                requestData.profilePicture!)
+                                            : NetworkImage(
+                                                UserIcon.proFileIcon),
                                       ),
                                     ),
                                   ),

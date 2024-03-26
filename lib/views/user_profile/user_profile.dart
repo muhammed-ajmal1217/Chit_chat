@@ -1,13 +1,15 @@
+import 'package:chitchat/constants/user_icon.dart';
 import 'package:chitchat/helpers/helpers.dart';
+import 'package:chitchat/model/user_model.dart';
 import 'package:chitchat/views/user_profile/widgets/user_profile_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class UserProfile extends StatefulWidget {
-  int index;
+  UserModel user;
   UserProfile({
     super.key,
-    required this.index,
+    required this.user,
   });
 
   @override
@@ -33,7 +35,7 @@ class _UserProfileState extends State<UserProfile> {
               width: double.infinity,
               decoration: BoxDecoration(
               borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20)),
-                color: Colors.black,
+                color: Color.fromARGB(255, 19, 25, 35),
               ),
               child: SingleChildScrollView(
                 child: Column(
@@ -42,7 +44,7 @@ class _UserProfileState extends State<UserProfile> {
                     spacingHeight(screenHeight * 0.040),
                     Padding(
                       padding: const EdgeInsets.only(right: 20),
-                      child: Text('User${widget.index}',
+                      child: Text('${widget.user.userName}',
                           style: GoogleFonts.raleway(
                               fontSize: 20,
                               fontWeight: FontWeight.w500,
@@ -51,7 +53,7 @@ class _UserProfileState extends State<UserProfile> {
                     Padding(
                       padding: const EdgeInsets.only(right: 20),
                       child: Text(
-                        'username${widget.index}@gmail.com',
+                        '${widget.user.email}',
                         style: TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.w400,
@@ -94,32 +96,7 @@ class _UserProfileState extends State<UserProfile> {
                     spacingHeight(screenHeight * 0.01),
                     UserDetailsInProfile(
                         color: Colors.grey, text: 'Phone number', size: 20),
-                    UserDetailsInProfile(
-                        color: Colors.white, text: '8089833972', size: 15),
-                    spacingHeight(screenHeight * 0.01),
-                    Divider(
-                      thickness: 0.1,
-                    ),
-                    spacingHeight(screenHeight * 0.01),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        UserDetailsInProfile(
-                            color: Colors.grey,
-                            text: 'Mute Notification',
-                            size: 20),
-                        Switch(  
-                          value: false,
-                          activeTrackColor: Color.fromARGB(255, 15, 161, 154),
-                          activeColor: Color.fromARGB(255, 200, 87, 1),
-                          focusColor: Colors.black,
-                          hoverColor: Colors.black,
-                          inactiveThumbColor: Color.fromARGB(255, 96, 97, 97),
-                          inactiveTrackColor: Colors.black,
-                          onChanged: (value) {},
-                        )
-                      ],
-                    ),
+                    UserDetailsInProfile(text: '${widget.user.phoneNumber!=null?'${widget.user.phoneNumber}':'Phone number not disclosed'}', size: 15, color: Colors.white),
                     spacingHeight(screenHeight * 0.01),
                     Divider(thickness: 0.1),
                     spacingHeight(screenHeight * 0.01),
@@ -134,11 +111,11 @@ class _UserProfileState extends State<UserProfile> {
               top: screenHeight * 0.16,
               left: 20,
               child: Hero(
-                tag: widget.index,
+                tag: widget.user,
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
-                    gradient: circleAvatarGradient(),
+                    color:  Color.fromARGB(255, 40, 49, 62),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.4),
@@ -156,12 +133,13 @@ class _UserProfileState extends State<UserProfile> {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
                             image: DecorationImage(
-                                image: AssetImage('assets/Designer (2).png'))),
+                              fit: BoxFit.cover,
+                                image:widget.user.profilePicture!=null? NetworkImage(widget.user.profilePicture??''):NetworkImage(UserIcon.proFileIcon)),
                       ),
                   ),
                 ),
               ),
-            ),
+            ),),
             Positioned(
               top: 50,
               left: 20,

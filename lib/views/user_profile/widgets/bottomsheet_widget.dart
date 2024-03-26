@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:chitchat/constants/user_icon.dart';
 import 'package:chitchat/views/chat_screen/widgets/image_selector.dart';
 import 'package:chitchat/controller/chat_provider.dart';
 import 'package:chitchat/controller/image_provider.dart';
@@ -8,16 +8,26 @@ import 'package:chitchat/model/user_model.dart';
 import 'package:chitchat/service/chat_service.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 
-class BottomSheetPage extends StatelessWidget {
+class BottomSheetPage extends StatefulWidget {
   UserModel? user;
   BottomSheetPage({super.key, this.user});
 
   @override
+  State<BottomSheetPage> createState() => _BottomSheetPageState();
+}
+
+class _BottomSheetPageState extends State<BottomSheetPage> {
+  String locationMessage = '';
+  late dynamic lat;
+  late dynamic long;
+
+  @override
   Widget build(BuildContext context) {
-    final provider=Provider.of<FirebaseProvider>(context);
+    final provider = Provider.of<FirebaseProvider>(context);
     final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -33,18 +43,28 @@ class BottomSheetPage extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircleAvatar(
-              radius: size.height * 0.03,
-              backgroundColor: Colors.amber,
-              child: Icon(
-                Iconsax.location,
-                color: Colors.white,
+            InkWell(
+              onTap: () {
+                getCurrentLocation().then((value) {
+                   setState(() {
+                    locationMessage = 'Latitude: $lat, Longitude: $long';
+                  });
+                  ChatService().sendLocationMessage('${UserIcon.locationUrl}${lat},${long}',widget.user?.userId??'',);
+                });
+              },
+              child: CircleAvatar(
+                radius: size.height * 0.03,
+                backgroundColor: Colors.amber,
+                child: Icon(
+                  Iconsax.location,
+                  color: Colors.white,
+                ),
               ),
             ),
             spacingWidth(20),
             InkWell(
               onTap: () {
-                provider.pickDocument(user!.userId!);
+                provider.pickDocument(widget.user!.userId!);
               },
               child: CircleAvatar(
                 radius: size.height * 0.03,
@@ -65,7 +85,7 @@ class BottomSheetPage extends StatelessWidget {
                     return ImageSelectorDialog(
                       pro: pro,
                       size: size,
-                      recieverId: user!.userId!,
+                      recieverId: widget.user!.userId!,
                     );
                   },
                 );
@@ -89,8 +109,9 @@ class BottomSheetPage extends StatelessWidget {
                   );
                   if (result != null) {
                     final file = File(result.files.single.path!);
-                    ChatService().selectAndSendVideo(file, user!.userId!);
-                  } 
+                    ChatService()
+                        .selectAndSendVideo(file, widget.user!.userId!);
+                  }
                 } catch (e) {
                   print('Error picking video: $e');
                 }
@@ -109,5 +130,30 @@ class BottomSheetPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  getCurrentLocation() async {
+    try {
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission==LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission!=LocationPermission.whileInUse && permission!=LocationPermission.always) {
+          print("permission denid");
+          return null;
+        }
+      }
+      if (permission==LocationPermission.deniedForever) {
+        print("Location denied forever");
+        return null;
+      }
+      Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+
+      setState(() {
+     lat = position.latitude;
+     long = position.longitude;
+      });
+    } catch (e) {
+      
+    }
   }
 }

@@ -20,7 +20,7 @@ class ProfileContainers extends StatelessWidget {
       decoration: BoxDecoration(
         border: Border.all(color: Colors.white.withOpacity(0.1)),
         borderRadius: BorderRadius.circular(20),
-        color: Colors.black,
+        color: Color.fromARGB(255, 20, 27, 37),
         boxShadow: [
           BoxShadow(
             color: Color.fromARGB(255, 76, 76, 76),

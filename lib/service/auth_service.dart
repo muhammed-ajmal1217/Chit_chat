@@ -18,7 +18,7 @@ class AuthenticationService {
   Reference storage=FirebaseStorage.instance.ref();
   String userEmail = '';
   String? profileUrl="";
-    String userName='';
+  String userName='';
   getUserName()async{
     DocumentSnapshot? userCredential = await firestore.collection('users').doc(authentication.currentUser!.uid).get();
     if(userCredential.exists){
@@ -223,4 +223,15 @@ Future<void> uploadProfilePicture(File image) async {
     throw Exception('Error uploading profile picture: $e');
   }
 }  
+deleteMyAccount()async{
+  try {
+  User? user = authentication.currentUser;
+  await user?.delete();
+  await firestore.collection('users').doc(authentication.currentUser!.uid).delete();
+  print('User account deleted successfully.');
+} catch (e) {
+  print('Error deleting user account: $e');
+}
+
+}
 }

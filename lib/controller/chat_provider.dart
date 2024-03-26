@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:chitchat/model/message_model.dart';
-import 'package:chitchat/model/request_model.dart';
 import 'package:chitchat/model/user_model.dart';
 import 'package:chitchat/service/auth_service.dart';
 import 'package:chitchat/service/chat_service.dart';
@@ -10,9 +9,9 @@ import 'package:flutter/material.dart';
 class FirebaseProvider extends ChangeNotifier {
   List<UserModel> users = [];
   List<MessageModel> messages = [];
-  List<RequestModel> requests = [];
+  List<UserModel> requests = [];
   List<UserModel> favoriteList = [];
-  List<UserModel>? filteredUsers = [];
+  List<UserModel> filteredUsers = [];
   AuthenticationService authService = AuthenticationService();
   ChatService chatService = ChatService();
   ScrollController scrollController = ScrollController();
@@ -20,6 +19,7 @@ class FirebaseProvider extends ChangeNotifier {
   List<UserModel> getAllUsers() {
     authService.firestore.collection('users').snapshots().listen((user) {
       users = user.docs.map((doc) => UserModel.fromJson(doc.data())).toList();
+      filteredUsers = users;
       notifyListeners();
     });
     return users;

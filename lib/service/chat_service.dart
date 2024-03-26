@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:chitchat/model/message_model.dart';
 import 'package:chitchat/model/read_unread_model.dart';
+import 'package:chitchat/model/story_view_mode.dart';
 import 'package:chitchat/service/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,6 +13,7 @@ class ChatService {
   AuthenticationService authService = AuthenticationService();
   Reference storage = FirebaseStorage.instance.ref();
   String downloadurl = "";
+  List<Story> stories = [];
 
   sendMessage(String recieverId, String message, String messagetype) async {
     final String currentUserId = firebaseAuth.currentUser!.uid;
@@ -55,6 +57,8 @@ class ChatService {
         message = 'PDF';
       } else if (messageType=='mp3'){
         message = 'Voice Message';
+      } else if(messageType=='location'){
+        message = 'Location';
       }
       ReadUnReadModel unReadModel = ReadUnReadModel(
         senderId: currentUserId,
@@ -192,7 +196,7 @@ class ChatService {
     final downloadLink = await reference.getDownloadURL();
     sendMessage(
       recieverId,
-      downloadLink,
+      fileName,
       'pdf',
     );
     return downloadLink;
@@ -214,4 +218,56 @@ class ChatService {
       return null;
     }
   }
+  void sendLocationMessage(String location,String receiverId) async{
+   try {
+      sendMessage(receiverId, location, 'location');
+   } catch (e) {
+     throw Exception(e);
+   }
+
+
+}
+Future<void> uploadStatus(Story story) async {
+  try {
+    String uid = authService.authentication.currentUser!.uid;
+    CollectionReference statusCollection = authService.firestore.collection('status');
+    Reference storageRef = FirebaseStorage.instance.ref().child('user_stories').child(uid).child("${DateTime.now().millisecondsSinceEpoch.toString()}.jpg");
+    UploadTask uploadTask = storageRef.putFile(File(story.media!));
+    TaskSnapshot storageSnapshot = await uploadTask.whenComplete(() => null);
+    String downloadUrl = await storageSnapshot.ref.getDownloadURL();
+    await statusCollection.doc(uid).set({
+      'mediaUrl': downloadUrl,
+      'name': story.name,
+      'time': story.time,
+      'id':story.id,
+      'media_type': story.mediaType,
+      'timestamp': FieldValue.serverTimestamp(),
+    });
+
+    print('Media uploaded successfully!');
+  } catch (e) {
+    print('Error uploading media: $e');
+  }
+
+}
+Future<List<Story>> getStatus() async {
+  try {
+    QuerySnapshot querySnapshot = await firestore.collection('status').get();
+    querySnapshot.docs.forEach((doc) {
+      stories.add(Story.fromJson(doc.data() as Map<String, dynamic>));
+    });
+    return stories;
+  } catch (e) {
+    throw ('Error fetching status list: $e');
+  }
+}
+Story? getCurrentUserStory() {
+  for (Story story in stories) {
+    if (story.id == authService.authentication.currentUser!.uid) {
+      return story;
+    }
+  }
+  return null; 
+}
+
 }

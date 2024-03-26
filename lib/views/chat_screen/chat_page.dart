@@ -300,12 +300,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               ),
                               InkWell(
                                 child: CircleAvatar(
-                                  child: recorder.onProgress != null
-                                      ? Icon(
-                                          Icons.stop_outlined,
-                                          color: Colors.white,
-                                        )
-                                      : Icon(
+                                  child: Icon(
                                           Icons.mic,
                                           color: Colors.white,
                                         ),

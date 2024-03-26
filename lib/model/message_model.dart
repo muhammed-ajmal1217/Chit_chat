@@ -7,7 +7,8 @@ class MessageModel {
   String? senderemail;
   String? recieverId;
   Timestamp? time;
-  String? audioUrl; 
+  String? audioUrl;
+  String?location;
 
   MessageModel({
     this.content,
@@ -16,7 +17,8 @@ class MessageModel {
     this.senderId,
     this.time,
     this.senderemail,
-    this.audioUrl, 
+    this.audioUrl,
+    this.location
   });
 
   factory MessageModel.fromJson(Map<String, dynamic> json) {
@@ -27,7 +29,9 @@ class MessageModel {
       recieverId: json["recieverId"],
       senderId: json["senderId"],
       time: json["time"],
-      audioUrl: json["audioUrl"], 
+      audioUrl: json["audioUrl"],
+      location: json["location"],
+      
     );
   }
 
@@ -39,7 +43,9 @@ class MessageModel {
       "recieverId": recieverId,
       "senderId": senderId,
       "time": time,
-      "audioUrl": audioUrl, 
+      "audioUrl": audioUrl,
+      "location": location,
+       
     };
   }
 }

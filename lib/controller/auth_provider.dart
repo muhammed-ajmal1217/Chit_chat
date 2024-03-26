@@ -33,7 +33,7 @@ class AuthenticationProvider extends ChangeNotifier {
     try {
       await authService.signinWithGoogle();
     } catch (e) {
-      throw Exception('error signin with google becauase$e');
+      print('error signin with google becauase$e');
     }
     notifyListeners();
   }

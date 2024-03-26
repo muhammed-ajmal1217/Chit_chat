@@ -5,9 +5,13 @@ import 'package:chitchat/views/chat_screen/widgets/video_player.dart';
 import 'package:easy_pdf_viewer/easy_pdf_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart' as GoogleMaps;
+import 'package:url_launcher/url_launcher.dart';
 
 class ChatBubble extends StatefulWidget {
   ChatBubble({
@@ -28,13 +32,14 @@ class ChatBubble extends StatefulWidget {
 }
 
 class _ChatBubbleState extends State<ChatBubble> {
+  bool isPlaying = false;
   void initState() {
     super.initState();
     widget.audioPlayer = AudioPlayer();
   }
+
   @override
   Widget build(BuildContext context) {
-
     return Consumer<FirebaseProvider>(builder: (context, value, child) {
       if (value.messages.isEmpty) {
         return Center(
@@ -48,8 +53,6 @@ class _ChatBubbleState extends State<ChatBubble> {
           controller: value.scrollController,
           itemCount: value.messages.length,
           itemBuilder: (context, index) {
-                List<bool> isMessagePlayingList = List.filled(
-        value.messages.length, false);
             final chats = value.messages[index];
             DateTime dateTime = chats.time!.toDate();
             String formattedTime = DateFormat.jm().format(dateTime);
@@ -226,28 +229,33 @@ class _ChatBubbleState extends State<ChatBubble> {
                       minHeight: widget.size.height * 0.05,
                       minWidth: widget.size.width * 0.2,
                     ),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: bubblecolor,
-                        borderRadius: borderradius,
-                      ),
-                      child: InkWell(
-                        onTap: () {
-                          _openPdf(chats.content!, context);
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Icon(
-                                Icons.picture_as_pdf,
-                                size: 50,
-                                color: Colors.white,
-                              ),
-                              SizedBox(
-                                width: widget.size.width * 0.2,
-                                child: Align(
+                    child: SizedBox(
+                      width: widget.size.width * 0.3,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: bubblecolor,
+                          borderRadius: borderradius,
+                        ),
+                        child: InkWell(
+                          onTap: () {
+                            _openPdf(chats.content!, context);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.picture_as_pdf,
+                                      size: 30,
+                                      color: Colors.white,
+                                    ),
+                                    Text('PDF File',style: GoogleFonts.raleway(color:Colors.white),)
+                                  ],
+                                ),
+                                Align(
                                   alignment: Alignment.centerRight,
                                   child: Text(
                                     formattedTime,
@@ -257,8 +265,8 @@ class _ChatBubbleState extends State<ChatBubble> {
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -272,7 +280,7 @@ class _ChatBubbleState extends State<ChatBubble> {
                 child: Align(
                   alignment: alignment,
                   child: SizedBox(
-                    width: widget.size.width * 0.7,
+                    width: widget.size.width * 0.3,
                     child: Container(
                       decoration: BoxDecoration(
                         color: bubblecolor,
@@ -282,46 +290,125 @@ class _ChatBubbleState extends State<ChatBubble> {
                         padding: const EdgeInsets.all(5.0),
                         child: InkWell(
                           onTap: () {
-                            if (!isMessagePlayingList[index]) {
-                              playVoice(
-                                  chats.content!, isMessagePlayingList, index);
+                            if (!isPlaying) {
+                              playVoice(chats.content!);
                             } else {
                               widget.audioPlayer?.pause();
                             }
                             setState(() {
-                              isMessagePlayingList[index] =
-                                  !isMessagePlayingList[index];
+                              isPlaying = !isPlaying;
                             });
                           },
-                          child: !isMessagePlayingList[index]
-                              ? Row(
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left: 5),
+                                child: Row(
                                   children: [
-                                    Icon(
-                                      Icons.play_arrow,
-                                      color: Colors.white,
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Container(
-                                        height: 1,
-                                        width: widget.size.width * 0.55,
-                                        color: Colors.white,
-                                      ),
-                                    )
-                                  ],
-                                )
-                              : Row(
-                                  children: [
-                                    Icon(
-                                      Icons.pause,
-                                      color: Colors.white,
-                                    ),
-                                    Lottie.asset(
-                                      "assets/Animation - 1710842378300.json",
-                                      width: 230,
-                                    ),
+                                    Icon(Iconsax.audio_square,color: Colors.white,),
+                                    Text('Play Audio',style: GoogleFonts.raleway(color:Colors.white),),
                                   ],
                                 ),
+                              ),
+                              // !isPlaying
+                              // ? Row(
+                              //     children: [
+                              //       Icon(
+                              //         Icons.play_arrow,
+                              //         color: Colors.white,
+                              //       ),
+                              //       Padding(
+                              //         padding: const EdgeInsets.all(8.0),
+                              //         child: Container(
+                              //           height: 1,
+                              //           width: widget.size.width * 0.55,
+                              //           color: Colors.white,
+                              //         ),
+                              //       )
+                              //     ],
+                              //   )
+                              // : Row(
+                              //     children: [
+                              //       Icon(
+                              //         Icons.pause,
+                              //         color: Colors.white,
+                              //       ),
+                              //       Lottie.asset(
+                              //         "assets/Animation - 1710842378300.json",
+                              //         width: 230,
+                              //       ),
+                                    
+                              //     ],
+                              //   ),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                    formattedTime,
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      color: Colors.white.withOpacity(0.7),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          )
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            } else if (chats.messagetype == "location") {
+              return Padding(
+                padding: const EdgeInsets.fromLTRB(10, 0, 10, 20),
+                child: Align(
+                  alignment: alignment,
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: widget.size.height * 0.05,
+                      minWidth: widget.size.width * 0.2,
+                    ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: bubblecolor,
+                        borderRadius: borderradius,
+                      ),
+                      child: InkWell(
+                        onTap: ()async {
+                          await launchUrl(Uri.parse(chats.content??''));
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: SizedBox(
+                            width: widget.size.width * 0.5,
+                            height: 180,
+                            child: Column(
+                              children: [
+                                Container(
+                                  height: 100,
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: AssetImage('assets/3d-view-map.jpg'))
+                                  ),
+                                ),
+                                Text(chats.content??'',style: GoogleFonts.raleway(color:Colors.white,fontSize:13),),
+                                SizedBox(
+                                width: widget.size.width * 0.2,
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                    formattedTime,
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      color: Colors.white.withOpacity(0.7),
+                                    ),
+                                  ),))
+                              ],
+                            )
+                          ),
                         ),
                       ),
                     ),
@@ -347,13 +434,12 @@ class _ChatBubbleState extends State<ChatBubble> {
     );
   }
 
-  playVoice(
-      String audioFilePath, List<bool> isMessagePlayingList, int index) async {
+  playVoice(String audioFilePath) async {
     try {
       await widget.audioPlayer?.play(UrlSource(audioFilePath));
       widget.audioPlayer?.onPlayerComplete.listen((event) {
         setState(() {
-          isMessagePlayingList[index] = false;
+          isPlaying = false;
         });
       });
     } catch (e) {

@@ -50,13 +50,13 @@ class _CustomDrawerState extends State<CustomDrawer> {
       builder: (context, authProvider, profilePro, imagePro, chatPro, child) =>
           Drawer(
         surfaceTintColor: Colors.black,
-        backgroundColor: Colors.black,
+        backgroundColor: Color.fromARGB(255, 19, 25, 35),
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
             DrawerHeader(
               curve: Curves.bounceInOut,
-              decoration: BoxDecoration(gradient: mainGradient()),
+              decoration: BoxDecoration(color: Color.fromARGB(255, 20, 27, 39),),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -151,7 +151,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
             ),
             ListTiles(
               text: 'Profile',
-              onTap: () {},
+              onTap: () {
+                
+              },
             ),
             ListTiles(
               text: 'Notification',
@@ -177,7 +179,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
             ),
             ListTiles(
               text: 'Delete my Account',
-              onTap: () {},
+              onTap: () {
+                AuthenticationService().deleteMyAccount();
+              },
             ),
           ],
         ),
