@@ -13,14 +13,21 @@ alerts, friend requests, and a search function. Additionally, users can post sta
 5. **Firebase Backend**: With Firebase serving as the backend, Chitchat ensures a reliable and efficient platform for data storage, real-time updates, and scalability, providing users with a seamless and responsive experience.
 
 <!-- Image Gallery -->
-<!--<div align="center">
-  <img src="https://github.com/muhammed-ajmal1217/Movie_Stack/assets/136672051/86089e61-650f-40fd-b0c0-dc178b185591" alt="Screenshot 1" width="200"/>
-  <img src="https://github.com/muhammed-ajmal1217/Movie_Stack/assets/136672051/f91c5395-a416-4a5a-bc77-0c51475172db" alt="Screenshot 2" width="200"/>
-  <img src="https://github.com/muhammed-ajmal1217/Movie_Stack/assets/136672051/331a4762-70e9-465c-876d-27dc1c827707" alt="Screenshot 3" width="200"/>
-  <img src="https://github.com/muhammed-ajmal1217/Movie_Stack/assets/136672051/7f8f4cd4-6ecc-4ce0-a39c-28c8e0f0d4a9" alt="Screenshot 4" width="200"/>
-  <img src="https://github.com/muhammed-ajmal1217/Movie_Stack/assets/136672051/e07b4f65-69b0-4bae-b46f-bceecb711e5e" alt="Screenshot 4" width="200"/>
-  <img src="https://github.com/muhammed-ajmal1217/Movie_Stack/assets/136672051/d847a3a6-e197-481b-9a3e-f5aeb6fc834f" alt="Screenshot 4" width="200"/>
-</div>-->
+<div align="center">
+  <img src="https://github.com/muhammed-ajmal1217/Chit_chat/assets/136672051/6de322ed-a474-43e6-a9a5-9a9ca99b9389" alt="Screenshot 1" width="200"/>
+  <img src="https://github.com/muhammed-ajmal1217/Chit_chat/assets/136672051/d4284405-18a1-463b-8418-33059d771f74" alt="Screenshot 2" width="200"/>
+  <img src="https://github.com/muhammed-ajmal1217/Chit_chat/assets/136672051/d848f051-751b-4415-b668-01ca086e56be" alt="Screenshot 3" width="200"/>
+  <img src="https://github.com/muhammed-ajmal1217/Chit_chat/assets/136672051/abb96afa-aa50-4b3a-9b19-195deba97c7b" alt="Screenshot 4" width="200"/>
+  <img src="https://github.com/muhammed-ajmal1217/Chit_chat/assets/136672051/1051fd53-d881-4ba0-9bf4-1902803805f4" alt="Screenshot 4" width="200"/>
+  <img src="https://github.com/muhammed-ajmal1217/Chit_chat/assets/136672051/cfd03630-d9cd-4e9a-aea2-1ae45773c2ce" alt="Screenshot 4" width="200"/>
+  <img src="https://github.com/muhammed-ajmal1217/Chit_chat/assets/136672051/c299c58b-da1a-4205-9891-a22595ca923a" alt="Screenshot 4" width="200"/>
+  <img src="https://github.com/muhammed-ajmal1217/Chit_chat/assets/136672051/b95aa990-c40f-462d-ac15-52daf95a0eff" alt="Screenshot 4" width="200"/>
+  <img src="https://github.com/muhammed-ajmal1217/Chit_chat/assets/136672051/9dd3c68a-270f-4580-bce6-57694f39b8ec" alt="Screenshot 4" width="200"/>
+  <img src="https://github.com/muhammed-ajmal1217/Chit_chat/assets/136672051/4f18e8b3-0c75-42ec-9e6d-7723c5794425" alt="Screenshot 4" width="200"/>
+  <img src="https://github.com/muhammed-ajmal1217/Chit_chat/assets/136672051/83a360e6-f926-4b68-ad86-f65b9ecd44b4" alt="Screenshot 4" width="200"/>
+  <img src="https://github.com/muhammed-ajmal1217/Chit_chat/assets/136672051/49f524f7-0375-4b0a-91c0-96f5fa86b197" alt="Screenshot 4" width="200"/>
+  <img src="https://github.com/muhammed-ajmal1217/Chit_chat/assets/136672051/06b9b801-879c-48ef-a44d-8982b84d32a8" alt="Screenshot 4" width="200"/>
+</div>
 
 
 ## Getting Started
