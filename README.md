@@ -30,10 +30,3 @@ alerts, friend requests, and a search function. Additionally, users can post sta
 </div>
 
 
-## Getting Started
-### Installation
-Clone the repository to your local machine:
-```bash
-git clone https://github.com/muhammed-ajmal1217/Chit_chat.git
-
-
