@@ -14,7 +14,7 @@ alerts, friend requests, and a search function. Additionally, users can post sta
 
 <!-- Image Gallery -->
 <div align="center">
-  <img src="https://github.com/muhammed-ajmal1217/Chit_chat/assets/136672051/6de322ed-a474-43e6-a9a5-9a9ca99b9389" alt="Screenshot 1" width="200"/>
+<!--   <img src="https://github.com/muhammed-ajmal1217/Chit_chat/assets/136672051/6de322ed-a474-43e6-a9a5-9a9ca99b9389" alt="Screenshot 1" width="200"/>
   <img src="https://github.com/muhammed-ajmal1217/Chit_chat/assets/136672051/d4284405-18a1-463b-8418-33059d771f74" alt="Screenshot 2" width="200"/>
   <img src="https://github.com/muhammed-ajmal1217/Chit_chat/assets/136672051/d848f051-751b-4415-b668-01ca086e56be" alt="Screenshot 3" width="200"/>
   <img src="https://github.com/muhammed-ajmal1217/Chit_chat/assets/136672051/abb96afa-aa50-4b3a-9b19-195deba97c7b" alt="Screenshot 4" width="200"/>
@@ -26,7 +26,7 @@ alerts, friend requests, and a search function. Additionally, users can post sta
   <img src="https://github.com/muhammed-ajmal1217/Chit_chat/assets/136672051/4f18e8b3-0c75-42ec-9e6d-7723c5794425" alt="Screenshot 4" width="200"/>
   <img src="https://github.com/muhammed-ajmal1217/Chit_chat/assets/136672051/83a360e6-f926-4b68-ad86-f65b9ecd44b4" alt="Screenshot 4" width="200"/>
   <img src="https://github.com/muhammed-ajmal1217/Chit_chat/assets/136672051/49f524f7-0375-4b0a-91c0-96f5fa86b197" alt="Screenshot 4" width="200"/>
-  <img src="https://github.com/muhammed-ajmal1217/Chit_chat/assets/136672051/06b9b801-879c-48ef-a44d-8982b84d32a8" alt="Screenshot 4" width="200"/>
+  <img src="https://github.com/muhammed-ajmal1217/Chit_chat/assets/136672051/06b9b801-879c-48ef-a44d-8982b84d32a8" alt="Screenshot 4" width="200"/> -->
 </div>
 
 
